@@ -1,0 +1,6 @@
+@echo off
+cd /d "C:\Users\Pc\Desktop\khati bajar"
+echo Navigated to Khati Bajar project directory...
+echo Running Git Push to GitHub (https://github.com/comdaraz/khatibazarbd.git)...
+git push -u origin main
+pause
