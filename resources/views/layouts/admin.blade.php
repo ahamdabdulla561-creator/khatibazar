@@ -6,6 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin Dashboard - Khati Bajar')</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,12 +53,10 @@
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
         <!-- Brand Header -->
-        <div class="h-16 flex items-center justify-between px-6 bg-slate-950 border-b border-slate-800">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center font-bold text-white text-lg">
-                    K
-                </div>
-                <span class="font-bold text-lg text-white tracking-wide">Admin Panel</span>
+        <div class="h-16 flex items-center justify-between px-4 bg-slate-950 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10 w-auto object-contain bg-white/90 p-1 rounded-lg">
+                <span class="font-extrabold text-base text-white tracking-wide">Admin Panel</span>
             </div>
             <button @click="sidebarOpen = false" class="md:hidden text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>

@@ -12,9 +12,7 @@
 <body class="bg-slate-950 text-slate-200 flex items-center justify-center min-h-screen p-4">
     <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
         <div class="text-center mb-8">
-            <div class="w-16 h-16 bg-green-600 text-white rounded-2xl flex items-center justify-center text-3xl font-bold mx-auto mb-3 shadow-lg shadow-green-600/30">
-                K
-            </div>
+            <img src="{{ asset('images/logo.png') }}" alt="Khati Bajar Logo" class="h-20 w-auto mx-auto mb-3 bg-white p-2 rounded-2xl shadow-lg border border-slate-700">
             <h1 class="text-2xl font-extrabold text-white">Admin Panel Login</h1>
             <p class="text-xs text-slate-400 mt-1">Access the Khati Bajar Admin Dashboard</p>
         </div>

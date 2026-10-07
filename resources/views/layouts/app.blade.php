@@ -6,6 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', site_setting('site_name', 'Khati Bajar - Pure & Organic Products'))</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
     <!-- Google Fonts: Inter & Hind Siliguri for Bengali -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -194,17 +197,7 @@
             
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2 group">
-                @if(site_setting('site_logo'))
-                    <img src="{{ asset('storage/' . site_setting('site_logo')) }}" alt="Logo" class="h-10 w-auto">
-                @else
-                    <div class="w-10 h-10 bg-brand-600 text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-md group-hover:bg-brand-700 transition">
-                        K
-                    </div>
-                    <div>
-                        <span class="text-xl font-bold text-brand-800 tracking-tight block">Khati Bajar</span>
-                        <span class="text-[10px] text-gray-500 font-medium block -mt-1">Khati Bajar Online Shop</span>
-                    </div>
-                @endif
+                <img src="{{ site_setting('site_logo') ? asset('storage/' . site_setting('site_logo')) : asset('images/logo.png') }}" alt="Khati Bajar BD Logo" class="h-12 md:h-14 w-auto max-w-[190px] object-contain group-hover:scale-105 transition-transform duration-300">
             </a>
 
             <!-- Desktop Search Bar -->
