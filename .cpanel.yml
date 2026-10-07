@@ -3,3 +3,5 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/khatxoha/public_html
     - /bin/cp -R * $DEPLOYPATH
+    - /bin/chmod -R 777 $DEPLOYPATH/storage
+    - /bin/chmod -R 777 $DEPLOYPATH/bootstrap/cache
