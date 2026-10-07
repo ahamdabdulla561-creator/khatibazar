@@ -156,3 +156,31 @@ Route::get('/storage/{path}', function ($path) {
     abort(404);
 })->where('path', '.*');
 
+/*
+|--------------------------------------------------------------------------
+| SSL PKI VALIDATION & ACME CHALLENGE FALLBACK ROUTES
+|--------------------------------------------------------------------------
+*/
+Route::get('/.well-known/pki-validation/{file}', function ($file) {
+    $path = public_path('.well-known/pki-validation/' . $file);
+    if (!file_exists($path)) {
+        $path = base_path('.well-known/pki-validation/' . $file);
+    }
+    if (file_exists($path)) {
+        return response()->file($path, ['Content-Type' => 'text/plain']);
+    }
+    return response($file, 200, ['Content-Type' => 'text/plain']);
+});
+
+Route::get('/.well-known/acme-challenge/{file}', function ($file) {
+    $path = public_path('.well-known/acme-challenge/' . $file);
+    if (!file_exists($path)) {
+        $path = base_path('.well-known/acme-challenge/' . $file);
+    }
+    if (file_exists($path)) {
+        return response()->file($path, ['Content-Type' => 'text/plain']);
+    }
+    return response($file, 200, ['Content-Type' => 'text/plain']);
+});
+
+
