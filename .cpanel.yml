@@ -3,3 +3,5 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/khatxoha/public_html
     - /bin/rsync -av --exclude='.git' --exclude='node_modules' ./ $DEPLOYPATH
+    - /bin/cp -f .htaccess $DEPLOYPATH/.htaccess
+    - /bin/cp -f public/.htaccess $DEPLOYPATH/public/.htaccess
