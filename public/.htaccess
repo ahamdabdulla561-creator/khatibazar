@@ -4,6 +4,7 @@
     </IfModule>
 
     RewriteEngine On
+    RewriteBase /
 
     # Bypass .well-known for SSL Validation
     RewriteCond %{REQUEST_URI} ^/\.well-known/
@@ -25,5 +26,5 @@
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+    RewriteRule ^ /index.php [L]
 </IfModule>
