@@ -2,6 +2,9 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/khatxoha/public_html
-    - /bin/rsync -av --exclude='.git' --exclude='node_modules' ./ $DEPLOYPATH
+    - /bin/chmod 755 $DEPLOYPATH
+    - /bin/rsync -rlDv --no-perms --no-owner --no-group --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r --exclude='.git' --exclude='node_modules' ./ $DEPLOYPATH
     - /bin/cp -f .htaccess $DEPLOYPATH/.htaccess
     - /bin/cp -f public/.htaccess $DEPLOYPATH/public/.htaccess
+    - /bin/chmod 755 $DEPLOYPATH $DEPLOYPATH/public $DEPLOYPATH/storage $DEPLOYPATH/bootstrap/cache
+    - /bin/chmod 644 $DEPLOYPATH/.htaccess $DEPLOYPATH/index.php $DEPLOYPATH/public/.htaccess $DEPLOYPATH/public/index.php $DEPLOYPATH/.env
