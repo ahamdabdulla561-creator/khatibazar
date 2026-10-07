@@ -52,6 +52,8 @@
     <style>
         [x-cloak] { display: none !important; }
         body { font-family: 'Hind Siliguri', 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         /* Keyframe Animations for Hero Section */
         @keyframes heroSlideLeft {
@@ -174,18 +176,30 @@
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen" x-data="{ mobileMenuOpen: false, searchOpen: false, cartCount: 0 }" x-init="fetch('{{ route('cart.count') }}').then(r => r.ok ? r.json() : {count: 0}).then(d => cartCount = d ? d.count : 0).catch(() => cartCount = 0)">
 
     <!-- Top Announcement Bar -->
-    <div class="bg-brand-900 text-white text-xs md:text-sm py-2.5 px-4 shadow-sm">
-        <div class="max-w-[1400px] mx-auto flex flex-wrap justify-between items-center gap-3">
-            <div class="flex items-center gap-4 md:gap-6">
-                <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-amber-500"></i> Helpline: {{ site_setting('phone', '01711-000000') }}</span>
-                <span class="hidden md:flex items-center gap-1.5"><i class="fa-solid fa-envelope text-amber-500"></i> {{ site_setting('email', 'info@khatibajar.com') }}</span>
+    <div class="bg-brand-900 text-white text-[11px] sm:text-xs py-2 px-3 sm:px-4 shadow-sm">
+        <div class="max-w-[1400px] mx-auto flex justify-between items-center gap-2">
+            <div class="flex items-center gap-3 sm:gap-6 truncate">
+                <a href="tel:{{ site_setting('phone', '01711-000000') }}" class="flex items-center gap-1.5 hover:text-amber-400 transition truncate">
+                    <i class="fa-solid fa-phone text-amber-400"></i>
+                    <span>Helpline: {{ site_setting('phone', '01711-000000') }}</span>
+                </a>
+                <span class="hidden md:flex items-center gap-1.5"><i class="fa-solid fa-envelope text-amber-400"></i> {{ site_setting('email', 'info@khatibajar.com') }}</span>
             </div>
-            <div class="flex items-center gap-4 md:gap-6">
-                <a href="{{ route('order.track') }}" class="hover:text-amber-400 transition flex items-center gap-1.5"><i class="fa-solid fa-comments text-amber-500"></i> Order Chat / SMS</a>
+            <div class="flex items-center gap-3 sm:gap-5 shrink-0">
+                <a href="{{ route('order.track') }}" class="hover:text-amber-400 transition flex items-center gap-1">
+                    <i class="fa-solid fa-truck-fast text-amber-400"></i>
+                    <span class="hidden xs:inline sm:inline">Track Order</span>
+                </a>
                 @auth
-                    <a href="{{ route('customer.dashboard') }}" class="hover:text-amber-400 transition flex items-center gap-1.5"><i class="fa-solid fa-user text-amber-500"></i> Dashboard</a>
+                    <a href="{{ route('customer.dashboard') }}" class="hover:text-amber-400 transition flex items-center gap-1 font-semibold">
+                        <i class="fa-solid fa-user text-amber-400"></i>
+                        <span>Dashboard</span>
+                    </a>
                 @else
-                    <a href="{{ route('login') }}" class="hover:text-amber-400 transition flex items-center gap-1.5"><i class="fa-solid fa-right-to-bracket text-amber-500"></i> Login / Register</a>
+                    <a href="{{ route('login') }}" class="hover:text-amber-400 transition flex items-center gap-1 font-semibold">
+                        <i class="fa-solid fa-user text-amber-400"></i>
+                        <span>Sign In</span>
+                    </a>
                 @endauth
             </div>
         </div>
@@ -193,11 +207,11 @@
 
     <!-- Main Header -->
     <header class="bg-white sticky top-0 z-40 shadow-sm border-b border-gray-100">
-        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+        <div class="max-w-[1400px] mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-3">
             
             <!-- Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-2 group">
-                <img src="{{ site_setting('site_logo') ? asset('storage/' . site_setting('site_logo')) : asset('images/logo.png') }}" alt="Khati Bajar BD Logo" class="h-12 md:h-14 w-auto max-w-[190px] object-contain group-hover:scale-105 transition-transform duration-300">
+            <a href="{{ route('home') }}" class="flex items-center gap-2 group shrink-0">
+                <img src="{{ site_setting('site_logo') ? asset('storage/' . site_setting('site_logo')) : asset('images/logo.png') }}" alt="Khati Bajar BD Logo" class="h-10 sm:h-12 md:h-14 w-auto max-w-[150px] sm:max-w-[190px] object-contain group-hover:scale-105 transition-transform duration-300">
             </a>
 
             <!-- Desktop Search Bar -->
@@ -207,6 +221,7 @@
                         type="text" 
                         x-model="query" 
                         @input.debounce.300ms="fetchSuggestions()"
+                        @keydown.enter="search()"
                         placeholder="Search products or brands..." 
                         class="w-full bg-gray-50 border border-gray-200 rounded-full py-2.5 pl-5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition"
                     >
@@ -229,24 +244,40 @@
             </div>
 
             <!-- Header Action Buttons -->
-            <div class="flex items-center gap-3 md:gap-4">
+            <div class="flex items-center gap-2 sm:gap-3">
                 <!-- Cart Button -->
-                <a href="{{ route('cart.index') }}" class="relative flex items-center gap-2 bg-brand-50 text-brand-700 px-3.5 py-2 rounded-full hover:bg-brand-100 transition font-medium text-sm">
-                    <i class="fa-solid fa-basket-shopping text-base text-brand-600"></i>
+                <a href="{{ route('cart.index') }}" class="relative flex items-center gap-1.5 sm:gap-2 bg-brand-50 text-brand-700 px-3 sm:px-3.5 py-2 rounded-full hover:bg-brand-100 transition font-semibold text-xs sm:text-sm border border-brand-100">
+                    <i class="fa-solid fa-basket-shopping text-sm sm:text-base text-brand-600"></i>
                     <span class="hidden sm:inline">Cart</span>
-                    <span class="bg-brand-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center" x-text="cartCount">0</span>
+                    <span class="bg-brand-600 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center" x-text="cartCount">0</span>
                 </a>
 
                 <!-- Mobile Menu Trigger -->
-                <button type="button" @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-gray-700 p-2 text-xl focus:outline-none">
+                <button type="button" @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center text-base focus:outline-none transition">
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Navigation Bar -->
+        <!-- Mobile Search Bar (Visible directly on phones for easy access) -->
+        <div class="md:hidden px-3 pb-2.5">
+            <form action="{{ route('products.index') }}" method="GET" class="relative">
+                <input 
+                    type="text" 
+                    name="q" 
+                    value="{{ request('q') }}"
+                    placeholder="Search medicines, feeds, or farm products..." 
+                    class="w-full bg-gray-50 border border-gray-200 rounded-full py-2 pl-4 pr-10 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition"
+                >
+                <button type="submit" class="absolute right-1 top-1 bottom-1 px-3 bg-brand-600 text-white rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-magnifying-glass text-[11px]"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Desktop Navigation Bar -->
         <nav class="hidden md:block bg-brand-800 text-white border-t border-brand-700">
-            <div class="max-w-[1400px] mx-auto px-4 flex items-center gap-6 text-sm font-medium">
+            <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-6 text-sm font-medium">
                 
                 <!-- Categories Header Dropdown -->
                 <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
@@ -290,31 +321,34 @@
                     <a href="{{ route('category.show', $navCat->slug) }}" class="py-3 hover:text-amber-400 transition">{{ $navCat->name }}</a>
                 @endforeach
                 
-                <a href="{{ route('order.track') }}" class="py-3 hover:text-amber-400 transition ml-auto text-amber-300 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-comments"></i> Order Chat / SMS</a>
+                <a href="{{ route('order.track') }}" class="py-3 hover:text-amber-400 transition ml-auto text-amber-300 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-truck-fast"></i> Track Order</a>
             </div>
         </nav>
 
         <!-- Mobile Drawer -->
         <div x-show="mobileMenuOpen" x-cloak class="md:hidden fixed inset-0 z-50 flex">
-            <div @click="mobileMenuOpen = false" class="fixed inset-0 bg-black bg-opacity-50"></div>
-            <div class="relative bg-white w-4/5 max-w-sm ml-auto h-full shadow-2xl flex flex-col z-10">
+            <div @click="mobileMenuOpen = false" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs"></div>
+            <div class="relative bg-white w-4/5 max-w-xs ml-auto h-full shadow-2xl flex flex-col z-10">
                 <div class="p-4 bg-brand-800 text-white flex items-center justify-between">
-                    <span class="font-bold text-lg">মোপাইল মেনু</span>
-                    <button @click="mobileMenuOpen = false" class="text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+                    <span class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-leaf text-amber-400"></i> Khati Bajar Menu</span>
+                    <button @click="mobileMenuOpen = false" class="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <div class="p-4 border-b">
-                    <form action="{{ route('products.index') }}" method="GET">
-                        <input type="text" name="q" placeholder="Search products..." class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500">
-                    </form>
-                </div>
-                <div class="flex-1 overflow-y-auto p-4 space-y-3 font-medium">
-                    <a href="{{ route('home') }}" class="block py-2 border-b text-gray-700">Home</a>
-                    <a href="{{ route('products.index') }}" class="block py-2 border-b text-gray-700">All Products</a>
-                    @foreach(\App\Models\Category::where('status', 'active')->get() as $navCat)
-                        <a href="{{ route('category.show', $navCat->slug) }}" class="block py-2 border-b text-gray-600 pl-2 text-sm">{{ $navCat->name }}</a>
+                <div class="flex-1 overflow-y-auto p-4 space-y-1.5 text-sm font-medium">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-brand-50 text-gray-800 font-semibold"><i class="fa-solid fa-house text-brand-600 w-5"></i> Home</a>
+                    <a href="{{ route('products.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-brand-50 text-gray-800 font-semibold"><i class="fa-solid fa-box-open text-brand-600 w-5"></i> All Products</a>
+                    
+                    <div class="pt-2 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-gray-400">Categories</div>
+                    @foreach(\App\Models\Category::where('status', 'active')->orderBy('sort_order', 'asc')->get() as $navCat)
+                        <a href="{{ route('category.show', $navCat->slug) }}" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-brand-50 text-gray-600 text-xs font-semibold">
+                            <span>{{ $navCat->name }}</span>
+                            <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                        </a>
                     @endforeach
-                    <a href="{{ route('cart.index') }}" class="block py-2 border-b text-gray-700">Cart</a>
-                    <a href="{{ route('order.track') }}" class="block py-2 border-b text-amber-600 font-bold flex items-center gap-1.5"><i class="fa-solid fa-comments"></i> Order Chat / SMS</a>
+
+                    <div class="border-t border-gray-100 my-2 pt-2 space-y-1">
+                        <a href="{{ route('cart.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-brand-50 text-gray-800 font-semibold"><i class="fa-solid fa-basket-shopping text-brand-600 w-5"></i> Shopping Cart</a>
+                        <a href="{{ route('order.track') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-amber-50 text-amber-700 font-bold"><i class="fa-solid fa-truck-fast w-5"></i> Track Order</a>
+                    </div>
                 </div>
             </div>
         </div>

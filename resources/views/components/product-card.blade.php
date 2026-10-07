@@ -1,58 +1,58 @@
 @props(['product'])
 
-<div class="product-card-anim product-card-hover bg-white rounded-2xl border border-gray-100/80 shadow-sm flex flex-col justify-between overflow-hidden group relative" x-data="productCard({{ $product->id }}, {{ json_encode($product->variants) }})">
+<div class="product-card-anim product-card-hover bg-white rounded-xl sm:rounded-2xl border border-gray-100/90 shadow-sm flex flex-col justify-between overflow-hidden group relative" x-data="productCard({{ $product->id }}, {{ json_encode($product->variants) }})">
     
     <!-- Badges -->
-    <div class="absolute top-3 left-3 z-10 flex flex-col gap-1">
+    <div class="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 flex flex-col gap-1">
         @if($product->discount_percent > 0)
-            <span class="animate-discount-glow bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm inline-block">
-                {{ $product->discount_percent }}% Off
+            <span class="animate-discount-glow bg-red-500 text-white text-[10px] sm:text-[11px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-sm inline-block w-fit">
+                -{{ $product->discount_percent }}%
             </span>
         @endif
         @if($product->is_super_offer)
-            <span class="animate-badge-glow bg-amber-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm inline-block">
-                Super Offer
+            <span class="animate-badge-glow bg-amber-500 text-white text-[9px] sm:text-[11px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-sm inline-block w-fit">
+                Hot Deal
             </span>
         @endif
     </div>
 
     <!-- Product Image -->
-    <div class="relative bg-gray-50 overflow-hidden pt-[100%]">
+    <div class="relative bg-gray-50/70 overflow-hidden pt-[92%] sm:pt-[100%]">
         <a href="{{ route('products.show', $product->slug) }}">
             <img 
                 src="{{ $product->image_url }}" 
                 alt="{{ $product->name }}" 
-                class="absolute inset-0 w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                class="absolute inset-0 w-full h-full object-contain p-2 sm:p-3 group-hover:scale-105 transition-transform duration-500 ease-out"
+                loading="lazy"
             >
         </a>
-        <!-- Quick View Overlay Button (4️⃣ Star Highlight) -->
+        <!-- Quick View Overlay Button -->
         <button 
             type="button" 
             @click="$dispatch('open-quickview', { id: {{ $product->id }} })"
-            class="absolute inset-x-3 bottom-3 bg-white/95 backdrop-blur-sm text-slate-900 font-extrabold text-xs py-2 px-3 rounded-xl shadow-lg border border-gray-200 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 flex items-center justify-center gap-1.5 hover:bg-brand-600 hover:text-white hover:border-brand-600"
+            class="hidden sm:flex absolute inset-x-3 bottom-3 bg-white/95 backdrop-blur-sm text-slate-900 font-extrabold text-xs py-2 px-3 rounded-xl shadow-lg border border-gray-200 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 items-center justify-center gap-1.5 hover:bg-brand-600 hover:text-white hover:border-brand-600"
         >
             <i class="fa-solid fa-eye"></i> Quick View
         </button>
     </div>
 
     <!-- Content -->
-    <div class="p-4 flex-1 flex flex-col justify-between">
+    <div class="p-2.5 sm:p-4 flex-1 flex flex-col justify-between border-t border-gray-50">
         <div>
             @if($product->category)
-                <span class="text-[11px] font-semibold text-brand-600 uppercase tracking-wider block mb-1">
+                <span class="text-[10px] sm:text-[11px] font-semibold text-brand-600 uppercase tracking-wider block mb-0.5 truncate">
                     {{ $product->category->name }}
                 </span>
             @endif
 
-            <h3 class="font-bold text-gray-900 text-sm md:text-base line-clamp-2 hover:text-brand-600 transition mb-2">
+            <h3 class="font-bold text-gray-900 text-xs sm:text-sm md:text-base line-clamp-2 hover:text-brand-600 transition mb-1.5 sm:mb-2 leading-snug min-h-[2.25rem] sm:min-h-[2.5rem]">
                 <a href="{{ route('products.show', $product->slug) }}">{{ $product->name }}</a>
             </h3>
 
-            <!-- Variants pills selector if product has variants -->
+            <!-- Variants selector if product has variants -->
             @if($product->variants && count($product->variants) > 0)
-                <div class="mb-3">
-                    <label class="block text-[11px] text-gray-500 font-medium mb-1">Select Size/Weight:</label>
-                    <select x-model="selectedVariantId" @change="updateVariantPrice()" class="w-full text-xs bg-gray-50 border border-gray-200 rounded-lg p-1.5 focus:ring-1 focus:ring-brand-500">
+                <div class="mb-2 sm:mb-3">
+                    <select x-model="selectedVariantId" @change="updateVariantPrice()" class="w-full text-[11px] sm:text-xs bg-gray-50 border border-gray-200 rounded-lg py-1 px-1.5 sm:p-1.5 focus:ring-1 focus:ring-brand-500 text-gray-700 font-medium">
                         @foreach($product->variants as $variant)
                             <option value="{{ $variant->id }}">{{ $variant->name }} — {{ format_price($variant->price) }}</option>
                         @endforeach
@@ -63,12 +63,12 @@
 
         <div>
             <!-- Price Display -->
-            <div class="flex items-baseline gap-2 mb-3">
-                <span class="text-base md:text-lg font-bold text-brand-700" x-text="priceFormatted">
+            <div class="flex items-baseline flex-wrap gap-1.5 sm:gap-2 mb-2.5 sm:mb-3">
+                <span class="text-sm sm:text-base md:text-lg font-extrabold text-brand-700" x-text="priceFormatted">
                     {{ format_price($product->effective_price) }}
                 </span>
                 @if($product->sale_price && $product->sale_price < $product->regular_price)
-                    <span class="text-xs text-gray-400 line-through">
+                    <span class="text-[10px] sm:text-xs text-gray-400 line-through">
                         {{ format_price($product->regular_price) }}
                     </span>
                 @endif
@@ -76,24 +76,26 @@
 
             <!-- Action Buttons -->
             @if($product->inStock())
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-1.5 sm:gap-2">
                     <button 
                         type="button" 
                         @click="addToCart(false)" 
-                        class="bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs md:text-sm font-semibold py-2 px-2 rounded-xl transition text-center flex items-center justify-center gap-1 border border-brand-200"
+                        class="bg-brand-50 hover:bg-brand-100 text-brand-700 text-[11px] sm:text-xs font-bold py-1.5 sm:py-2 px-1.5 sm:px-2 rounded-lg sm:rounded-xl transition text-center flex items-center justify-center gap-1 border border-brand-200"
                     >
-                        <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                        <i class="fa-solid fa-cart-plus text-[10px] sm:text-xs"></i>
+                        <span>Cart</span>
                     </button>
                     <button 
                         type="button" 
                         @click="addToCart(true)" 
-                        class="bg-brand-600 hover:bg-brand-700 text-white text-xs md:text-sm font-bold py-2 px-2 rounded-xl transition text-center shadow-md flex items-center justify-center gap-1"
+                        class="bg-brand-600 hover:bg-brand-700 text-white text-[11px] sm:text-xs font-bold py-1.5 sm:py-2 px-1.5 sm:px-2 rounded-lg sm:rounded-xl transition text-center shadow-sm flex items-center justify-center gap-1"
                     >
-                        <i class="fa-solid fa-bolt"></i> Order Now
+                        <i class="fa-solid fa-bolt text-[10px] sm:text-xs"></i>
+                        <span>Buy Now</span>
                     </button>
                 </div>
             @else
-                <button disabled class="w-full bg-gray-200 text-gray-500 text-xs md:text-sm font-bold py-2 rounded-xl cursor-not-allowed">
+                <button disabled class="w-full bg-gray-100 text-gray-400 text-[11px] sm:text-xs font-bold py-1.5 sm:py-2 rounded-lg sm:rounded-xl cursor-not-allowed">
                     Out of Stock
                 </button>
             @endif
