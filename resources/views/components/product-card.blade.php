@@ -1,17 +1,17 @@
 @props(['product'])
 
-<div class="product-card-anim product-card-hover bg-white rounded-xl sm:rounded-2xl border border-gray-100/90 shadow-sm flex flex-col justify-between overflow-hidden group relative" x-data="productCard({{ $product->id }}, {{ json_encode($product->variants) }})">
+<div class="product-card-anim product-card-hover bg-white rounded-xl sm:rounded-2xl border border-brand-100/90 shadow-sm flex flex-col justify-between overflow-hidden group relative" x-data="productCard({{ $product->id }}, {{ json_encode($product->variants) }})">
     
-    <!-- Badges -->
+    <!-- Natural Green Badges -->
     <div class="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 flex flex-col gap-1">
         @if($product->discount_percent > 0)
-            <span class="animate-discount-glow bg-red-500 text-white text-[10px] sm:text-[11px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-sm inline-block w-fit">
+            <span class="bg-brand-600 text-white text-[10px] sm:text-[11px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-sm inline-block w-fit">
                 -{{ $product->discount_percent }}%
             </span>
         @endif
         @if($product->is_super_offer)
-            <span class="animate-badge-glow bg-amber-500 text-white text-[9px] sm:text-[11px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-sm inline-block w-fit">
-                Hot Deal
+            <span class="bg-brand-800 text-white text-[9px] sm:text-[11px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-sm inline-block w-fit">
+                Special Offer
             </span>
         @endif
     </div>

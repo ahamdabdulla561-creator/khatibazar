@@ -175,29 +175,29 @@
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen" x-data="{ mobileMenuOpen: false, searchOpen: false, cartCount: 0 }" x-init="fetch('{{ route('cart.count') }}').then(r => r.ok ? r.json() : {count: 0}).then(d => cartCount = d ? d.count : 0).catch(() => cartCount = 0)">
 
-    <!-- Top Announcement Bar -->
-    <div class="bg-brand-900 text-white text-[11px] sm:text-xs py-2 px-3 sm:px-4 shadow-sm">
+    <!-- Top Announcement Bar (Deep Natural Green + White Text) -->
+    <div class="bg-brand-900 text-white text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-brand-800">
         <div class="max-w-[1400px] mx-auto flex justify-between items-center gap-2">
             <div class="flex items-center gap-3 sm:gap-6 truncate">
-                <a href="tel:{{ site_setting('phone', '01711-000000') }}" class="flex items-center gap-1.5 hover:text-amber-400 transition truncate">
-                    <i class="fa-solid fa-phone text-amber-400"></i>
+                <a href="tel:{{ site_setting('phone', '01711-000000') }}" class="flex items-center gap-1.5 hover:text-brand-100 transition truncate">
+                    <i class="fa-solid fa-phone text-brand-100"></i>
                     <span>Helpline: {{ site_setting('phone', '01711-000000') }}</span>
                 </a>
-                <span class="hidden md:flex items-center gap-1.5"><i class="fa-solid fa-envelope text-amber-400"></i> {{ site_setting('email', 'info@khatibajar.com') }}</span>
+                <span class="hidden md:flex items-center gap-1.5"><i class="fa-solid fa-envelope text-brand-100"></i> {{ site_setting('email', 'info@khatibajar.com') }}</span>
             </div>
             <div class="flex items-center gap-3 sm:gap-5 shrink-0">
-                <a href="{{ route('order.track') }}" class="hover:text-amber-400 transition flex items-center gap-1">
-                    <i class="fa-solid fa-truck-fast text-amber-400"></i>
+                <a href="{{ route('order.track') }}" class="hover:text-brand-100 transition flex items-center gap-1">
+                    <i class="fa-solid fa-truck-fast text-brand-100"></i>
                     <span class="hidden xs:inline sm:inline">Track Order</span>
                 </a>
                 @auth
-                    <a href="{{ route('customer.dashboard') }}" class="hover:text-amber-400 transition flex items-center gap-1 font-semibold">
-                        <i class="fa-solid fa-user text-amber-400"></i>
+                    <a href="{{ route('customer.dashboard') }}" class="hover:text-brand-100 transition flex items-center gap-1 font-semibold">
+                        <i class="fa-solid fa-user text-brand-100"></i>
                         <span>Dashboard</span>
                     </a>
                 @else
-                    <a href="{{ route('login') }}" class="hover:text-amber-400 transition flex items-center gap-1 font-semibold">
-                        <i class="fa-solid fa-user text-amber-400"></i>
+                    <a href="{{ route('login') }}" class="hover:text-brand-100 transition flex items-center gap-1 font-semibold">
+                        <i class="fa-solid fa-user text-brand-100"></i>
                         <span>Sign In</span>
                     </a>
                 @endauth
@@ -205,13 +205,13 @@
         </div>
     </div>
 
-    <!-- Main Header -->
-    <header class="bg-white sticky top-0 z-40 shadow-sm border-b border-gray-100">
-        <div class="max-w-[1400px] mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-3">
+    <!-- Main Header (Natural Green Background + White Text) -->
+    <header class="bg-brand-700 text-white sticky top-0 z-40 shadow-md">
+        <div class="max-w-[1400px] mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3.5 flex items-center justify-between gap-3">
             
             <!-- Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-2 group shrink-0">
-                <img src="{{ site_setting('site_logo') ? asset('storage/' . site_setting('site_logo')) : asset('images/logo.png') }}" alt="Khati Bajar BD Logo" class="h-10 sm:h-12 md:h-14 w-auto max-w-[150px] sm:max-w-[190px] object-contain group-hover:scale-105 transition-transform duration-300">
+            <a href="{{ route('home') }}" class="flex items-center gap-2 group shrink-0 bg-white px-3 py-1.5 rounded-xl shadow-xs">
+                <img src="{{ site_setting('site_logo') ? asset('storage/' . site_setting('site_logo')) : asset('images/logo.png') }}" alt="Khati Bajar BD Logo" class="h-8 sm:h-10 md:h-11 w-auto max-w-[140px] sm:max-w-[175px] object-contain group-hover:scale-105 transition-transform duration-300">
             </a>
 
             <!-- Desktop Search Bar -->
@@ -222,21 +222,21 @@
                         x-model="query" 
                         @input.debounce.300ms="fetchSuggestions()"
                         @keydown.enter="search()"
-                        placeholder="Search products or brands..." 
-                        class="w-full bg-gray-50 border border-gray-200 rounded-full py-2.5 pl-5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition"
+                        placeholder="Search pure farm products, medicines or feeds..." 
+                        class="w-full bg-white text-gray-800 placeholder-gray-400 border border-brand-600 rounded-full py-2.5 pl-5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-white transition shadow-inner"
                     >
-                    <button type="button" @click="search()" class="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-brand-600 text-white rounded-full hover:bg-brand-700 transition flex items-center justify-center">
+                    <button type="button" @click="search()" class="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-brand-700 text-white rounded-full hover:bg-brand-800 transition flex items-center justify-center">
                         <i class="fa-solid fa-magnifying-glass text-xs"></i>
                     </button>
                 </div>
                 <!-- Suggestions Dropdown -->
-                <div x-show="suggestions.length > 0" @click.away="suggestions = []" x-cloak class="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden">
+                <div x-show="suggestions.length > 0" @click.away="suggestions = []" x-cloak class="absolute left-0 right-0 top-full mt-2 bg-white text-gray-800 rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden">
                     <template x-for="item in suggestions" :key="item.id">
-                        <a :href="'/products/' + item.slug" class="flex items-center gap-3 p-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition">
+                        <a :href="'/products/' + item.slug" class="flex items-center gap-3 p-3 hover:bg-brand-50 border-b border-gray-50 last:border-0 transition">
                             <img :src="item.image ? '/storage/' + item.image : 'https://placehold.co/100x100?text=KB'" class="w-10 h-10 object-cover rounded-lg">
                             <div class="flex-1 min-w-0">
                                 <h4 class="text-sm font-medium text-gray-900 truncate" x-text="item.name"></h4>
-                                <p class="text-xs text-brand-600 font-bold" x-text="'৳ ' + (item.sale_price || item.regular_price)"></p>
+                                <p class="text-xs text-brand-700 font-bold" x-text="'৳ ' + (item.sale_price || item.regular_price)"></p>
                             </div>
                         </a>
                     </template>
@@ -245,21 +245,21 @@
 
             <!-- Header Action Buttons -->
             <div class="flex items-center gap-2 sm:gap-3">
-                <!-- Cart Button -->
-                <a href="{{ route('cart.index') }}" class="relative flex items-center gap-1.5 sm:gap-2 bg-brand-50 text-brand-700 px-3 sm:px-3.5 py-2 rounded-full hover:bg-brand-100 transition font-semibold text-xs sm:text-sm border border-brand-100">
-                    <i class="fa-solid fa-basket-shopping text-sm sm:text-base text-brand-600"></i>
+                <!-- Cart Button (Green & White) -->
+                <a href="{{ route('cart.index') }}" class="relative flex items-center gap-2 bg-brand-800 hover:bg-brand-900 text-white px-3.5 sm:px-4 py-2 rounded-full transition font-bold text-xs sm:text-sm border border-brand-600 shadow-xs">
+                    <i class="fa-solid fa-basket-shopping text-sm sm:text-base text-white"></i>
                     <span class="hidden sm:inline">Cart</span>
-                    <span class="bg-brand-600 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center" x-text="cartCount">0</span>
+                    <span class="bg-white text-brand-800 text-[11px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center" x-text="cartCount">0</span>
                 </a>
 
                 <!-- Mobile Menu Trigger -->
-                <button type="button" @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center text-base focus:outline-none transition">
+                <button type="button" @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden w-9 h-9 rounded-full bg-brand-800 hover:bg-brand-900 text-white border border-brand-600 flex items-center justify-center text-base focus:outline-none transition">
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Search Bar (Visible directly on phones for easy access) -->
+        <!-- Mobile Search Bar (Visible directly on phones) -->
         <div class="md:hidden px-3 pb-2.5">
             <form action="{{ route('products.index') }}" method="GET" class="relative">
                 <input 
@@ -267,24 +267,24 @@
                     name="q" 
                     value="{{ request('q') }}"
                     placeholder="Search medicines, feeds, or farm products..." 
-                    class="w-full bg-gray-50 border border-gray-200 rounded-full py-2 pl-4 pr-10 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition"
+                    class="w-full bg-white text-gray-800 placeholder-gray-400 rounded-full py-2 pl-4 pr-10 text-xs focus:outline-none focus:ring-2 focus:ring-brand-100 transition shadow-inner"
                 >
-                <button type="submit" class="absolute right-1 top-1 bottom-1 px-3 bg-brand-600 text-white rounded-full flex items-center justify-center">
+                <button type="submit" class="absolute right-1 top-1 bottom-1 px-3 bg-brand-700 text-white rounded-full flex items-center justify-center">
                     <i class="fa-solid fa-magnifying-glass text-[11px]"></i>
                 </button>
             </form>
         </div>
 
-        <!-- Desktop Navigation Bar -->
-        <nav class="hidden md:block bg-brand-800 text-white border-t border-brand-700">
+        <!-- Desktop Navigation Bar (Rich Natural Green + Crisp White Text) -->
+        <nav class="hidden md:block bg-brand-800 text-white border-t border-brand-600/60">
             <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-6 text-sm font-medium">
                 
                 <!-- Categories Header Dropdown -->
                 <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <button type="button" @click="open = !open" class="py-3 px-4 bg-brand-900 hover:bg-brand-950 text-white rounded-t-lg font-bold flex items-center gap-2.5 transition">
-                        <i class="fa-solid fa-bars text-amber-400"></i>
+                    <button type="button" @click="open = !open" class="py-3 px-4 bg-brand-900 hover:bg-brand-950 text-white font-bold flex items-center gap-2.5 transition">
+                        <i class="fa-solid fa-bars text-white"></i>
                         <span>Categories</span>
-                        <i class="fa-solid fa-chevron-down text-xs ml-1 text-amber-300 transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                        <i class="fa-solid fa-chevron-down text-xs ml-1 text-brand-100 transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
                     </button>
 
                     <!-- Dropdown Menu -->
@@ -303,7 +303,7 @@
                                         @if($cat->image)
                                             <img src="{{ asset('storage/' . $cat->image) }}" class="w-4 h-4 object-cover rounded">
                                         @else
-                                            <i class="fa-solid fa-prescription-bottle-medical text-xs"></i>
+                                            <i class="fa-solid fa-seedling text-xs"></i>
                                         @endif
                                     </div>
                                     <span class="truncate">{{ $cat->name }}</span>
@@ -314,40 +314,40 @@
                     </div>
                 </div>
 
-                <a href="{{ route('home') }}" class="py-3 hover:text-amber-400 transition {{ request()->routeIs('home') ? 'text-amber-400 font-bold border-b-2 border-amber-400' : '' }}">Home</a>
-                <a href="{{ route('products.index') }}" class="py-3 hover:text-amber-400 transition {{ request()->routeIs('products.index') ? 'text-amber-400 font-bold border-b-2 border-amber-400' : '' }}">All Products</a>
+                <a href="{{ route('home') }}" class="py-3 text-white hover:text-brand-100 transition {{ request()->routeIs('home') ? 'font-extrabold border-b-2 border-white' : '' }}">Home</a>
+                <a href="{{ route('products.index') }}" class="py-3 text-white hover:text-brand-100 transition {{ request()->routeIs('products.index') ? 'font-extrabold border-b-2 border-white' : '' }}">All Products</a>
                 
                 @foreach(\App\Models\Category::where('status', 'active')->orderBy('sort_order', 'asc')->take(4)->get() as $navCat)
-                    <a href="{{ route('category.show', $navCat->slug) }}" class="py-3 hover:text-amber-400 transition">{{ $navCat->name }}</a>
+                    <a href="{{ route('category.show', $navCat->slug) }}" class="py-3 text-white/95 hover:text-white transition">{{ $navCat->name }}</a>
                 @endforeach
                 
-                <a href="{{ route('order.track') }}" class="py-3 hover:text-amber-400 transition ml-auto text-amber-300 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-truck-fast"></i> Track Order</a>
+                <a href="{{ route('order.track') }}" class="py-3 text-white hover:text-brand-100 transition ml-auto font-bold flex items-center gap-1.5"><i class="fa-solid fa-truck-fast"></i> Track Order</a>
             </div>
         </nav>
 
         <!-- Mobile Drawer -->
         <div x-show="mobileMenuOpen" x-cloak class="md:hidden fixed inset-0 z-50 flex">
-            <div @click="mobileMenuOpen = false" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs"></div>
+            <div @click="mobileMenuOpen = false" class="fixed inset-0 bg-brand-950/60 backdrop-blur-xs"></div>
             <div class="relative bg-white w-4/5 max-w-xs ml-auto h-full shadow-2xl flex flex-col z-10">
-                <div class="p-4 bg-brand-800 text-white flex items-center justify-between">
-                    <span class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-leaf text-amber-400"></i> Khati Bajar Menu</span>
-                    <button @click="mobileMenuOpen = false" class="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+                <div class="p-4 bg-brand-700 text-white flex items-center justify-between">
+                    <span class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-leaf text-white"></i> Khati Bajar</span>
+                    <button @click="mobileMenuOpen = false" class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="flex-1 overflow-y-auto p-4 space-y-1.5 text-sm font-medium">
                     <a href="{{ route('home') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-brand-50 text-gray-800 font-semibold"><i class="fa-solid fa-house text-brand-600 w-5"></i> Home</a>
                     <a href="{{ route('products.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-brand-50 text-gray-800 font-semibold"><i class="fa-solid fa-box-open text-brand-600 w-5"></i> All Products</a>
                     
-                    <div class="pt-2 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-gray-400">Categories</div>
+                    <div class="pt-2 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-brand-700">Categories</div>
                     @foreach(\App\Models\Category::where('status', 'active')->orderBy('sort_order', 'asc')->get() as $navCat)
-                        <a href="{{ route('category.show', $navCat->slug) }}" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-brand-50 text-gray-600 text-xs font-semibold">
+                        <a href="{{ route('category.show', $navCat->slug) }}" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-brand-50 text-gray-700 text-xs font-semibold">
                             <span>{{ $navCat->name }}</span>
-                            <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                            <i class="fa-solid fa-chevron-right text-[10px] text-brand-500"></i>
                         </a>
                     @endforeach
 
                     <div class="border-t border-gray-100 my-2 pt-2 space-y-1">
                         <a href="{{ route('cart.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-brand-50 text-gray-800 font-semibold"><i class="fa-solid fa-basket-shopping text-brand-600 w-5"></i> Shopping Cart</a>
-                        <a href="{{ route('order.track') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-amber-50 text-amber-700 font-bold"><i class="fa-solid fa-truck-fast w-5"></i> Track Order</a>
+                        <a href="{{ route('order.track') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-brand-50 text-brand-700 font-bold"><i class="fa-solid fa-truck-fast w-5"></i> Track Order</a>
                     </div>
                 </div>
             </div>
@@ -357,12 +357,12 @@
     <!-- Flash Notification Messages -->
     <div class="max-w-[1400px] mx-auto px-4 mt-4">
         @if(session('success'))
-            <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-xl shadow-sm mb-4 flex items-center justify-between" x-data="{ show: true }" x-show="show">
+            <div class="bg-brand-50 border border-brand-200 text-brand-800 px-4 py-3 rounded-xl shadow-sm mb-4 flex items-center justify-between" x-data="{ show: true }" x-show="show">
                 <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-circle-check text-green-600"></i>
+                    <i class="fa-solid fa-circle-check text-brand-600"></i>
                     <span>{{ session('success') }}</span>
                 </div>
-                <button @click="show = false" class="text-green-600"><i class="fa-solid fa-xmark"></i></button>
+                <button @click="show = false" class="text-brand-600"><i class="fa-solid fa-xmark"></i></button>
             </div>
         @endif
         @if(session('error'))
@@ -381,70 +381,72 @@
         @yield('content')
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 pt-12 pb-6 border-t border-gray-800 mt-12">
+    <!-- Natural Green Footer -->
+    <footer class="bg-brand-900 text-brand-100 pt-12 pb-6 border-t border-brand-800 mt-12">
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
             <div>
-                <h3 class="text-white text-lg font-bold mb-4">Khati Bajar</h3>
-                <p class="text-sm text-gray-400 mb-4 leading-relaxed">
+                <h3 class="text-white text-lg font-bold mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-leaf text-brand-500"></i> Khati Bajar
+                </h3>
+                <p class="text-sm text-brand-100/80 mb-4 leading-relaxed">
                     The trusted digital marketplace for 100% pure products &amp; medicines for agriculture, livestock, and fish farmers.
                 </p>
                 <div class="flex space-x-3">
                     @if(site_setting('facebook_url'))
-                        <a href="{{ site_setting('facebook_url') }}" target="_blank" class="w-9 h-9 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-brand-600 transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="{{ site_setting('facebook_url') }}" target="_blank" class="w-9 h-9 bg-brand-800 text-white rounded-full flex items-center justify-center hover:bg-brand-600 transition"><i class="fa-brands fa-facebook-f"></i></a>
                     @endif
                     @if(site_setting('youtube_url'))
-                        <a href="{{ site_setting('youtube_url') }}" target="_blank" class="w-9 h-9 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="{{ site_setting('youtube_url') }}" target="_blank" class="w-9 h-9 bg-brand-800 text-white rounded-full flex items-center justify-center hover:bg-brand-600 transition"><i class="fa-brands fa-youtube"></i></a>
                     @endif
                     @if(site_setting('whatsapp_number'))
-                        <a href="https://wa.me/{{ site_setting('whatsapp_number') }}" target="_blank" class="w-9 h-9 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-green-600 transition"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="https://wa.me/{{ site_setting('whatsapp_number') }}" target="_blank" class="w-9 h-9 bg-brand-800 text-white rounded-full flex items-center justify-center hover:bg-brand-600 transition"><i class="fa-brands fa-whatsapp"></i></a>
                     @endif
                 </div>
             </div>
 
             <div>
                 <h4 class="text-white font-semibold mb-4 text-base">Quick Links</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="{{ route('home') }}" class="hover:text-amber-400 transition">Home</a></li>
-                    <li><a href="{{ route('products.index') }}" class="hover:text-amber-400 transition">All Products</a></li>
-                    <li><a href="{{ route('cart.index') }}" class="hover:text-amber-400 transition">Shopping Cart</a></li>
-                    <li><a href="{{ route('order.track') }}" class="hover:text-amber-400 transition">Order Tracking</a></li>
+                <ul class="space-y-2 text-sm text-brand-100/85">
+                    <li><a href="{{ route('home') }}" class="hover:text-white transition">Home</a></li>
+                    <li><a href="{{ route('products.index') }}" class="hover:text-white transition">All Products</a></li>
+                    <li><a href="{{ route('cart.index') }}" class="hover:text-white transition">Shopping Cart</a></li>
+                    <li><a href="{{ route('order.track') }}" class="hover:text-white transition">Order Tracking</a></li>
                 </ul>
             </div>
 
             <div>
                 <h4 class="text-white font-semibold mb-4 text-base">Product Categories</h4>
-                <ul class="space-y-2 text-sm">
+                <ul class="space-y-2 text-sm text-brand-100/85">
                     @foreach(\App\Models\Category::where('status', 'active')->take(4)->get() as $fCat)
-                        <li><a href="{{ route('category.show', $fCat->slug) }}" class="hover:text-amber-400 transition">{{ $fCat->name }}</a></li>
+                        <li><a href="{{ route('category.show', $fCat->slug) }}" class="hover:text-white transition">{{ $fCat->name }}</a></li>
                     @endforeach
                 </ul>
             </div>
 
             <div>
                 <h4 class="text-white font-semibold mb-4 text-base">Contact</h4>
-                <ul class="space-y-2.5 text-sm text-gray-400">
+                <ul class="space-y-2.5 text-sm text-brand-100/85">
                     <li class="flex items-start gap-2">
-                        <i class="fa-solid fa-location-dot mt-1 text-amber-400"></i>
+                        <i class="fa-solid fa-location-dot mt-1 text-white"></i>
                         <span>{{ site_setting('address', 'Dhaka, Bangladesh') }}</span>
                     </li>
                     <li class="flex items-center gap-2">
-                        <i class="fa-solid fa-phone text-amber-400"></i>
+                        <i class="fa-solid fa-phone text-white"></i>
                         <span>{{ site_setting('phone', '01711-000000') }}</span>
                     </li>
                     <li class="flex items-center gap-2">
-                        <i class="fa-solid fa-envelope text-amber-400"></i>
+                        <i class="fa-solid fa-envelope text-white"></i>
                         <span>{{ site_setting('email', 'info@khatibajar.com') }}</span>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <div class="border-t border-gray-800 max-w-[1400px] mx-auto px-4 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-4">
+        <div class="border-t border-brand-800 max-w-[1400px] mx-auto px-4 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-brand-100/70 gap-4">
             <p>&copy; {{ date('Y') }} Khati Bajar. All rights reserved.</p>
-            <div class="flex items-center gap-4">
-                <span>Cash on Delivery Supported</span>
-                <i class="fa-solid fa-shield-halved text-brand-500 text-sm"></i>
+            <div class="flex items-center gap-2 text-white">
+                <i class="fa-solid fa-leaf text-brand-500 text-sm"></i>
+                <span>100% Pure &amp; Natural • Cash on Delivery Supported</span>
             </div>
         </div>
     </footer>
@@ -474,16 +476,16 @@
             }
         }
     </script>
-    <!-- Floating Cart Widget (5️⃣ Star Highlight) -->
-    <a href="{{ route('cart.index') }}" class="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-gradient-to-b from-brand-700 to-brand-900 text-white py-3 px-2.5 rounded-l-2xl shadow-2xl flex flex-col items-center gap-1.5 border-l-2 border-y border-amber-400/50 hover:px-3.5 transition-all duration-300 group">
+    <!-- Floating Cart Widget (Natural Green & White) -->
+    <a href="{{ route('cart.index') }}" class="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-brand-700 hover:bg-brand-800 text-white py-3 px-2.5 rounded-l-2xl shadow-2xl flex flex-col items-center gap-1.5 border-l-2 border-y border-white/40 hover:px-3.5 transition-all duration-300 group">
         <div class="relative">
-            <i class="fa-solid fa-cart-shopping text-lg text-amber-400 group-hover:scale-110 transition-transform"></i>
-            <span class="absolute -top-2 -right-2.5 bg-red-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm" x-text="cartCount">0</span>
+            <i class="fa-solid fa-cart-shopping text-lg text-white group-hover:scale-110 transition-transform"></i>
+            <span class="absolute -top-2 -right-2.5 bg-white text-brand-800 text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border border-brand-700 shadow-sm" x-text="cartCount">0</span>
         </div>
-        <span class="text-[10px] font-extrabold uppercase tracking-tighter text-amber-300">Cart</span>
+        <span class="text-[10px] font-extrabold uppercase tracking-tighter text-white">Cart</span>
     </a>
 
-    <!-- Floating Back-to-Top Button (6️⃣ Star Highlight) -->
+    <!-- Floating Back-to-Top Button -->
     <div x-data="{ showTopBtn: false }" @scroll.window="showTopBtn = (window.pageYOffset > 250)" class="fixed bottom-6 right-6 z-40">
         <button 
             type="button"
@@ -495,14 +497,14 @@
             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
             x-transition:leave-end="opacity-0 translate-y-6 scale-75"
             @click="window.scrollTo({ top: 0, behavior: 'smooth' })" 
-            class="w-12 h-12 bg-gradient-to-tr from-brand-600 via-brand-500 to-emerald-400 text-white rounded-full shadow-2xl flex items-center justify-center text-lg hover:scale-110 hover:shadow-brand-600/50 transition duration-300 cursor-pointer border-2 border-white"
+            class="w-11 h-11 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-xl flex items-center justify-center text-base hover:scale-110 transition duration-300 cursor-pointer border-2 border-white"
             title="Back to top"
         >
             <i class="fa-solid fa-arrow-up"></i>
         </button>
     </div>
 
-    <!-- Global Product Quick View Modal (4️⃣ Star Highlight: Dark Overlay + Fade/Scale Animation + Variants) -->
+    <!-- Global Product Quick View Modal -->
     <div 
         x-data="quickViewComponent()" 
         @open-quickview.window="loadProduct($event.detail.id)"
@@ -511,7 +513,7 @@
         class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4"
         @keydown.escape.window="closeModal()"
     >
-        <!-- Dark Overlay Background (13) -->
+        <!-- Overlay -->
         <div 
             x-show="isOpen" 
             x-transition:enter="transition ease-out duration-300" 
@@ -521,10 +523,10 @@
             x-transition:leave-start="opacity-100" 
             x-transition:leave-end="opacity-0"
             @click="closeModal()" 
-            class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
+            class="fixed inset-0 bg-brand-950/60 backdrop-blur-sm"
         ></div>
 
-        <!-- Modal Dialog (14: Fade/Scale Effect) -->
+        <!-- Modal Dialog -->
         <div 
             x-show="isOpen" 
             x-transition:enter="transition ease-out duration-300 transform" 
@@ -536,7 +538,7 @@
             class="relative bg-white rounded-3xl max-w-2xl w-full shadow-2xl overflow-hidden z-10 border border-gray-100 p-6 md:p-8"
         >
             <!-- Close Button -->
-            <button @click="closeModal()" class="absolute top-4 right-4 bg-gray-100 text-gray-500 hover:bg-red-600 hover:text-white rounded-full w-8 h-8 flex items-center justify-center transition font-bold z-20">
+            <button @click="closeModal()" class="absolute top-4 right-4 bg-gray-100 text-gray-500 hover:bg-brand-600 hover:text-white rounded-full w-8 h-8 flex items-center justify-center transition font-bold z-20">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -549,7 +551,7 @@
             <!-- Product Content Body -->
             <div x-show="!loading && product" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                 <!-- Image -->
-                <div class="bg-gray-50 rounded-2xl p-4 flex items-center justify-center border border-gray-100 h-64">
+                <div class="bg-brand-50/40 rounded-2xl p-4 flex items-center justify-center border border-brand-100 h-64">
                     <img :src="product ? product.image_url : ''" :alt="product ? product.name : ''" class="max-h-full max-w-full object-contain">
                 </div>
 
@@ -559,7 +561,7 @@
                     <h3 class="text-lg md:text-xl font-extrabold text-gray-900 leading-snug" x-text="product ? product.name : ''"></h3>
                     <p class="text-xs text-gray-500 line-clamp-2" x-text="product ? product.description : ''"></p>
 
-                    <!-- Price View (16: Dynamic Update) -->
+                    <!-- Price View -->
                     <div class="flex items-baseline gap-2 pt-1 border-t">
                         <span class="text-2xl font-black text-brand-700" x-text="'৳ ' + calculateTotalPrice().toLocaleString()"></span>
                         <template x-if="product && product.sale_price">
@@ -567,7 +569,7 @@
                         </template>
                     </div>
 
-                    <!-- Variant Selection Options (15: Active State) -->
+                    <!-- Variant Selection Options -->
                     <template x-if="product && product.variants && product.variants.length > 0">
                         <div class="space-y-1.5">
                             <label class="block text-xs font-bold text-gray-700">Select Size / Variant:</label>
@@ -587,7 +589,7 @@
                         </div>
                     </template>
 
-                    <!-- Quantity Controller (17: Dynamic Update) -->
+                    <!-- Quantity Controller -->
                     <div class="flex items-center gap-3 pt-2">
                         <span class="text-xs font-bold text-gray-700">Quantity:</span>
                         <div class="flex items-center border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
@@ -612,9 +614,9 @@
                             type="button" 
                             @click="addToCart(true)" 
                             :disabled="adding"
-                            class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-extrabold text-xs py-3 rounded-xl transition flex items-center justify-center gap-1.5 shadow-md"
+                            class="bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs py-3 rounded-xl transition flex items-center justify-center gap-1.5 shadow-md"
                         >
-                            <i class="fa-solid fa-bolt"></i> Order Now
+                            <i class="fa-solid fa-leaf"></i> Order Now
                         </button>
                     </div>
                 </div>
