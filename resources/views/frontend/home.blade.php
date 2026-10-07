@@ -155,7 +155,7 @@
                     <div class="grid grid-cols-2 gap-1.5">
                         @foreach($superDeals->take(2) as $dealCard)
                             <a href="{{ route('products.show', $dealCard->slug) }}" class="bg-white p-2 rounded-xl text-center border border-amber-200 shadow-2xl block hover:scale-105 transition-transform">
-                                <img src="{{ asset('storage/' . $dealCard->image) }}" class="w-12 h-12 object-contain mx-auto mb-1">
+                                <img src="{{ $dealCard->image_url }}" class="w-12 h-12 object-contain mx-auto mb-1">
                                 <span class="text-[10px] font-extrabold text-gray-900 truncate block">{{ format_price($dealCard->effective_price) }}</span>
                             </a>
                         @endforeach
@@ -205,7 +205,7 @@
                                     @php
                                         $isModel = $deal instanceof \App\Models\ComboOffer;
                                         $link = $isModel ? ($deal->link ?? ($deal->product ? route('products.show', $deal->product->slug) : route('products.index'))) : route('products.show', $deal->slug);
-                                        $imageSrc = $deal->image ? (filter_var($deal->image, FILTER_VALIDATE_URL) ? $deal->image : asset('storage/' . $deal->image)) : 'https://placehold.co/200x200?text=Khati+Bajar';
+                                        $imageSrc = $deal->image_url;
                                         $badgeText = $isModel ? ($deal->badge_text ?? 'BIG COMBO OFFER') : 'BIG COMBO OFFER';
                                         $offerText = $isModel ? ($deal->offer_text ?? ('৳ ' . number_format($deal->price))) : ($deal->short_description ?: format_price($deal->effective_price));
                                         $priceText = $isModel ? ('৳ ' . number_format($deal->price)) : format_price($deal->effective_price);

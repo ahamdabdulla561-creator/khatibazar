@@ -18,6 +18,19 @@ class Category extends Model
         'sort_order',
     ];
 
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        if (empty($this->image)) {
+            return null;
+        }
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+        return asset('storage/' . ltrim($this->image, '/'));
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class);

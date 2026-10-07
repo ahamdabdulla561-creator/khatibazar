@@ -67,7 +67,7 @@
                 <label class="block text-xs font-bold text-gray-700 mb-1">Upload Offer Image</label>
                 @if($offer->image)
                     <div class="mb-2 flex items-center gap-3">
-                        <img src="{{ filter_var($offer->image, FILTER_VALIDATE_URL) ? $offer->image : asset('storage/' . $offer->image) }}" class="w-12 h-12 object-contain rounded-lg border bg-white p-1">
+                        <img src="{{ $offer->image_url }}" class="w-12 h-12 object-contain rounded-lg border bg-white p-1">
                         <span class="text-xs text-gray-400">Current Image</span>
                     </div>
                 @endif

@@ -20,7 +20,7 @@
     <div class="relative bg-gray-50 overflow-hidden pt-[100%]">
         <a href="{{ route('products.show', $product->slug) }}">
             <img 
-                src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/400x400?text=Khati+Bajar' }}" 
+                src="{{ $product->image_url }}" 
                 alt="{{ $product->name }}" 
                 class="absolute inset-0 w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
             >

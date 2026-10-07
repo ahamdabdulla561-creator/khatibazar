@@ -66,7 +66,7 @@
                         <tr class="hover:bg-gray-50/80 transition">
                             <td class="p-4">
                                 <div class="w-14 h-14 rounded-xl overflow-hidden border border-gray-200 bg-gray-50 p-1 flex items-center justify-center">
-                                    <img src="{{ $product->image ? (filter_var($product->image, FILTER_VALIDATE_URL) ? $product->image : asset('storage/' . $product->image)) : 'https://placehold.co/100x100?text=KB' }}" class="max-h-full max-w-full object-contain">
+                                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="max-h-full max-w-full object-contain">
                                 </div>
                             </td>
                             <td class="p-4">

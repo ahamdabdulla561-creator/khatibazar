@@ -120,7 +120,7 @@
                 <div>
                     <label class="block text-xs font-bold text-gray-700 mb-1">Upload New Main Image (if any)</label>
                     @if($product->image)
-                        <img src="{{ asset('storage/' . $product->image) }}" class="w-16 h-16 object-cover rounded-xl border mb-2">
+                        <img src="{{ $product->image_url }}" class="w-16 h-16 object-cover rounded-xl border mb-2">
                     @endif
                     <input type="file" name="image" accept="image/*" class="w-full text-xs text-gray-500 border border-gray-200 rounded-xl p-2 bg-gray-50">
                 </div>

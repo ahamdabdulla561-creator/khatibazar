@@ -268,7 +268,7 @@
                             @foreach($cart->items as $item)
                                 <div class="flex items-center justify-between gap-3 text-xs border-b pb-2">
                                     <div class="flex items-center gap-2">
-                                        <img src="{{ $item->product->image ? asset('storage/' . $item->product->image) : 'https://placehold.co/80x80?text=KB' }}" class="w-10 h-10 object-cover rounded-lg">
+                                        <img src="{{ $item->product->image_url }}" class="w-10 h-10 object-cover rounded-lg">
                                         <div>
                                             <span class="font-bold text-gray-800 block line-clamp-1">{{ $item->product->name }}</span>
                                             @if($item->variant)

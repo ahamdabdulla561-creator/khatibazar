@@ -31,7 +31,7 @@
                     <tr class="hover:bg-gray-50">
                         <td class="p-4 font-bold text-gray-600">{{ $category->sort_order }}</td>
                         <td class="p-4">
-                            <img src="{{ $category->image ? asset('storage/' . $category->image) : 'https://placehold.co/80x80?text=Cat' }}" class="w-10 h-10 object-cover rounded-xl border border-gray-200">
+                            <img src="{{ $category->image_url ?: 'https://placehold.co/80x80?text=Cat' }}" class="w-10 h-10 object-cover rounded-xl border border-gray-200">
                         </td>
                         <td class="p-4 font-bold text-gray-900">{{ $category->name }}</td>
                         <td class="p-4 text-xs font-mono text-gray-500">{{ $category->slug }}</td>

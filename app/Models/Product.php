@@ -35,6 +35,19 @@ class Product extends Model
         'is_super_offer' => 'boolean',
     ];
 
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        if (empty($this->image)) {
+            return 'https://placehold.co/400x400?text=Khati+Bajar';
+        }
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+        return asset('storage/' . ltrim($this->image, '/'));
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);

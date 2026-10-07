@@ -17,7 +17,7 @@
                             
                             <!-- Product Details -->
                             <div class="flex items-center gap-4 w-full sm:w-auto">
-                                <img src="{{ $item->product->image ? asset('storage/' . $item->product->image) : 'https://placehold.co/100x100?text=KB' }}" class="w-16 h-16 object-cover rounded-xl border border-gray-100 shrink-0">
+                                <img src="{{ $item->product->image_url }}" class="w-16 h-16 object-cover rounded-xl border border-gray-100 shrink-0">
                                 <div>
                                     <h3 class="font-bold text-gray-900 text-sm md:text-base line-clamp-1">
                                         <a href="{{ route('products.show', $item->product->slug) }}">{{ $item->product->name }}</a>

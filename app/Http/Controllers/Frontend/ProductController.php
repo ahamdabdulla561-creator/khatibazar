@@ -120,7 +120,7 @@ class ProductController extends Controller
             'slug' => $product->slug,
             'short_description' => $product->short_description,
             'description' => \Illuminate\Support\Str::limit(strip_tags($product->description), 160),
-            'image_url' => $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/400x400?text=Khati+Bajar',
+            'image_url' => $product->image_url,
             'regular_price' => (float)$product->regular_price,
             'sale_price' => $product->sale_price ? (float)$product->sale_price : null,
             'effective_price' => (float)$product->effective_price,
