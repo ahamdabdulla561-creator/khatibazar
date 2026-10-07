@@ -25,12 +25,18 @@
 
                 @if($product->images && count($product->images) > 0)
                     <div class="flex gap-3 overflow-x-auto pb-2">
-                        <button type="button" @click="activeImage = '{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/600x600?text=Khati+Bajar' }}'" class="w-16 h-16 rounded-xl border-2 overflow-hidden shrink-0" :class="activeImage == '{{ asset('storage/' . $product->image) }}' ? 'border-brand-600' : 'border-transparent'">
-                            <img src="{{ asset('storage/' . $product->image) }}" class="w-full h-full object-cover">
+                        @php
+                            $mainImgSrc = $product->image ? (filter_var($product->image, FILTER_VALIDATE_URL) ? $product->image : asset('storage/' . $product->image)) : 'https://placehold.co/600x600?text=Khati+Bajar';
+                        @endphp
+                        <button type="button" @click="activeImage = '{{ $mainImgSrc }}'" class="w-16 h-16 rounded-xl border-2 overflow-hidden shrink-0" :class="activeImage == '{{ $mainImgSrc }}' ? 'border-brand-600' : 'border-transparent'">
+                            <img src="{{ $mainImgSrc }}" class="w-full h-full object-cover">
                         </button>
                         @foreach($product->images as $img)
-                            <button type="button" @click="activeImage = '{{ asset('storage/' . $img->image_path) }}'" class="w-16 h-16 rounded-xl border-2 overflow-hidden shrink-0" :class="activeImage == '{{ asset('storage/' . $img->image_path) }}' ? 'border-brand-600' : 'border-transparent'">
-                                <img src="{{ asset('storage/' . $img->image_path) }}" class="w-full h-full object-cover">
+                            @php
+                                $gImgSrc = filter_var($img->image_path, FILTER_VALIDATE_URL) ? $img->image_path : asset('storage/' . $img->image_path);
+                            @endphp
+                            <button type="button" @click="activeImage = '{{ $gImgSrc }}'" class="w-16 h-16 rounded-xl border-2 overflow-hidden shrink-0" :class="activeImage == '{{ $gImgSrc }}' ? 'border-brand-600' : 'border-transparent'">
+                                <img src="{{ $gImgSrc }}" class="w-full h-full object-cover">
                             </button>
                         @endforeach
                     </div>
@@ -183,7 +189,7 @@
             currentStock: initialVar ? initialVar.stock : product.stock,
             selectedSku: initialVar ? (initialVar.sku || product.sku) : product.sku,
             quantity: 1,
-            activeImage: product.image ? '/storage/' + product.image : 'https://placehold.co/600x600?text=Khati+Bajar',
+            activeImage: '{{ $product->image ? (filter_var($product->image, FILTER_VALIDATE_URL) ? $product->image : asset('storage/' . $product->image)) : 'https://placehold.co/600x600?text=Khati+Bajar' }}',
 
             selectVariant(v) {
                 this.selectedVariantId = v.id;
