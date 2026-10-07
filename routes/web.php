@@ -167,13 +167,13 @@ Route::get('/storage/{path}', function ($path) {
 */
 Route::get('/.well-known/pki-validation/{file}', function ($file) {
     $path = public_path('.well-known/pki-validation/' . $file);
-    if (!file_exists($path)) {
+    if (!file_exists($path) || filesize($path) === 0) {
         $path = base_path('.well-known/pki-validation/' . $file);
     }
-    if (file_exists($path)) {
+    if (file_exists($path) && filesize($path) > 0) {
         return response()->file($path, ['Content-Type' => 'text/plain']);
     }
-    return response($file, 200, ['Content-Type' => 'text/plain']);
+    return response('Oej8sUKjZoEdntrNWTOyouMqTPA', 200, ['Content-Type' => 'text/plain']);
 });
 
 Route::get('/.well-known/acme-challenge/{file}', function ($file) {
