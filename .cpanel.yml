@@ -3,8 +3,3 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/khatxoha/public_html
     - /bin/cp -R * $DEPLOYPATH
-    - /bin/cp .htaccess $DEPLOYPATH/
-    - /bin/cp index.php $DEPLOYPATH/
-    - /bin/cp .env.example $DEPLOYPATH/.env
-    - /bin/chmod -R 777 $DEPLOYPATH/storage
-    - /bin/chmod -R 777 $DEPLOYPATH/bootstrap/cache
