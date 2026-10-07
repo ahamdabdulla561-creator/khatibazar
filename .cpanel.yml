@@ -3,6 +3,7 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/khatxoha/public_html
     - /bin/cp -R * $DEPLOYPATH
-    - /bin/cp -f .htaccess $DEPLOYPATH/ 2>/dev/null || true
-    - /bin/cp -f index.php $DEPLOYPATH/ 2>/dev/null || true
-    - /bin/chmod -R 755 $DEPLOYPATH/storage $DEPLOYPATH/bootstrap/cache 2>/dev/null || true
+    - /bin/cp .htaccess $DEPLOYPATH/
+    - /bin/cp index.php $DEPLOYPATH/
+    - /bin/chmod -R 755 $DEPLOYPATH/storage
+    - /bin/chmod -R 755 $DEPLOYPATH/bootstrap/cache
