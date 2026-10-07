@@ -523,20 +523,20 @@
             <div x-show="!loading && product" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                 <!-- Image -->
                 <div class="bg-gray-50 rounded-2xl p-4 flex items-center justify-center border border-gray-100 h-64">
-                    <img :src="product.image_url" :alt="product.name" class="max-h-full max-w-full object-contain">
+                    <img :src="product ? product.image_url : ''" :alt="product ? product.name : ''" class="max-h-full max-w-full object-contain">
                 </div>
 
                 <!-- Info & Selection -->
                 <div class="space-y-4">
-                    <span class="text-[10px] font-extrabold uppercase bg-brand-50 text-brand-700 px-2.5 py-1 rounded-full tracking-wider" x-text="product.category_name"></span>
-                    <h3 class="text-lg md:text-xl font-extrabold text-gray-900 leading-snug" x-text="product.name"></h3>
-                    <p class="text-xs text-gray-500 line-clamp-2" x-text="product.description"></p>
+                    <span class="text-[10px] font-extrabold uppercase bg-brand-50 text-brand-700 px-2.5 py-1 rounded-full tracking-wider" x-text="product ? product.category_name : ''"></span>
+                    <h3 class="text-lg md:text-xl font-extrabold text-gray-900 leading-snug" x-text="product ? product.name : ''"></h3>
+                    <p class="text-xs text-gray-500 line-clamp-2" x-text="product ? product.description : ''"></p>
 
                     <!-- Price View (16: Dynamic Update) -->
                     <div class="flex items-baseline gap-2 pt-1 border-t">
                         <span class="text-2xl font-black text-brand-700" x-text="'৳ ' + calculateTotalPrice().toLocaleString()"></span>
                         <template x-if="product && product.sale_price">
-                            <span class="text-sm text-gray-400 line-through" x-text="product.formatted_regular_price"></span>
+                            <span class="text-sm text-gray-400 line-through" x-text="product ? product.formatted_regular_price : ''"></span>
                         </template>
                     </div>
 
