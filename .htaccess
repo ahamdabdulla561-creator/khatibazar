@@ -9,6 +9,16 @@
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
+    # Direct rewrite for /storage/ URLs to storage/app/public/
+    RewriteCond %{REQUEST_URI} ^/storage/(.*)$
+    RewriteCond %{DOCUMENT_ROOT}/storage/app/public/%1 -f
+    RewriteRule ^storage/(.*)$ storage/app/public/$1 [L]
+
+    # Direct rewrite for /storage/ URLs to public/storage/
+    RewriteCond %{REQUEST_URI} ^/storage/(.*)$
+    RewriteCond %{DOCUMENT_ROOT}/public/storage/%1 -f
+    RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$

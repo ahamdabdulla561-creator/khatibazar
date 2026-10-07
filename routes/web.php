@@ -137,3 +137,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/audit-logs', [AdminAuditLogController::class, 'index'])->name('audit_logs.index');
     });
 });
+
+/*
+|--------------------------------------------------------------------------
+| DYNAMIC UPLOADED STORAGE IMAGE SERVING FALLBACK
+|--------------------------------------------------------------------------
+| Guarantees 100% image display on live hosting/cPanel regardless of symlinks
+*/
+Route::get('/storage/{path}', function ($path) {
+    $fullPath = storage_path('app/public/' . $path);
+    if (!file_exists($fullPath)) {
+        $fullPath = public_path('storage/' . $path);
+    }
+    if (file_exists($fullPath) && !is_dir($fullPath)) {
+        $mime = mime_content_type($fullPath) ?: 'image/jpeg';
+        return response()->file($fullPath, ['Content-Type' => $mime]);
+    }
+    abort(404);
+})->where('path', '.*');
+
