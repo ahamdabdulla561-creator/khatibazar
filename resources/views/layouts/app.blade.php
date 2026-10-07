@@ -168,7 +168,7 @@
     </style>
     @stack('styles')
 </head>
-<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen" x-data="{ mobileMenuOpen: false, searchOpen: false, cartCount: 0 }" x-init="fetch('{{ route('cart.count') }}').then(r=>r.json()).then(d=>cartCount=d.count)">
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen" x-data="{ mobileMenuOpen: false, searchOpen: false, cartCount: 0 }" x-init="fetch('{{ route('cart.count') }}').then(r => r.ok ? r.json() : {count: 0}).then(d => cartCount = d ? d.count : 0).catch(() => cartCount = 0)">
 
     <!-- Top Announcement Bar -->
     <div class="bg-brand-900 text-white text-xs md:text-sm py-2.5 px-4 shadow-sm">
@@ -535,13 +535,13 @@
                     <!-- Price View (16: Dynamic Update) -->
                     <div class="flex items-baseline gap-2 pt-1 border-t">
                         <span class="text-2xl font-black text-brand-700" x-text="'৳ ' + calculateTotalPrice().toLocaleString()"></span>
-                        <template x-if="product.sale_price">
+                        <template x-if="product && product.sale_price">
                             <span class="text-sm text-gray-400 line-through" x-text="product.formatted_regular_price"></span>
                         </template>
                     </div>
 
                     <!-- Variant Selection Options (15: Active State) -->
-                    <template x-if="product.variants && product.variants.length > 0">
+                    <template x-if="product && product.variants && product.variants.length > 0">
                         <div class="space-y-1.5">
                             <label class="block text-xs font-bold text-gray-700">Select Size / Variant:</label>
                             <div class="flex flex-wrap gap-2">
