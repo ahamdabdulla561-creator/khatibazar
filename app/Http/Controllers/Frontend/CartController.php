@@ -157,7 +157,7 @@ class CartController extends Controller
     {
         $cart = $this->getCart();
         $count = $cart->items()->sum('quantity');
-        $subtotal = $cart->items->get()->sum(fn($i) => $i->price * $i->quantity);
+        $subtotal = $cart->items->sum(fn($i) => $i->price * $i->quantity);
 
         return response()->json([
             'count' => $count,

@@ -150,8 +150,12 @@ Route::get('/storage/{path}', function ($path) {
         $fullPath = public_path('storage/' . $path);
     }
     if (file_exists($fullPath) && !is_dir($fullPath)) {
-        $mime = mime_content_type($fullPath) ?: 'image/jpeg';
+        $mime = function_exists('mime_content_type') ? (mime_content_type($fullPath) ?: 'image/png') : 'image/png';
         return response()->file($fullPath, ['Content-Type' => $mime]);
+    }
+    $fallback = public_path('images/logo.png');
+    if (file_exists($fallback)) {
+        return response()->file($fallback, ['Content-Type' => 'image/png']);
     }
     abort(404);
 })->where('path', '.*');

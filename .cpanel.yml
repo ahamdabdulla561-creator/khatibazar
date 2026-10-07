@@ -4,7 +4,10 @@ deployment:
     - export DEPLOYPATH=/home/khatxoha/public_html
     - /bin/chmod 755 $DEPLOYPATH
     - /bin/rsync -rlDv --no-perms --no-owner --no-group --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r --exclude='.git' --exclude='node_modules' ./ $DEPLOYPATH
+    - /bin/mkdir -p $DEPLOYPATH/public/storage
+    - /bin/cp -Rf storage/app/public/* $DEPLOYPATH/public/storage/ 2>/dev/null || true
     - /bin/cp -f .htaccess $DEPLOYPATH/.htaccess
     - /bin/cp -f public/.htaccess $DEPLOYPATH/public/.htaccess
-    - /bin/chmod 755 $DEPLOYPATH $DEPLOYPATH/public $DEPLOYPATH/storage $DEPLOYPATH/bootstrap/cache
+    - /bin/chmod 755 $DEPLOYPATH $DEPLOYPATH/public $DEPLOYPATH/storage $DEPLOYPATH/storage/app $DEPLOYPATH/storage/app/public $DEPLOYPATH/bootstrap/cache
+    - /bin/chmod -R 755 $DEPLOYPATH/storage/app/public $DEPLOYPATH/public/storage 2>/dev/null || true
     - /bin/chmod 644 $DEPLOYPATH/.htaccess $DEPLOYPATH/index.php $DEPLOYPATH/public/.htaccess $DEPLOYPATH/public/index.php $DEPLOYPATH/.env
