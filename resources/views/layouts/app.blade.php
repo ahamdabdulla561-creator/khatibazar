@@ -172,7 +172,7 @@
 
     <!-- Top Announcement Bar -->
     <div class="bg-brand-900 text-white text-xs md:text-sm py-2.5 px-4 shadow-sm">
-        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-3">
+        <div class="max-w-[1400px] mx-auto flex flex-wrap justify-between items-center gap-3">
             <div class="flex items-center gap-4 md:gap-6">
                 <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-amber-500"></i> Helpline: {{ site_setting('phone', '01711-000000') }}</span>
                 <span class="hidden md:flex items-center gap-1.5"><i class="fa-solid fa-envelope text-amber-500"></i> {{ site_setting('email', 'info@khatibajar.com') }}</span>
@@ -190,7 +190,7 @@
 
     <!-- Main Header -->
     <header class="bg-white sticky top-0 z-40 shadow-sm border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
             
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2 group">
@@ -253,7 +253,7 @@
 
         <!-- Navigation Bar -->
         <nav class="hidden md:block bg-brand-800 text-white border-t border-brand-700">
-            <div class="max-w-7xl mx-auto px-4 flex items-center gap-6 text-sm font-medium">
+            <div class="max-w-[1400px] mx-auto px-4 flex items-center gap-6 text-sm font-medium">
                 
                 <!-- Categories Header Dropdown -->
                 <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
@@ -328,7 +328,7 @@
     </header>
 
     <!-- Flash Notification Messages -->
-    <div class="max-w-7xl mx-auto px-4 mt-4">
+    <div class="max-w-[1400px] mx-auto px-4 mt-4">
         @if(session('success'))
             <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-xl shadow-sm mb-4 flex items-center justify-between" x-data="{ show: true }" x-show="show">
                 <div class="flex items-center gap-2">
@@ -356,7 +356,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-gray-300 pt-12 pb-6 border-t border-gray-800 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
             <div>
                 <h3 class="text-white text-lg font-bold mb-4">Khati Bajar</h3>
                 <p class="text-sm text-gray-400 mb-4 leading-relaxed">
@@ -413,7 +413,7 @@
             </div>
         </div>
 
-        <div class="border-t border-gray-800 max-w-7xl mx-auto px-4 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-4">
+        <div class="border-t border-gray-800 max-w-[1400px] mx-auto px-4 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-4">
             <p>&copy; {{ date('Y') }} Khati Bajar. All rights reserved.</p>
             <div class="flex items-center gap-4">
                 <span>Cash on Delivery Supported</span>

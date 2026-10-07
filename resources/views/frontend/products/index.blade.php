@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="bg-gray-100 py-6">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Breadcrumb & Title -->
         <div class="reveal-side-left flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">

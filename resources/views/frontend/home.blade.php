@@ -4,8 +4,8 @@
 
 @section('content')
 <!-- TOP HERO SECTION (3-Column Layout: Categories Sidebar + Main Hero & Combo Slider + Welcome & Promo Widget) -->
-<section class="py-4 bg-slate-100/70 border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-5 bg-slate-100/70 border-b border-gray-200">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
             
@@ -187,7 +187,7 @@
                 x-init="startSubTimer()"
                 @mouseenter="stopSubTimer()"
                 @mouseleave="startSubTimer()"
-                class="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 p-2.5 sm:p-3 rounded-2xl shadow-lg border border-amber-300 relative overflow-hidden"
+                class="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 p-2.5 sm:p-3 rounded-2xl shadow-lg border border-amber-300 relative overflow-hidden mt-6 sm:mt-8"
             >
                 <!-- Smooth Horizontal Sliding Track -->
                 <div class="relative min-h-[185px] overflow-hidden">
@@ -260,8 +260,8 @@
 </section>
 
 <!-- BELOW HERO SECTION: Welcome User Card + One-by-One Item Carousel -->
-<section class="py-6 bg-white border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+<section class="py-8 bg-white border-b border-gray-100">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
         
         <!-- Welcome User Box (Moved Below Hero Section) -->
         <div class="md:col-span-4 bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 text-white rounded-2xl shadow-md p-6 flex flex-col items-center text-center relative overflow-hidden">
@@ -384,8 +384,8 @@
 </section>
 
 <!-- Trust Badges -->
-<section class="bg-white border-b border-gray-100 py-8">
-    <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+<section class="bg-white border-b border-gray-100 py-10">
+    <div class="max-w-[1400px] mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
         <div class="flex items-center justify-center gap-3.5 p-3 group">
             <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-2xl flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white transition-all duration-300 shadow-sm">
                 <i class="fa-solid fa-truck-fast"></i>
@@ -431,7 +431,7 @@
 <!-- Super Offer Deals Section -->
 @if(count($superDeals) > 0)
 <section class="py-12 bg-amber-50/60 border-y border-amber-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div class="flex items-center gap-3">
                 <div class="w-11 h-11 bg-amber-500 text-white rounded-2xl flex items-center justify-center font-bold text-xl shadow-md animate-flame">
@@ -498,7 +498,7 @@
 @endif
 
 <!-- Featured Products Section -->
-<section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-12 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between mb-8">
         <div>
             <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">Featured Products</h2>
@@ -519,7 +519,7 @@
 
 <!-- Popular Products Grid -->
 <section class="py-12 bg-gray-100/70 border-t border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between mb-8">
             <div>
                 <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">Popular Products</h2>
@@ -536,7 +536,7 @@
 </section>
 
 <!-- Why Choose Us -->
-<section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<section class="py-16 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <div>
         <h2 class="text-2xl md:text-4xl font-extrabold text-gray-900 mb-3">Why Shop at Khati Bajar?</h2>
         <p class="text-sm text-gray-500 max-w-2xl mx-auto mb-12">We are committed to providing the highest service to farmers and delivering products of the right quality.</p>

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="bg-gray-50 py-8" x-data="productDetail({{ json_encode($product) }}, {{ json_encode($product->activeVariants) }})">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Breadcrumb -->
         <nav class="flex text-xs md:text-sm text-gray-500 mb-6 gap-2">
