@@ -18,10 +18,10 @@
 
         <!-- 2 Lines of Text Below Logo -->
         <h1 class="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight max-w-2xl leading-snug">
-            100% Pure &amp; Natural Agricultural and Farm Products
+            খাঁটি স্বাদ, বিশুদ্ধতার প্রতিশ্রুতি।
         </h1>
         <p class="text-xs sm:text-sm md:text-base text-brand-100 mt-1.5 max-w-xl leading-relaxed">
-            Your trusted digital marketplace for authentic livestock medicines, fish supplements &amp; organic farm supplies.
+            প্রকৃতির সেরা উপাদান থেকে বেছে নেওয়া খাঁটি ও মানসম্মত খাবার—আপনার ঘরের জন্য।
         </p>
 
     </div>
