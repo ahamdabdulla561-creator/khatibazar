@@ -205,86 +205,23 @@
         </div>
     </div>
 
-    <!-- Main Header (Natural Green Background + White Text) -->
-    <header class="bg-brand-700 text-white sticky top-0 z-40 shadow-md">
-        <div class="max-w-[1400px] mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3.5 flex items-center justify-between gap-3">
+    <!-- Main Header (No Logo, Navigation Menu Directly in Header, Compact Magnifying Glass Search Icon) -->
+    <header class="bg-brand-700 text-white sticky top-0 z-40 shadow-md" x-data="searchComponent()">
+        <div class="max-w-[1400px] mx-auto px-3 sm:px-6 lg:px-8 h-13 sm:h-14 flex items-center justify-between gap-3">
             
-            <!-- Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-2 group shrink-0 bg-white px-3 py-1.5 rounded-xl shadow-xs">
-                <img src="{{ site_setting('site_logo') ? asset('storage/' . site_setting('site_logo')) : asset('images/logo.png') }}" alt="Khati Bajar BD Logo" class="h-8 sm:h-10 md:h-11 w-auto max-w-[140px] sm:max-w-[175px] object-contain group-hover:scale-105 transition-transform duration-300">
-            </a>
-
-            <!-- Desktop Search Bar -->
-            <div class="hidden md:flex flex-1 max-w-xl relative" x-data="searchComponent()">
-                <div class="relative w-full">
-                    <input 
-                        type="text" 
-                        x-model="query" 
-                        @input.debounce.300ms="fetchSuggestions()"
-                        @keydown.enter="search()"
-                        placeholder="Search pure farm products, medicines or feeds..." 
-                        class="w-full bg-white text-gray-800 placeholder-gray-400 border border-brand-600 rounded-full py-2.5 pl-5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-white transition shadow-inner"
-                    >
-                    <button type="button" @click="search()" class="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-brand-700 text-white rounded-full hover:bg-brand-800 transition flex items-center justify-center">
-                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                    </button>
-                </div>
-                <!-- Suggestions Dropdown -->
-                <div x-show="suggestions.length > 0" @click.away="suggestions = []" x-cloak class="absolute left-0 right-0 top-full mt-2 bg-white text-gray-800 rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden">
-                    <template x-for="item in suggestions" :key="item.id">
-                        <a :href="'/products/' + item.slug" class="flex items-center gap-3 p-3 hover:bg-brand-50 border-b border-gray-50 last:border-0 transition">
-                            <img :src="item.image ? '/storage/' + item.image : 'https://placehold.co/100x100?text=KB'" class="w-10 h-10 object-cover rounded-lg">
-                            <div class="flex-1 min-w-0">
-                                <h4 class="text-sm font-medium text-gray-900 truncate" x-text="item.name"></h4>
-                                <p class="text-xs text-brand-700 font-bold" x-text="'৳ ' + (item.sale_price || item.regular_price)"></p>
-                            </div>
-                        </a>
-                    </template>
-                </div>
-            </div>
-
-            <!-- Header Action Buttons -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <!-- Cart Button (Green & White) -->
-                <a href="{{ route('cart.index') }}" class="relative flex items-center gap-2 bg-brand-800 hover:bg-brand-900 text-white px-3.5 sm:px-4 py-2 rounded-full transition font-bold text-xs sm:text-sm border border-brand-600 shadow-xs">
-                    <i class="fa-solid fa-basket-shopping text-sm sm:text-base text-white"></i>
-                    <span class="hidden sm:inline">Cart</span>
-                    <span class="bg-white text-brand-800 text-[11px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center" x-text="cartCount">0</span>
-                </a>
-
-                <!-- Mobile Menu Trigger -->
+            <!-- Left / Center: Navigation Menu Directly in Header -->
+            <div class="flex items-center gap-4 lg:gap-6 text-sm font-medium">
+                <!-- Mobile Menu Trigger (Left on Mobile) -->
                 <button type="button" @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden w-9 h-9 rounded-full bg-brand-800 hover:bg-brand-900 text-white border border-brand-600 flex items-center justify-center text-base focus:outline-none transition">
                     <i class="fa-solid fa-bars"></i>
                 </button>
-            </div>
-        </div>
 
-        <!-- Mobile Search Bar (Visible directly on phones) -->
-        <div class="md:hidden px-3 pb-2.5">
-            <form action="{{ route('products.index') }}" method="GET" class="relative">
-                <input 
-                    type="text" 
-                    name="q" 
-                    value="{{ request('q') }}"
-                    placeholder="Search medicines, feeds, or farm products..." 
-                    class="w-full bg-white text-gray-800 placeholder-gray-400 rounded-full py-2 pl-4 pr-10 text-xs focus:outline-none focus:ring-2 focus:ring-brand-100 transition shadow-inner"
-                >
-                <button type="submit" class="absolute right-1 top-1 bottom-1 px-3 bg-brand-700 text-white rounded-full flex items-center justify-center">
-                    <i class="fa-solid fa-magnifying-glass text-[11px]"></i>
-                </button>
-            </form>
-        </div>
-
-        <!-- Desktop Navigation Bar (Rich Natural Green + Crisp White Text) -->
-        <nav class="hidden md:block bg-brand-800 text-white border-t border-brand-600/60">
-            <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-6 text-sm font-medium">
-                
-                <!-- Categories Header Dropdown -->
-                <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <button type="button" @click="open = !open" class="py-3 px-4 bg-brand-900 hover:bg-brand-950 text-white font-bold flex items-center gap-2.5 transition">
+                <!-- Categories Dropdown (Desktop) -->
+                <div class="hidden md:block relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                    <button type="button" @click="open = !open" class="py-2 px-3.5 bg-brand-800 hover:bg-brand-900 text-white rounded-xl font-bold flex items-center gap-2 border border-brand-600 transition text-xs lg:text-sm">
                         <i class="fa-solid fa-bars text-white"></i>
                         <span>Categories</span>
-                        <i class="fa-solid fa-chevron-down text-xs ml-1 text-brand-100 transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] ml-0.5 text-brand-100 transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
                     </button>
 
                     <!-- Dropdown Menu -->
@@ -295,7 +232,7 @@
                          x-transition:leave="transition ease-in duration-150"
                          x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                          x-transition:leave-end="opacity-0 scale-95 -translate-y-2"
-                         class="absolute left-0 top-full w-64 bg-white text-gray-800 rounded-b-2xl shadow-2xl border border-gray-100 z-50 py-2 space-y-1">
+                         class="absolute left-0 top-full mt-1 w-64 bg-white text-gray-800 rounded-2xl shadow-2xl border border-gray-100 z-50 py-2 space-y-1">
                         @foreach(\App\Models\Category::where('status', 'active')->orderBy('sort_order', 'asc')->get() as $cat)
                             <a href="{{ route('category.show', $cat->slug) }}" class="flex items-center justify-between px-4 py-2.5 hover:bg-brand-50 hover:text-brand-700 text-xs font-semibold text-gray-700 transition group">
                                 <div class="flex items-center gap-2.5">
@@ -314,21 +251,88 @@
                     </div>
                 </div>
 
-                <a href="{{ route('home') }}" class="py-3 text-white hover:text-brand-100 transition {{ request()->routeIs('home') ? 'font-extrabold border-b-2 border-white' : '' }}">Home</a>
-                <a href="{{ route('products.index') }}" class="py-3 text-white hover:text-brand-100 transition {{ request()->routeIs('products.index') ? 'font-extrabold border-b-2 border-white' : '' }}">All Products</a>
-                
-                @foreach(\App\Models\Category::where('status', 'active')->orderBy('sort_order', 'asc')->take(4)->get() as $navCat)
-                    <a href="{{ route('category.show', $navCat->slug) }}" class="py-3 text-white/95 hover:text-white transition">{{ $navCat->name }}</a>
-                @endforeach
-                
-                <a href="{{ route('order.track') }}" class="py-3 text-white hover:text-brand-100 transition ml-auto font-bold flex items-center gap-1.5"><i class="fa-solid fa-truck-fast"></i> Track Order</a>
+                <!-- Quick Links on Mobile & Desktop -->
+                <nav class="flex items-center gap-4 lg:gap-6">
+                    <a href="{{ route('home') }}" class="py-1 text-white hover:text-brand-100 transition text-xs sm:text-sm {{ request()->routeIs('home') ? 'font-extrabold border-b-2 border-white' : '' }}">Home</a>
+                    <a href="{{ route('products.index') }}" class="py-1 text-white hover:text-brand-100 transition text-xs sm:text-sm {{ request()->routeIs('products.index') ? 'font-extrabold border-b-2 border-white' : '' }}">All Products</a>
+                    
+                    @foreach(\App\Models\Category::where('status', 'active')->orderBy('sort_order', 'asc')->take(4)->get() as $navCat)
+                        <a href="{{ route('category.show', $navCat->slug) }}" class="hidden lg:inline-block py-1 text-white/95 hover:text-white transition text-sm">{{ $navCat->name }}</a>
+                    @endforeach
+                    
+                    <a href="{{ route('order.track') }}" class="hidden md:flex py-1 text-white hover:text-brand-100 transition font-semibold items-center gap-1.5 text-xs lg:text-sm"><i class="fa-solid fa-truck-fast"></i> Track Order</a>
+                </nav>
             </div>
-        </nav>
+
+            <!-- Right: Compact Magnifying Glass Search Icon + Cart Button -->
+            <div class="flex items-center gap-2 sm:gap-2.5">
+                <!-- Small Magnifying Glass Icon Button (Click to Open Search) -->
+                <button 
+                    type="button" 
+                    @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.headerSearchInput.focus())" 
+                    class="w-9 h-9 rounded-full bg-brand-800 hover:bg-brand-900 text-white border border-brand-600 flex items-center justify-center transition shadow-xs"
+                    title="Search Products"
+                >
+                    <i class="fa-solid text-xs sm:text-sm" :class="searchOpen ? 'fa-xmark' : 'fa-magnifying-glass'"></i>
+                </button>
+
+                <!-- Cart Button (Green & White) -->
+                <a href="{{ route('cart.index') }}" class="relative flex items-center gap-1.5 sm:gap-2 bg-brand-800 hover:bg-brand-900 text-white px-3 sm:px-3.5 py-1.5 rounded-full transition font-bold text-xs sm:text-sm border border-brand-600 shadow-xs">
+                    <i class="fa-solid fa-basket-shopping text-xs sm:text-sm text-white"></i>
+                    <span class="hidden sm:inline">Cart</span>
+                    <span class="bg-white text-brand-800 text-[11px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center" x-text="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Collapsible Search Box (Opens only when Magnifying Glass is clicked) -->
+        <div 
+            x-show="searchOpen" 
+            x-cloak
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 -translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-2"
+            @click.away="searchOpen = false; suggestions = []"
+            class="bg-brand-800 border-t border-brand-600/60 px-3 sm:px-6 lg:px-8 py-3"
+        >
+            <div class="max-w-xl mx-auto relative">
+                <form action="{{ route('products.index') }}" method="GET" class="relative">
+                    <input 
+                        x-ref="headerSearchInput"
+                        type="text" 
+                        name="q"
+                        x-model="query" 
+                        @input.debounce.300ms="fetchSuggestions()"
+                        placeholder="Search products..." 
+                        class="w-full bg-white text-gray-800 placeholder-gray-400 rounded-full py-2 pl-4 pr-11 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-300 shadow-inner"
+                    >
+                    <button type="submit" class="absolute right-1 top-1 bottom-1 px-3.5 bg-brand-700 hover:bg-brand-800 text-white rounded-full flex items-center justify-center transition">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    </button>
+                </form>
+
+                <!-- Live Suggestions Dropdown -->
+                <div x-show="suggestions.length > 0" x-cloak class="absolute left-0 right-0 top-full mt-2 bg-white text-gray-800 rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden">
+                    <template x-for="item in suggestions" :key="item.id">
+                        <a :href="'/products/' + item.slug" class="flex items-center gap-3 p-3 hover:bg-brand-50 border-b border-gray-50 last:border-0 transition">
+                            <img :src="item.image ? '/storage/' + item.image : 'https://placehold.co/100x100?text=KB'" class="w-10 h-10 object-cover rounded-lg">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-sm font-medium text-gray-900 truncate" x-text="item.name"></h4>
+                                <p class="text-xs text-brand-700 font-bold" x-text="'৳ ' + (item.sale_price || item.regular_price)"></p>
+                            </div>
+                        </a>
+                    </template>
+                </div>
+            </div>
+        </div>
 
         <!-- Mobile Drawer -->
         <div x-show="mobileMenuOpen" x-cloak class="md:hidden fixed inset-0 z-50 flex">
             <div @click="mobileMenuOpen = false" class="fixed inset-0 bg-brand-950/60 backdrop-blur-xs"></div>
-            <div class="relative bg-white w-4/5 max-w-xs ml-auto h-full shadow-2xl flex flex-col z-10">
+            <div class="relative bg-white w-4/5 max-w-xs mr-auto h-full shadow-2xl flex flex-col z-10">
                 <div class="p-4 bg-brand-700 text-white flex items-center justify-between">
                     <span class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-leaf text-white"></i> Khati Bajar</span>
                     <button @click="mobileMenuOpen = false" class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>

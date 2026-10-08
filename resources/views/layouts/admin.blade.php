@@ -70,19 +70,14 @@
 
             <div class="pt-3 pb-1 text-[11px] font-bold text-slate-500 uppercase tracking-wider px-4">Products & Stock</div>
 
-            <a href="{{ route('admin.products.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.products.*') && !request()->filled('filter') ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-800 text-slate-300' }}">
+            <a href="{{ route('admin.products.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.products.index') || request()->routeIs('admin.products.edit') ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-800 text-slate-300' }}">
                 <i class="fa-solid fa-box-archive w-5"></i>
                 <span>All Products (সকল পণ্য)</span>
             </a>
 
-            <a href="{{ route('admin.products.index', ['filter' => 'super_offer']) }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request('filter') === 'super_offer' ? 'bg-amber-500 text-slate-950 font-black shadow-md' : 'hover:bg-slate-800 text-amber-400' }}">
-                <i class="fa-solid fa-bolt w-5 text-yellow-400"></i>
-                <span>Super Offer Products (সুপার অফার)</span>
-            </a>
-
-            <a href="{{ route('admin.products.index', ['filter' => 'featured']) }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request('filter') === 'featured' ? 'bg-blue-600 text-white font-bold' : 'hover:bg-slate-800 text-blue-300' }}">
-                <i class="fa-solid fa-star w-5 text-amber-400"></i>
-                <span>Featured Products (ফিচার্ড পণ্য)</span>
+            <a href="{{ route('admin.products.create') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.products.create') ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-800 text-slate-300' }}">
+                <i class="fa-solid fa-plus w-5"></i>
+                <span>Upload Product (নতুন পণ্য)</span>
             </a>
 
             <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.categories.*') ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-800 text-slate-300' }}">
@@ -93,16 +88,6 @@
             <a href="{{ route('admin.brands.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.brands.*') ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-800 text-slate-300' }}">
                 <i class="fa-solid fa-tags w-5"></i>
                 <span>Brand Management</span>
-            </a>
-
-            <a href="{{ route('admin.banners.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.banners.*') ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-800 text-slate-300' }}">
-                <i class="fa-solid fa-images w-5"></i>
-                <span>Hero Banners / Sliders</span>
-            </a>
-
-            <a href="{{ route('admin.combo-offers.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.combo-offers.*') ? 'bg-amber-500 text-slate-950 font-black shadow-md' : 'hover:bg-slate-800 text-amber-400' }}">
-                <i class="fa-solid fa-fire w-5 text-amber-400"></i>
-                <span>Combo Offer Cards</span>
             </a>
 
             <div class="pt-3 pb-1 text-[11px] font-bold text-slate-500 uppercase tracking-wider px-4">Orders & Customers</div>

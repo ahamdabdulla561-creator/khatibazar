@@ -141,27 +141,13 @@
                 <textarea name="description" rows="5" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm"></textarea>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t">
-                <div>
+            <div class="pt-4 border-t">
+                <div class="max-w-xs">
                     <label class="block text-xs font-bold text-gray-700 mb-1">Status</label>
                     <select name="status" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm">
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
-                </div>
-
-                <div class="flex items-center pt-5">
-                    <label class="flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-800">
-                        <input type="checkbox" name="is_featured" value="1" class="text-brand-600 rounded">
-                        <span>Show in Featured Products</span>
-                    </label>
-                </div>
-
-                <div class="flex items-center pt-5">
-                    <label class="flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-800">
-                        <input type="checkbox" name="is_super_offer" value="1" class="text-amber-500 rounded">
-                        <span>Show in Super Offers</span>
-                    </label>
                 </div>
             </div>
         </div>
