@@ -11,7 +11,7 @@ class BannerSeeder extends Seeder
     {
         $banners = [
             [
-                'title' => 'Khati Bajar — Pure Agricultural & Veterinary Supplies',
+                'title' => 'Khati Bazar — Pure Agricultural & Veterinary Supplies',
                 'subtitle' => 'Trusted digital marketplace for livestock medicines, CFC plus combo feeds, and fish supplements.',
                 'badge_text' => '100% Genuine Farm Products',
                 'background_image' => 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1000&auto=format&fit=crop',

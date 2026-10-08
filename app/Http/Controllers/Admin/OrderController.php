@@ -132,7 +132,7 @@ class OrderController extends Controller
         OrderMessage::create([
             'order_id' => $order->id,
             'sender_type' => 'admin',
-            'sender_name' => auth()->user()->name ?? 'Khati Bajar Admin',
+            'sender_name' => auth()->user()->name ?? 'Khati Bazar Admin',
             'message' => $request->message,
             'is_read' => true,
         ]);

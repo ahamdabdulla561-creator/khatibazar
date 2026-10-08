@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $product->name . ' - Khati Bajar')
+@section('title', $product->name . ' - Khati Bazar')
 
 @section('content')
 <div class="bg-gray-50 py-8" x-data="productDetail({{ json_encode($product) }}, {{ json_encode($product->activeVariants) }})">
-    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1400px] mx-auto px-3 sm:px-6 lg:px-8">
 
         <!-- Breadcrumb -->
         <nav class="flex text-xs md:text-sm text-gray-500 mb-6 gap-2">
@@ -26,7 +26,7 @@
                 @if($product->images && count($product->images) > 0)
                     <div class="flex gap-3 overflow-x-auto pb-2">
                         @php
-                            $mainImgSrc = $product->image ? (filter_var($product->image, FILTER_VALIDATE_URL) ? $product->image : asset('storage/' . $product->image)) : 'https://placehold.co/600x600?text=Khati+Bajar';
+                            $mainImgSrc = $product->image ? (filter_var($product->image, FILTER_VALIDATE_URL) ? $product->image : asset('storage/' . $product->image)) : 'https://placehold.co/600x600?text=Khati+Bazar';
                         @endphp
                         <button type="button" @click="activeImage = '{{ $mainImgSrc }}'" class="w-16 h-16 rounded-xl border-2 overflow-hidden shrink-0" :class="activeImage == '{{ $mainImgSrc }}' ? 'border-brand-600' : 'border-transparent'">
                             <img src="{{ $mainImgSrc }}" class="w-full h-full object-cover">
@@ -54,7 +54,7 @@
                             </span>
                         @endif
                         @if($product->brand)
-                            <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">
+                            <span class="bg-brand-50 text-brand-700 text-xs font-bold px-3 py-1 rounded-full">
                                 {{ $product->brand->name }}
                             </span>
                         @endif
@@ -141,7 +141,7 @@
                                 @click="addToCart(true)" 
                                 class="bg-brand-600 hover:bg-brand-700 text-white text-base font-extrabold py-3.5 px-6 rounded-2xl shadow-lg hover:shadow-brand-600/30 transition flex items-center justify-center gap-2"
                             >
-                                <i class="fa-solid fa-bolt text-lg text-amber-400"></i> Buy Now
+                                <i class="fa-solid fa-bolt text-lg text-white"></i> Buy Now
                             </button>
                         </div>
                     </template>
@@ -167,7 +167,7 @@
         @if(count($relatedProducts) > 0)
             <div>
                 <h2 class="text-xl font-bold text-gray-900 mb-6">Related Products</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
                     @foreach($relatedProducts as $relProduct)
                         <x-product-card :product="$relProduct" />
                     @endforeach
@@ -189,7 +189,7 @@
             currentStock: initialVar ? initialVar.stock : product.stock,
             selectedSku: initialVar ? (initialVar.sku || product.sku) : product.sku,
             quantity: 1,
-            activeImage: '{{ $product->image ? (filter_var($product->image, FILTER_VALIDATE_URL) ? $product->image : asset('storage/' . $product->image)) : 'https://placehold.co/600x600?text=Khati+Bajar' }}',
+            activeImage: '{{ $product->image ? (filter_var($product->image, FILTER_VALIDATE_URL) ? $product->image : asset('storage/' . $product->image)) : 'https://placehold.co/600x600?text=Khati+Bazar' }}',
 
             selectVariant(v) {
                 this.selectedVariantId = v.id;

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', site_setting('site_name', 'Khati Bajar - Pure & Organic Products'))</title>
+    <title>@yield('title', site_setting('site_name', 'Khati Bazar - Pure & Organic Products'))</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
@@ -304,7 +304,7 @@
             <div @click="mobileMenuOpen = false" class="fixed inset-0 bg-brand-950/60 backdrop-blur-xs"></div>
             <div class="relative bg-white w-4/5 max-w-xs mr-auto h-full shadow-2xl flex flex-col z-10">
                 <div class="p-4 bg-brand-700 text-white flex items-center justify-between">
-                    <span class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-leaf text-white"></i> Khati Bajar</span>
+                    <span class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-leaf text-white"></i> Khati Bazar</span>
                     <button @click="mobileMenuOpen = false" class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="flex-1 overflow-y-auto p-4 space-y-1.5 text-sm font-medium">
@@ -360,7 +360,7 @@
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
             <div>
                 <h3 class="text-white text-lg font-bold mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-leaf text-brand-500"></i> Khati Bajar
+                    <i class="fa-solid fa-leaf text-brand-500"></i> Khati Bazar
                 </h3>
                 <p class="text-sm text-brand-100/80 mb-4 leading-relaxed">
                     The trusted digital marketplace for 100% pure products &amp; medicines for agriculture, livestock, and fish farmers.
@@ -417,7 +417,7 @@
         </div>
 
         <div class="border-t border-brand-800 max-w-[1400px] mx-auto px-4 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-brand-100/70 gap-4">
-            <p>&copy; {{ date('Y') }} Khati Bajar. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} Khati Bazar. All rights reserved.</p>
             <div class="flex items-center gap-2 text-white">
                 <i class="fa-solid fa-leaf text-brand-500 text-sm"></i>
                 <span>100% Pure &amp; Natural • Cash on Delivery Supported</span>

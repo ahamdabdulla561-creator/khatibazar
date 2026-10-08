@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Site Settings - Khati Bajar Admin')
+@section('title', 'Site Settings - Khati Bazar Admin')
 
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">
@@ -19,7 +19,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-700 mb-1">Website Name</label>
-                    <input type="text" name="site_name" value="{{ site_setting('site_name', 'Khati Bajar') }}" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm">
+                    <input type="text" name="site_name" value="{{ site_setting('site_name', 'Khati Bazar') }}" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm">
                 </div>
 
                 <div>

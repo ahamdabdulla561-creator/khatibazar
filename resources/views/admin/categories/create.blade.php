@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Create New Category - Khati Bajar')
+@section('title', 'Create New Category - Khati Bazar')
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6">

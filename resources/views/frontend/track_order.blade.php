@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Order Chat & Support - Khati Bajar')
+@section('title', 'Order Chat & Support - Khati Bazar')
 
 @section('content')
 <div class="bg-gray-50 py-12">

@@ -40,7 +40,7 @@ class Product extends Model
     public function getImageUrlAttribute()
     {
         if (empty($this->image)) {
-            return 'https://placehold.co/400x400?text=Khati+Bajar';
+            return 'https://placehold.co/400x400?text=Khati+Bazar';
         }
         if (filter_var($this->image, FILTER_VALIDATE_URL)) {
             return $this->image;

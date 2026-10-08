@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Khati Bajar - Pure & Organic Agricultural & Farm Products')
+@section('title', 'Khati Bazar - Pure & Organic Agricultural & Farm Products')
 
 @section('content')
 <!-- HERO SECTION (Logo Centered + 2 Lines of Text) -->
@@ -11,7 +11,7 @@
         <div class="bg-white px-8 py-5 sm:px-12 sm:py-7 rounded-3xl shadow-xl mb-5 sm:mb-6 inline-flex items-center justify-center">
             <img 
                 src="{{ asset('images/hero-logo.png') }}" 
-                alt="Khati Bajar BD Logo" 
+                alt="Khati Bazar BD Logo" 
                 class="h-36 sm:h-48 md:h-56 lg:h-64 w-auto object-contain"
             >
         </div>

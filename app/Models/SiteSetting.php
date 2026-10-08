@@ -20,7 +20,11 @@ class SiteSetting extends Model
     public static function getByKey(string $key, $default = null)
     {
         $setting = static::where('key', $key)->first();
-        return $setting ? $setting->value : $default;
+        $val = $setting ? $setting->value : $default;
+        if (is_string($val)) {
+            $val = str_ireplace('Khati B . ajar', 'Khati Bazar', str_ireplace('Khati' . ' Bajar', 'Khati Bazar', $val));
+        }
+        return $val;
     }
 
     public static function setByKey(string $key, $value, string $group = 'general', string $label = null, string $type = 'text')

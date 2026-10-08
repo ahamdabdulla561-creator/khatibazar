@@ -66,7 +66,7 @@
                         <td class="px-6 py-4">
                             <div class="w-16 h-20 bg-amber-500/10 border border-amber-300 rounded-xl p-1 flex flex-col items-center justify-between text-center relative overflow-hidden">
                                 <span class="bg-red-600 text-white text-[7px] font-black w-full rounded-t-sm truncate px-0.5">{{ $offer->badge_text }}</span>
-                                <img src="{{ $offer->image ? (filter_var($offer->image, FILTER_VALIDATE_URL) ? $offer->image : asset('storage/' . $offer->image)) : 'https://placehold.co/80x80?text=Khati+Bajar' }}" class="h-8 object-contain my-0.5">
+                                <img src="{{ $offer->image ? (filter_var($offer->image, FILTER_VALIDATE_URL) ? $offer->image : asset('storage/' . $offer->image)) : 'https://placehold.co/80x80?text=Khati+Bazar' }}" class="h-8 object-contain my-0.5">
                                 <span class="bg-red-600 text-white text-[7px] font-bold w-full rounded-sm truncate">{{ $offer->offer_text }}</span>
                                 <span class="bg-gradient-to-r from-lime-500 to-amber-500 text-white text-[8px] font-extrabold w-full rounded-full py-0.5">৳ {{ number_format($offer->price) }}</span>
                             </div>

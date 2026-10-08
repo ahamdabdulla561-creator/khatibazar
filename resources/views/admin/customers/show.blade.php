@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Customer Profile - ' . $customer->name . ' - Khati Bajar Admin')
+@section('title', 'Customer Profile - ' . $customer->name . ' - Khati Bazar Admin')
 
 @section('content')
 <div class="space-y-6">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Khati Bajar</title>
+    <title>Admin Login - Khati Bazar</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -12,9 +12,9 @@
 <body class="bg-slate-950 text-slate-200 flex items-center justify-center min-h-screen p-4">
     <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
         <div class="text-center mb-8">
-            <img src="{{ asset('images/logo.png') }}" alt="Khati Bajar Logo" class="h-20 w-auto mx-auto mb-3 bg-white p-2 rounded-2xl shadow-lg border border-slate-700">
+            <img src="{{ asset('images/logo.png') }}" alt="Khati Bazar Logo" class="h-20 w-auto mx-auto mb-3 bg-white p-2 rounded-2xl shadow-lg border border-slate-700">
             <h1 class="text-2xl font-extrabold text-white">Admin Panel Login</h1>
-            <p class="text-xs text-slate-400 mt-1">Access the Khati Bajar Admin Dashboard</p>
+            <p class="text-xs text-slate-400 mt-1">Access the Khati Bazar Admin Dashboard</p>
         </div>
 
         @if(session('error'))

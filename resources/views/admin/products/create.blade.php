@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Add New Product - Khati Bajar')
+@section('title', 'Add New Product - Khati Bazar')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6" x-data="productForm()">

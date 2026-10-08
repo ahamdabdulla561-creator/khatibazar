@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         $admin = User::updateOrCreate(
             ['email' => 'admin@khatibajar.com'],
             [
-                'name' => 'Khati Bajar Admin',
+                'name' => 'Khati Bazar Admin',
                 'phone' => '01711112222',
                 'password' => Hash::make('admin123456'),
                 'role' => 'admin',
@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
 
         // 2. Site Settings
         $settings = [
-            ['key' => 'site_name', 'value' => 'খাঁটি বাজার (Khati Bajar)', 'group' => 'general', 'label' => 'Website Name', 'type' => 'text'],
+            ['key' => 'site_name', 'value' => 'খাঁটি বাজার (Khati Bazar)', 'group' => 'general', 'label' => 'Website Name', 'type' => 'text'],
             ['key' => 'phone', 'value' => '01711-000000', 'group' => 'contact', 'label' => 'Phone Number', 'type' => 'text'],
             ['key' => 'email', 'value' => 'info@khatibajar.com', 'group' => 'contact', 'label' => 'Email Address', 'type' => 'text'],
             ['key' => 'address', 'value' => 'ঢাকা, বাংলাদেশ', 'group' => 'contact', 'label' => 'Full Address', 'type' => 'textarea'],
@@ -102,7 +102,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 4. Brands
-        $b1 = Brand::updateOrCreate(['slug' => 'khati-bajar-organics'], ['name' => 'Khati Bajar Organics', 'status' => 'active']);
+        $b1 = Brand::updateOrCreate(['slug' => 'khati-bajar-organics'], ['name' => 'Khati Bazar Organics', 'status' => 'active']);
         $b2 = Brand::updateOrCreate(['slug' => 'agrovet-ltd'], ['name' => 'AgroVet Ltd', 'status' => 'active']);
         $b3 = Brand::updateOrCreate(['slug' => 'bioaqua-labs'], ['name' => 'BioAqua Labs', 'status' => 'active']);
 

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'All Products - Khati Bajar')
+@section('title', 'All Products - Khati Bazar')
 
 @section('content')
 <div class="bg-gray-100 py-6">
-    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1400px] mx-auto px-3 sm:px-6 lg:px-8">
         
         <!-- Breadcrumb & Title -->
         <div class="reveal-side-left flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8" x-data="{ filterDrawerOpen: false }">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8" x-data="{ filterDrawerOpen: false }">
             
             <!-- Desktop Filter Sidebar (19: Accordion & 20: Price Range Slider) -->
             <aside class="reveal-side-left hidden md:block bg-white p-6 rounded-2xl border border-gray-100 shadow-sm h-fit" x-data="{ openCat: true, openBrand: true, openPrice: true, maxPriceVal: {{ request('max_price', 15000) }} }">
@@ -111,29 +111,21 @@
                         </div>
                     </div>
 
-                    <!-- Super Offer Checkbox -->
-                    <div>
-                        <label class="flex items-center gap-2 text-xs font-bold text-gray-800 cursor-pointer p-2 bg-amber-50 rounded-xl border border-amber-200">
-                            <input type="checkbox" name="super_offer" value="1" {{ request('super_offer') ? 'checked' : '' }} onchange="this.form.submit()" class="text-amber-500 rounded">
-                            <span class="flex items-center gap-1"><i class="fa-solid fa-fire text-amber-500"></i> Super Offers Only</span>
-                        </label>
-                    </div>
-
                     <button type="submit" class="w-full bg-brand-600 text-white font-bold text-xs py-3 rounded-xl hover:bg-brand-700 transition shadow-md">
                         Apply Filter
                     </button>
-                    @if(request()->anyFilled(['category', 'brand', 'min_price', 'max_price', 'super_offer', 'q']))
-                        <a href="{{ route('products.index') }}" class="block text-center text-xs text-red-600 font-semibold hover:underline mt-2">
+                    @if(request()->anyFilled(['category', 'brand', 'min_price', 'max_price', 'q']))
+                        <a href="{{ route('products.index') }}" class="block text-center text-xs text-brand-700 font-semibold hover:underline mt-2">
                             Clear Filters
                         </a>
                     @endif
                 </form>
             </aside>
 
-            <!-- Product Grid Area -->
+            <!-- Product Grid Area (2 Columns on Mobile) -->
             <div class="md:col-span-3">
                 @if($products->count() > 0)
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                         @foreach($products as $product)
                             <x-product-card :product="$product" />
                         @endforeach
@@ -145,7 +137,7 @@
                     </div>
                 @else
                     <div class="bg-white rounded-3xl p-12 text-center border border-gray-100 shadow-sm">
-                        <div class="w-20 h-20 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                        <div class="w-20 h-20 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
                             <i class="fa-solid fa-box-open"></i>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">No products found</h3>

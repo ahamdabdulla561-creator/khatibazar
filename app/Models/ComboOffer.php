@@ -40,7 +40,7 @@ class ComboOffer extends Model
         if ($this->product && $this->product->image_url) {
             return $this->product->image_url;
         }
-        return 'https://placehold.co/200x200?text=Khati+Bajar';
+        return 'https://placehold.co/200x200?text=Khati+Bazar';
     }
 
     public function product()

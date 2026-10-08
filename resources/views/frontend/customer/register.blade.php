@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Create an Account - Khati Bajar')
+@section('title', 'Create an Account - Khati Bazar')
 
 @section('content')
 <div class="bg-gray-50 py-12 flex items-center justify-center min-h-[75vh]">
@@ -12,7 +12,7 @@
                     খ
                 </div>
                 <h1 class="text-2xl font-extrabold text-gray-900">Create Account</h1>
-                <p class="text-xs text-gray-500 mt-1">Create an account to start shopping at Khati Bajar</p>
+                <p class="text-xs text-gray-500 mt-1">Create an account to start shopping at Khati Bazar</p>
             </div>
 
             <form action="{{ route('register.post') }}" method="POST" class="space-y-4">

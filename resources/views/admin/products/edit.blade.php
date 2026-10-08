@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Product - Khati Bajar')
+@section('title', 'Edit Product - Khati Bazar')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6" x-data="productForm({{ json_encode($product->variants) }})">

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Add New Hero Banner - Khati Bajar Admin')
+@section('title', 'Add New Hero Banner - Khati Bazar Admin')
 
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">
@@ -20,7 +20,7 @@
         <!-- Banner Title -->
         <div>
             <label class="block text-xs font-bold text-gray-700 mb-1">Banner Heading / Title <span class="text-red-500">*</span></label>
-            <input type="text" name="title" value="{{ old('title') }}" required placeholder="e.g. Khati Bajar — Pure Agricultural & Veterinary Supplies" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-brand-500">
+            <input type="text" name="title" value="{{ old('title') }}" required placeholder="e.g. Khati Bazar — Pure Agricultural & Veterinary Supplies" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-brand-500">
             @error('title') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
         </div>
 

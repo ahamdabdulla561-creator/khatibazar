@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Customer Login - Khati Bajar')
+@section('title', 'Customer Login - Khati Bazar')
 
 @section('content')
 <div class="bg-gray-50 py-12 flex items-center justify-center min-h-[70vh]">
