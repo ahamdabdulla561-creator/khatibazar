@@ -25,6 +25,11 @@ class HomeController extends Controller
             ->orderBy('sort_order', 'asc')
             ->get();
 
-        return view('frontend.home', compact('categories', 'products', 'heroBanners'));
+        $comboOffers = \App\Models\ComboOffer::with('product')
+            ->where('status', 'active')
+            ->orderBy('sort_order', 'asc')
+            ->get();
+
+        return view('frontend.home', compact('categories', 'products', 'heroBanners', 'comboOffers'));
     }
 }

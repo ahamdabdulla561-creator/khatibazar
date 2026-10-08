@@ -90,6 +90,11 @@
                 <span>Brand Management</span>
             </a>
 
+            <a href="{{ route('admin.combo-offers.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.combo-offers.*') ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-800 text-slate-300' }}">
+                <i class="fa-solid fa-gift w-5"></i>
+                <span>Combo Offers (কম্বো অফার)</span>
+            </a>
+
             <div class="pt-3 pb-1 text-[11px] font-bold text-slate-500 uppercase tracking-wider px-4">Orders & Customers</div>
 
             <a href="{{ route('admin.orders.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.orders.*') ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-800 text-slate-300' }}">
