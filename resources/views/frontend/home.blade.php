@@ -8,11 +8,11 @@
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center justify-center">
         
         <!-- Logo in Hero Section -->
-        <div class="bg-white px-6 py-3 sm:px-8 sm:py-4 rounded-2xl shadow-lg mb-4 sm:mb-5 inline-flex items-center justify-center">
+        <div class="bg-white px-8 py-4 sm:px-10 sm:py-6 rounded-3xl shadow-lg mb-5 sm:mb-6 inline-flex items-center justify-center">
             <img 
                 src="{{ site_setting('site_logo') ? asset('storage/' . site_setting('site_logo')) : asset('images/logo.png') }}" 
                 alt="Khati Bajar Logo" 
-                class="h-14 sm:h-20 md:h-24 w-auto object-contain"
+                class="h-28 sm:h-40 md:h-48 w-auto object-contain"
             >
         </div>
 
