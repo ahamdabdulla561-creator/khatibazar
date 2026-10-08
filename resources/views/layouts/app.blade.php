@@ -175,36 +175,6 @@
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen" x-data="{ mobileMenuOpen: false, searchOpen: false, cartCount: 0 }" x-init="fetch('{{ route('cart.count') }}').then(r => r.ok ? r.json() : {count: 0}).then(d => cartCount = d ? d.count : 0).catch(() => cartCount = 0)">
 
-    <!-- Top Announcement Bar (Deep Natural Green + White Text) -->
-    <div class="bg-brand-900 text-white text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-brand-800">
-        <div class="max-w-[1400px] mx-auto flex justify-between items-center gap-2">
-            <div class="flex items-center gap-3 sm:gap-6 truncate">
-                <a href="tel:{{ site_setting('phone', '01711-000000') }}" class="flex items-center gap-1.5 hover:text-brand-100 transition truncate">
-                    <i class="fa-solid fa-phone text-brand-100"></i>
-                    <span>Helpline: {{ site_setting('phone', '01711-000000') }}</span>
-                </a>
-                <span class="hidden md:flex items-center gap-1.5"><i class="fa-solid fa-envelope text-brand-100"></i> {{ site_setting('email', 'info@khatibajar.com') }}</span>
-            </div>
-            <div class="flex items-center gap-3 sm:gap-5 shrink-0">
-                <a href="{{ route('order.track') }}" class="hover:text-brand-100 transition flex items-center gap-1">
-                    <i class="fa-solid fa-truck-fast text-brand-100"></i>
-                    <span class="hidden xs:inline sm:inline">Track Order</span>
-                </a>
-                @auth
-                    <a href="{{ route('customer.dashboard') }}" class="hover:text-brand-100 transition flex items-center gap-1 font-semibold">
-                        <i class="fa-solid fa-user text-brand-100"></i>
-                        <span>Dashboard</span>
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" class="hover:text-brand-100 transition flex items-center gap-1 font-semibold">
-                        <i class="fa-solid fa-user text-brand-100"></i>
-                        <span>Sign In</span>
-                    </a>
-                @endauth
-            </div>
-        </div>
-    </div>
-
     <!-- Main Header (No Logo, Navigation Menu Directly in Header, Compact Magnifying Glass Search Icon) -->
     <header class="bg-brand-700 text-white sticky top-0 z-40 shadow-md" x-data="searchComponent()">
         <div class="max-w-[1400px] mx-auto px-3 sm:px-6 lg:px-8 h-13 sm:h-14 flex items-center justify-between gap-3">
