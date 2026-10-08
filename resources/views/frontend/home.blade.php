@@ -29,7 +29,7 @@
 
 <!-- COMBO OFFERS 1-BY-1 CAROUSEL SECTION (Directly Below Hero Section) -->
 @if(isset($comboOffers) && count($comboOffers) > 0)
-<section class="py-6 sm:py-8 bg-brand-50/60 border-b border-brand-100">
+<section id="combo-offers" class="py-6 sm:py-8 bg-brand-50/60 border-b border-brand-100">
     <div class="max-w-[1000px] mx-auto px-3 sm:px-6 lg:px-8">
         <div 
             x-data="{

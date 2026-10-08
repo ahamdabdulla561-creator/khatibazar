@@ -25,6 +25,14 @@ class HomeController extends Controller
             ->orderBy('sort_order', 'asc')
             ->get();
 
+        try {
+            if (\App\Models\ComboOffer::count() === 0) {
+                (new \Database\Seeders\ComboOfferSeeder())->run();
+            }
+        } catch (\Throwable $e) {
+            // Ignore if table not migrated
+        }
+
         $comboOffers = \App\Models\ComboOffer::with('product')
             ->where('status', 'active')
             ->orderBy('sort_order', 'asc')

@@ -35,8 +35,23 @@ class CheckoutController extends Controller
 
         $cart->load(['items.product', 'items.variant']);
 
-        $insideDhakaCharge = (float)site_setting('inside_dhaka_charge', 70);
-        $outsideDhakaCharge = (float)site_setting('outside_dhaka_charge', 130);
+        $insideDhakaCharge = 150;
+        $outsideDhakaCharge = 150;
+
+        // Ensure Pathao and Steadfast exist and are the active courier services
+        try {
+            CourierService::updateOrCreate(
+                ['code' => 'pathao'],
+                ['name' => 'পাঠাও কুরিয়ার (Pathao)', 'status' => 'active', 'sort_order' => 1]
+            );
+            CourierService::updateOrCreate(
+                ['code' => 'steadfast'],
+                ['name' => 'স্টেডফাস্ট কুরিয়ার (Steadfast)', 'status' => 'active', 'sort_order' => 2]
+            );
+            CourierService::whereNotIn('code', ['pathao', 'steadfast'])->update(['status' => 'inactive']);
+        } catch (\Throwable $e) {
+            // Ignore if table not migrated
+        }
 
         $couriers = CourierService::where('status', 'active')->orderBy('sort_order', 'asc')->get();
 
@@ -45,6 +60,10 @@ class CheckoutController extends Controller
 
     public function store(Request $request)
     {
+        if (!$request->filled('delivery_area')) {
+            $request->merge(['delivery_area' => 'outside_dhaka']);
+        }
+
         $rules = [
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'required|string|max:20',
@@ -52,7 +71,7 @@ class CheckoutController extends Controller
             'shipping_district' => 'required|string|max:100',
             'shipping_upazila' => 'required|string|max:100',
             'shipping_address' => 'required|string|max:1000',
-            'delivery_area' => 'required|in:inside_dhaka,outside_dhaka',
+            'delivery_area' => 'nullable|in:inside_dhaka,outside_dhaka',
             'courier_service_id' => 'nullable|exists:courier_services,id',
             'payment_method' => 'required|string|in:cod,bkash,nagad,rocket',
             'notes' => 'nullable|string|max:500',
@@ -92,10 +111,8 @@ class CheckoutController extends Controller
             }
         }
 
-        // Calculate delivery charge from DB settings
-        $deliveryCharge = $request->delivery_area === 'inside_dhaka'
-            ? (float)site_setting('inside_dhaka_charge', 70)
-            : (float)site_setting('outside_dhaka_charge', 130);
+        // Flat 150 BDT nationwide delivery charge
+        $deliveryCharge = 150.00;
 
         try {
             $order = DB::transaction(function () use ($request, $cart, $deliveryCharge, $screenshotPath) {

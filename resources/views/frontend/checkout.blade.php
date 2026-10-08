@@ -60,54 +60,59 @@
                         </div>
                     </div>
 
-                    <!-- Delivery Area Selection -->
+                    <!-- Nationwide Delivery Charge Info (No Inside/Outside Dhaka split) -->
                     <div class="bg-white rounded-3xl p-6 border border-brand-100 shadow-sm">
                         <h2 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b flex items-center gap-2">
-                            <i class="fa-solid fa-truck-ramp-box text-brand-600"></i> ডেলিভারি এলাকা নির্বাচন করুন
+                            <i class="fa-solid fa-truck-ramp-box text-brand-600"></i> ডেলিভারি চার্জ
                         </h2>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <label class="p-4 rounded-2xl border-2 cursor-pointer transition flex items-center justify-between" :class="deliveryArea == 'inside_dhaka' ? 'border-brand-600 bg-brand-50/50' : 'border-gray-200 hover:border-gray-300'">
-                                <div class="flex items-center gap-3">
-                                    <input type="radio" name="delivery_area" value="inside_dhaka" x-model="deliveryArea" @change="recalculateTotal()" class="text-brand-600 focus:ring-brand-500">
-                                    <div>
-                                        <span class="font-bold text-sm text-gray-900 block">ঢাকার ভেতরে</span>
-                                        <span class="text-xs text-gray-500">ডেলিভারি চার্জ: ৳{{ $insideDhakaCharge }}</span>
-                                    </div>
-                                </div>
-                            </label>
+                        <input type="hidden" name="delivery_area" value="outside_dhaka">
 
-                            <label class="p-4 rounded-2xl border-2 cursor-pointer transition flex items-center justify-between" :class="deliveryArea == 'outside_dhaka' ? 'border-brand-600 bg-brand-50/50' : 'border-gray-200 hover:border-gray-300'">
-                                <div class="flex items-center gap-3">
-                                    <input type="radio" name="delivery_area" value="outside_dhaka" x-model="deliveryArea" @change="recalculateTotal()" class="text-brand-600 focus:ring-brand-500">
-                                    <div>
-                                        <span class="font-bold text-sm text-gray-900 block">ঢাকার বাইরে (সারাদেশে)</span>
-                                        <span class="text-xs text-gray-500">ডেলিভারি চার্জ: ৳{{ $outsideDhakaCharge }}</span>
-                                    </div>
+                        <div class="p-4 rounded-2xl border-2 border-brand-600 bg-brand-50/60 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-truck-fast"></i>
                                 </div>
-                            </label>
+                                <div>
+                                    <span class="font-extrabold text-sm sm:text-base text-brand-900 block">সারা বাংলাদেশে ক্যাশ অন ডেলিভারি ১৫০ টাকা</span>
+                                    <span class="text-xs text-brand-700 font-semibold">ডেলিভারি চার্জ: ৳১৫০ (পণ্য হাতে পেয়ে মূল্য পরিশোধের সুবিধা)</span>
+                                </div>
+                            </div>
+                            <span class="font-black text-base sm:text-lg text-brand-700 shrink-0">৳ ১৫০</span>
                         </div>
                     </div>
 
-                    <!-- Preferred Courier Service Selection -->
+                    <!-- Preferred Courier Service Selection (Pathao & Steadfast) -->
                     @if(isset($couriers) && $couriers->count() > 0)
-                    <div class="bg-white rounded-3xl p-6 border border-brand-100 shadow-sm">
+                    <div class="bg-white rounded-3xl p-6 border border-brand-100 shadow-sm" x-data="{ selectedCourier: '{{ old('courier_service_id', $couriers->first()->id ?? '') }}' }">
                         <h2 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b flex items-center justify-between">
                             <span class="flex items-center gap-2">
-                                <i class="fa-solid fa-truck-fast text-brand-600"></i> পছন্দের কুরিয়ার সার্ভিস নির্বাচন করুন <span class="text-xs text-gray-400 font-normal">(ঐচ্ছিক)</span>
+                                <i class="fa-solid fa-truck-fast text-brand-600"></i> কুরিয়ার সার্ভিস নির্বাচন করুন
                             </span>
                         </h2>
 
-                        <div class="space-y-3">
-                            <p class="text-xs text-gray-600">আপনার এলাকার সুবিধাজনক কুরিয়ার সার্ভিস বেছে নিন অথবা ডিফল্ট অবস্থায় রাখুন:</p>
-                            <select name="courier_service_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-brand-500 focus:bg-white font-medium text-gray-800">
-                                <option value="">-- স্ট্যান্ডার্ড দ্রুত ডেলিভারি (ডিফল্ট কুরিয়ার) --</option>
-                                @foreach($couriers as $courier)
-                                    <option value="{{ $courier->id }}" {{ old('courier_service_id') == $courier->id ? 'selected' : '' }}>
-                                        🚚 {{ $courier->name }} {{ $courier->notes ? '('.Str::limit($courier->notes, 40).')' : '' }}
-                                    </option>
-                                @endforeach
-                            </select>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            @foreach($couriers as $courier)
+                                <label 
+                                    class="p-4 rounded-2xl border-2 cursor-pointer transition flex items-center justify-between"
+                                    :class="selectedCourier == '{{ $courier->id }}' ? 'border-brand-600 bg-brand-50/60' : 'border-gray-200 hover:border-brand-300'"
+                                >
+                                    <div class="flex items-center gap-3">
+                                        <input 
+                                            type="radio" 
+                                            name="courier_service_id" 
+                                            value="{{ $courier->id }}" 
+                                            x-model="selectedCourier"
+                                            class="text-brand-600 focus:ring-brand-500"
+                                        >
+                                        <div>
+                                            <span class="font-extrabold text-sm text-gray-900 block">{{ $courier->name }}</span>
+                                            <span class="text-xs text-gray-500">দ্রুত ও নিরাপদ হোম ডেলিভারি</span>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-box text-brand-600 text-lg"></i>
+                                </label>
+                            @endforeach
                         </div>
                     </div>
                     @endif

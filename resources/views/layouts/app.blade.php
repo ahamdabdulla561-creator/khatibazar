@@ -222,9 +222,13 @@
                 </div>
 
                 <!-- Quick Links on Mobile & Desktop -->
-                <nav class="flex items-center gap-4 lg:gap-6">
+                <nav class="flex items-center gap-3 sm:gap-5 lg:gap-6">
                     <a href="{{ route('home') }}" class="py-1 text-white hover:text-brand-100 transition text-xs sm:text-sm {{ request()->routeIs('home') ? 'font-extrabold border-b-2 border-white' : '' }}">Home</a>
                     <a href="{{ route('products.index') }}" class="py-1 text-white hover:text-brand-100 transition text-xs sm:text-sm {{ request()->routeIs('products.index') ? 'font-extrabold border-b-2 border-white' : '' }}">All Products</a>
+                    <a href="{{ route('home') }}#combo-offers" class="py-1 text-white hover:text-brand-100 transition text-xs sm:text-sm font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-gift text-[11px] sm:text-xs"></i>
+                        <span>কম্বো অফার প্যাক</span>
+                    </a>
                     
                     @foreach(\App\Models\Category::where('status', 'active')->orderBy('sort_order', 'asc')->take(4)->get() as $navCat)
                         <a href="{{ route('category.show', $navCat->slug) }}" class="hidden lg:inline-block py-1 text-white/95 hover:text-white transition text-sm">{{ $navCat->name }}</a>
@@ -310,6 +314,7 @@
                 <div class="flex-1 overflow-y-auto p-4 space-y-1.5 text-sm font-medium">
                     <a href="{{ route('home') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-brand-50 text-gray-800 font-semibold"><i class="fa-solid fa-house text-brand-600 w-5"></i> Home</a>
                     <a href="{{ route('products.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-brand-50 text-gray-800 font-semibold"><i class="fa-solid fa-box-open text-brand-600 w-5"></i> All Products</a>
+                    <a href="{{ route('home') }}#combo-offers" @click="mobileMenuOpen = false" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-brand-50 text-brand-700 font-bold"><i class="fa-solid fa-gift text-brand-600 w-5"></i> কম্বো অফার প্যাক</a>
                     
                     <div class="pt-2 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-brand-700">Categories</div>
                     @foreach(\App\Models\Category::where('status', 'active')->orderBy('sort_order', 'asc')->get() as $navCat)
