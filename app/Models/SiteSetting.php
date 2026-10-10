@@ -25,6 +25,12 @@ class SiteSetting extends Model
         if ($key === 'whatsapp_number') {
             return '8801355465191';
         }
+        if ($key === 'email') {
+            return 'khatibazarbdstore@gmail.com';
+        }
+        if ($key === 'facebook_url') {
+            return 'https://www.facebook.com/share/19fM5TXnjj/';
+        }
         $setting = static::where('key', $key)->first();
         $val = $setting ? $setting->value : $default;
         if (is_string($val)) {

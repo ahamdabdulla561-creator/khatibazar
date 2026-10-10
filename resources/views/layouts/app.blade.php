@@ -371,9 +371,7 @@
                     The trusted digital marketplace for 100% pure products &amp; medicines for agriculture, livestock, and fish farmers.
                 </p>
                 <div class="flex space-x-3">
-                    @if(site_setting('facebook_url'))
-                        <a href="{{ site_setting('facebook_url') }}" target="_blank" class="w-9 h-9 bg-brand-800 text-white rounded-full flex items-center justify-center hover:bg-brand-600 transition"><i class="fa-brands fa-facebook-f"></i></a>
-                    @endif
+                    <a href="{{ site_setting('facebook_url', 'https://www.facebook.com/share/19fM5TXnjj/') }}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 bg-brand-800 text-white rounded-full flex items-center justify-center hover:bg-brand-600 transition" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
                     @if(site_setting('youtube_url'))
                         <a href="{{ site_setting('youtube_url') }}" target="_blank" class="w-9 h-9 bg-brand-800 text-white rounded-full flex items-center justify-center hover:bg-brand-600 transition"><i class="fa-brands fa-youtube"></i></a>
                     @endif
@@ -413,7 +411,7 @@
                     </li>
                     <li class="flex items-center gap-2">
                         <i class="fa-solid fa-envelope text-white"></i>
-                        <span>{{ site_setting('email', 'info@khatibazarbd.store') }}</span>
+                        <a href="mailto:{{ site_setting('email', 'khatibazarbdstore@gmail.com') }}" class="hover:underline hover:text-white transition">{{ site_setting('email', 'khatibazarbdstore@gmail.com') }}</a>
                     </li>
                 </ul>
             </div>
