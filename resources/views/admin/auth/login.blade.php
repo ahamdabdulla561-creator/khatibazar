@@ -26,6 +26,7 @@
 
         <form action="{{ route('admin.login.post') }}" method="POST" class="space-y-4">
             @csrf
+            <input type="hidden" name="remember" value="1">
 
             <div>
                 <label class="block text-xs font-bold text-slate-300 mb-1">Email / Mobile Number</label>
