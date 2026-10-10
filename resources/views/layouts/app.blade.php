@@ -377,9 +377,7 @@
                     @if(site_setting('youtube_url'))
                         <a href="{{ site_setting('youtube_url') }}" target="_blank" class="w-9 h-9 bg-brand-800 text-white rounded-full flex items-center justify-center hover:bg-brand-600 transition"><i class="fa-brands fa-youtube"></i></a>
                     @endif
-                    @if(site_setting('whatsapp_number'))
-                        <a href="https://wa.me/{{ site_setting('whatsapp_number') }}" target="_blank" class="w-9 h-9 bg-brand-800 text-white rounded-full flex items-center justify-center hover:bg-brand-600 transition"><i class="fa-brands fa-whatsapp"></i></a>
-                    @endif
+                    <a href="https://wa.me/8801355465191" target="_blank" class="w-9 h-9 bg-brand-800 text-white rounded-full flex items-center justify-center hover:bg-brand-600 transition" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
                 </div>
             </div>
 
@@ -411,11 +409,11 @@
                     </li>
                     <li class="flex items-center gap-2">
                         <i class="fa-solid fa-phone text-white"></i>
-                        <span>{{ site_setting('phone', '01711-000000') }}</span>
+                        <a href="tel:01355465191" class="hover:underline hover:text-white transition font-semibold">01355465191</a>
                     </li>
                     <li class="flex items-center gap-2">
                         <i class="fa-solid fa-envelope text-white"></i>
-                        <span>{{ site_setting('email', 'info@khatibajar.com') }}</span>
+                        <span>{{ site_setting('email', 'info@khatibazarbd.store') }}</span>
                     </li>
                 </ul>
             </div>

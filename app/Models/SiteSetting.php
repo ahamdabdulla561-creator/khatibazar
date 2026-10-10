@@ -19,6 +19,12 @@ class SiteSetting extends Model
 
     public static function getByKey(string $key, $default = null)
     {
+        if ($key === 'phone') {
+            return '01355465191';
+        }
+        if ($key === 'whatsapp_number') {
+            return '8801355465191';
+        }
         $setting = static::where('key', $key)->first();
         $val = $setting ? $setting->value : $default;
         if (is_string($val)) {

@@ -56,11 +56,12 @@ class DatabaseSeeder extends Seeder
         // 2. Site Settings
         $settings = [
             ['key' => 'site_name', 'value' => 'খাঁটি বাজার (Khati Bazar)', 'group' => 'general', 'label' => 'Website Name', 'type' => 'text'],
-            ['key' => 'phone', 'value' => '01711-000000', 'group' => 'contact', 'label' => 'Phone Number', 'type' => 'text'],
-            ['key' => 'email', 'value' => 'info@khatibajar.com', 'group' => 'contact', 'label' => 'Email Address', 'type' => 'text'],
+            ['key' => 'phone', 'value' => '01355465191', 'group' => 'contact', 'label' => 'Phone Number', 'type' => 'text'],
+            ['key' => 'whatsapp_number', 'value' => '8801355465191', 'group' => 'contact', 'label' => 'WhatsApp Number', 'type' => 'text'],
+            ['key' => 'email', 'value' => 'info@khatibazarbd.store', 'group' => 'contact', 'label' => 'Email Address', 'type' => 'text'],
             ['key' => 'address', 'value' => 'ঢাকা, বাংলাদেশ', 'group' => 'contact', 'label' => 'Full Address', 'type' => 'textarea'],
-            ['key' => 'inside_dhaka_charge', 'value' => '70', 'group' => 'shipping', 'label' => 'Inside Dhaka Delivery Charge (BDT)', 'type' => 'number'],
-            ['key' => 'outside_dhaka_charge', 'value' => '130', 'group' => 'shipping', 'label' => 'Outside Dhaka Delivery Charge (BDT)', 'type' => 'number'],
+            ['key' => 'inside_dhaka_charge', 'value' => '150', 'group' => 'shipping', 'label' => 'Inside Dhaka Delivery Charge (BDT)', 'type' => 'number'],
+            ['key' => 'outside_dhaka_charge', 'value' => '150', 'group' => 'shipping', 'label' => 'Outside Dhaka Delivery Charge (BDT)', 'type' => 'number'],
             ['key' => 'currency_symbol', 'value' => '৳', 'group' => 'general', 'label' => 'Currency Symbol', 'type' => 'text'],
         ];
 
