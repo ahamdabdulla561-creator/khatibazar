@@ -17,6 +17,8 @@ class SiteSetting extends Model
         'type',
     ];
 
+    protected static $cachedSettings = null;
+
     public static function getByKey(string $key, $default = null)
     {
         if ($key === 'phone') {
@@ -31,8 +33,14 @@ class SiteSetting extends Model
         if ($key === 'facebook_url') {
             return 'https://www.facebook.com/share/19fM5TXnjj/';
         }
-        $setting = static::where('key', $key)->first();
-        $val = $setting ? $setting->value : $default;
+        if (static::$cachedSettings === null) {
+            try {
+                static::$cachedSettings = static::pluck('value', 'key')->toArray();
+            } catch (\Throwable $e) {
+                static::$cachedSettings = [];
+            }
+        }
+        $val = array_key_exists($key, static::$cachedSettings) ? static::$cachedSettings[$key] : $default;
         if (is_string($val)) {
             $val = str_ireplace('Khati B . ajar', 'Khati Bazar', str_ireplace('Khati' . ' Bajar', 'Khati Bazar', $val));
         }
@@ -41,6 +49,7 @@ class SiteSetting extends Model
 
     public static function setByKey(string $key, $value, string $group = 'general', string $label = null, string $type = 'text')
     {
+        static::$cachedSettings = null;
         return static::updateOrCreate(
             ['key' => $key],
             [

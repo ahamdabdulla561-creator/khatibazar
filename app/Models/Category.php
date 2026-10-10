@@ -40,4 +40,16 @@ class Category extends Model
     {
         return $this->hasMany(Product::class)->where('status', 'active');
     }
+
+    protected static $cachedActive = null;
+
+    public static function getActiveCached()
+    {
+        if (static::$cachedActive === null) {
+            static::$cachedActive = static::where('status', 'active')
+                ->orderBy('sort_order', 'asc')
+                ->get();
+        }
+        return static::$cachedActive;
+    }
 }

@@ -203,7 +203,7 @@
                          x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                          x-transition:leave-end="opacity-0 scale-95 -translate-y-2"
                          class="absolute left-0 top-full mt-1 w-64 bg-white text-gray-800 rounded-2xl shadow-2xl border border-gray-100 z-50 py-2 space-y-1">
-                        @foreach(\App\Models\Category::where('status', 'active')->orderBy('sort_order', 'asc')->get() as $cat)
+                        @foreach(\App\Models\Category::getActiveCached() as $cat)
                             <a href="{{ route('category.show', $cat->slug) }}" class="flex items-center justify-between px-4 py-2.5 hover:bg-brand-50 hover:text-brand-700 text-xs font-semibold text-gray-700 transition group">
                                 <div class="flex items-center gap-2.5">
                                     <div class="w-6 h-6 bg-brand-50 text-brand-600 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-brand-600 group-hover:text-white transition">
@@ -230,7 +230,7 @@
                         <span>কম্বো অফার প্যাক</span>
                     </a>
                     
-                    @foreach(\App\Models\Category::where('status', 'active')->orderBy('sort_order', 'asc')->take(4)->get() as $navCat)
+                    @foreach(\App\Models\Category::getActiveCached()->take(4) as $navCat)
                         <a href="{{ route('category.show', $navCat->slug) }}" class="hidden lg:inline-block py-1 text-white/95 hover:text-white transition text-sm">{{ $navCat->name }}</a>
                     @endforeach
                     
@@ -317,7 +317,7 @@
                     <a href="{{ route('home') }}#combo-offers" @click="mobileMenuOpen = false" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-brand-50 text-brand-700 font-bold"><i class="fa-solid fa-gift text-brand-600 w-5"></i> কম্বো অফার প্যাক</a>
                     
                     <div class="pt-2 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-brand-700">Categories</div>
-                    @foreach(\App\Models\Category::where('status', 'active')->orderBy('sort_order', 'asc')->get() as $navCat)
+                    @foreach(\App\Models\Category::getActiveCached() as $navCat)
                         <a href="{{ route('category.show', $navCat->slug) }}" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-brand-50 text-gray-700 text-xs font-semibold">
                             <span>{{ $navCat->name }}</span>
                             <i class="fa-solid fa-chevron-right text-[10px] text-brand-500"></i>
@@ -392,7 +392,7 @@
             <div>
                 <h4 class="text-white font-semibold mb-4 text-base">Product Categories</h4>
                 <ul class="space-y-2 text-sm text-brand-100/85">
-                    @foreach(\App\Models\Category::where('status', 'active')->take(4)->get() as $fCat)
+                    @foreach(\App\Models\Category::getActiveCached()->take(4) as $fCat)
                         <li><a href="{{ route('category.show', $fCat->slug) }}" class="hover:text-white transition">{{ $fCat->name }}</a></li>
                     @endforeach
                 </ul>
