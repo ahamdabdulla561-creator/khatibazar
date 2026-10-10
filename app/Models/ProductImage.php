@@ -25,7 +25,14 @@ class ProductImage extends Model
         if (filter_var($this->image_path, FILTER_VALIDATE_URL)) {
             return $this->image_path;
         }
-        return asset('storage/' . ltrim($this->image_path, '/'));
+        $clean = ltrim($this->image_path, '/');
+        if (file_exists(public_path('images/' . $clean))) {
+            return asset('images/' . $clean);
+        }
+        if (file_exists(public_path('storage/' . $clean))) {
+            return asset('storage/' . $clean);
+        }
+        return asset('storage/' . $clean);
     }
 
     public function product()
