@@ -2,13 +2,13 @@
 
 <div class="product-card-anim product-card-hover bg-white rounded-xl sm:rounded-2xl border border-brand-100/90 shadow-sm flex flex-col justify-between overflow-hidden group relative" x-data="productCard({{ $product->id }}, {{ json_encode($product->variants) }})">
     
-    <!-- Product Image -->
-    <div class="relative bg-gray-50/70 overflow-hidden pt-[92%] sm:pt-[100%]">
+    <!-- Product Image (Strict 1:1 Square) -->
+    <div class="relative bg-gray-50/70 overflow-hidden pt-[100%]">
         <a href="{{ route('products.show', $product->slug) }}">
             <img 
                 src="{{ $product->image_url }}" 
                 alt="{{ $product->name }}" 
-                class="absolute inset-0 w-full h-full object-contain p-2 sm:p-3 group-hover:scale-105 transition-transform duration-500 ease-out"
+                class="absolute inset-0 w-full h-full object-contain p-1.5 sm:p-2.5 group-hover:scale-105 transition-transform duration-500 ease-out"
                 loading="lazy"
             >
         </a>
@@ -24,7 +24,7 @@
 
     <!-- Content -->
     <div class="p-2.5 sm:p-4 flex-1 flex flex-col justify-between border-t border-gray-50">
-        <div>
+        <div class="flex-1">
             @if($product->category)
                 <span class="text-[10px] sm:text-[11px] font-semibold text-brand-600 uppercase tracking-wider block mb-0.5 truncate">
                     {{ $product->category->name }}
@@ -47,7 +47,7 @@
             @endif
         </div>
 
-        <div>
+        <div class="mt-auto pt-1">
             <!-- Price Display -->
             <div class="flex items-baseline flex-wrap gap-1.5 sm:gap-2 mb-2.5 sm:mb-3">
                 <span class="text-sm sm:text-base md:text-lg font-extrabold text-brand-700" x-text="priceFormatted">
