@@ -82,40 +82,6 @@
                         </div>
                     </div>
 
-                    <!-- Preferred Courier Service Selection (Pathao & Steadfast) -->
-                    @if(isset($couriers) && $couriers->count() > 0)
-                    <div class="bg-white rounded-3xl p-6 border border-brand-100 shadow-sm" x-data="{ selectedCourier: '{{ old('courier_service_id', $couriers->first()->id ?? '') }}' }">
-                        <h2 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b flex items-center justify-between">
-                            <span class="flex items-center gap-2">
-                                <i class="fa-solid fa-truck-fast text-brand-600"></i> কুরিয়ার সার্ভিস নির্বাচন করুন
-                            </span>
-                        </h2>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            @foreach($couriers as $courier)
-                                <label 
-                                    class="p-4 rounded-2xl border-2 cursor-pointer transition flex items-center justify-between"
-                                    :class="selectedCourier == '{{ $courier->id }}' ? 'border-brand-600 bg-brand-50/60' : 'border-gray-200 hover:border-brand-300'"
-                                >
-                                    <div class="flex items-center gap-3">
-                                        <input 
-                                            type="radio" 
-                                            name="courier_service_id" 
-                                            value="{{ $courier->id }}" 
-                                            x-model="selectedCourier"
-                                            class="text-brand-600 focus:ring-brand-500"
-                                        >
-                                        <div>
-                                            <span class="font-extrabold text-sm text-gray-900 block">{{ $courier->name }}</span>
-                                            <span class="text-xs text-gray-500">দ্রুত ও নিরাপদ হোম ডেলিভারি</span>
-                                        </div>
-                                    </div>
-                                    <i class="fa-solid fa-box text-brand-600 text-lg"></i>
-                                </label>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
 
                     <!-- Payment Method Selection (COD, bKash, Nagad, Rocket) -->
                     <div class="bg-white rounded-3xl p-6 border border-brand-100 shadow-sm space-y-4">
