@@ -35,16 +35,6 @@
                 <a href="{{ route('products.show', $product->slug) }}">{{ $product->name }}</a>
             </h3>
 
-            <!-- Variants selector if product has variants -->
-            @if($product->variants && count($product->variants) > 0)
-                <div class="mb-2 sm:mb-3">
-                    <select x-model="selectedVariantId" @change="updateVariantPrice()" class="w-full text-[11px] sm:text-xs bg-gray-50 border border-gray-200 rounded-lg py-1 px-1.5 sm:p-1.5 focus:ring-1 focus:ring-brand-500 text-gray-700 font-medium">
-                        @foreach($product->variants as $variant)
-                            <option value="{{ $variant->id }}">{{ $variant->name }} — {{ format_price($variant->price) }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
         </div>
 
         <div class="mt-auto pt-1">
