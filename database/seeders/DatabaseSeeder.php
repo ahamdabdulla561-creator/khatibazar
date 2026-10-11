@@ -58,12 +58,18 @@ class DatabaseSeeder extends Seeder
             ['key' => 'site_name', 'value' => 'খাঁটি বাজার (Khati Bazar)', 'group' => 'general', 'label' => 'Website Name', 'type' => 'text'],
             ['key' => 'phone', 'value' => '01355465191', 'group' => 'contact', 'label' => 'Phone Number', 'type' => 'text'],
             ['key' => 'whatsapp_number', 'value' => '8801355465191', 'group' => 'contact', 'label' => 'WhatsApp Number', 'type' => 'text'],
-            ['key' => 'email', 'value' => 'khatibazarbdstore@gmail.com', 'group' => 'contact', 'label' => 'Email Address', 'type' => 'text'],
+            ['key' => 'email', 'value' => 'khatibazarbd91@gmail.com', 'group' => 'contact', 'label' => 'Email Address', 'type' => 'text'],
             ['key' => 'facebook_url', 'value' => 'https://www.facebook.com/share/19fM5TXnjj/', 'group' => 'contact', 'label' => 'Facebook Page URL', 'type' => 'text'],
-            ['key' => 'address', 'value' => 'ঢাকা, বাংলাদেশ', 'group' => 'contact', 'label' => 'Full Address', 'type' => 'textarea'],
+            ['key' => 'address', 'value' => 'ঝিনাইদহ, বাংলাদেশ', 'group' => 'contact', 'label' => 'Full Address', 'type' => 'textarea'],
             ['key' => 'inside_dhaka_charge', 'value' => '150', 'group' => 'shipping', 'label' => 'Inside Dhaka Delivery Charge (BDT)', 'type' => 'number'],
             ['key' => 'outside_dhaka_charge', 'value' => '150', 'group' => 'shipping', 'label' => 'Outside Dhaka Delivery Charge (BDT)', 'type' => 'number'],
             ['key' => 'currency_symbol', 'value' => '৳', 'group' => 'general', 'label' => 'Currency Symbol', 'type' => 'text'],
+            ['key' => 'bkash_number', 'value' => '01355465191', 'group' => 'payment', 'label' => 'bKash Number', 'type' => 'text'],
+            ['key' => 'bkash_type', 'value' => 'Personal', 'group' => 'payment', 'label' => 'bKash Type', 'type' => 'text'],
+            ['key' => 'nagad_number', 'value' => '01355465191', 'group' => 'payment', 'label' => 'Nagad Number', 'type' => 'text'],
+            ['key' => 'nagad_type', 'value' => 'Personal', 'group' => 'payment', 'label' => 'Nagad Type', 'type' => 'text'],
+            ['key' => 'rocket_number', 'value' => '01355465191', 'group' => 'payment', 'label' => 'Rocket Number', 'type' => 'text'],
+            ['key' => 'rocket_type', 'value' => 'Personal', 'group' => 'payment', 'label' => 'Rocket Type', 'type' => 'text'],
         ];
 
         foreach ($settings as $setting) {
@@ -75,7 +81,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Nuts & Seeds (বাদাম ও বীজ)',
             'description' => 'প্রাকৃতিক ও প্রিমিয়াম কোয়ালিটি বাদাম এবং পুষ্টিকর বীজ',
             'image' => 'products/multi-seeds-nuts-500g.jpg',
-            'status' => 'active',
+            'status' => 'inactive',
             'sort_order' => 1,
         ]);
 

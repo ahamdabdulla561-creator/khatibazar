@@ -403,7 +403,7 @@
                 <ul class="space-y-2.5 text-sm text-brand-100/85">
                     <li class="flex items-start gap-2">
                         <i class="fa-solid fa-location-dot mt-1 text-white"></i>
-                        <span>{{ site_setting('address', 'Dhaka, Bangladesh') }}</span>
+                        <span>{{ site_setting('address', 'ঝিনাইদহ, বাংলাদেশ') }}</span>
                     </li>
                     <li class="flex items-center gap-2">
                         <i class="fa-solid fa-phone text-white"></i>
@@ -411,7 +411,7 @@
                     </li>
                     <li class="flex items-center gap-2">
                         <i class="fa-solid fa-envelope text-white"></i>
-                        <a href="mailto:{{ site_setting('email', 'khatibazarbdstore@gmail.com') }}" class="hover:underline hover:text-white transition">{{ site_setting('email', 'khatibazarbdstore@gmail.com') }}</a>
+                        <a href="mailto:{{ site_setting('email', 'khatibazarbd91@gmail.com') }}" class="hover:underline hover:text-white transition">{{ site_setting('email', 'khatibazarbd91@gmail.com') }}</a>
                     </li>
                 </ul>
             </div>

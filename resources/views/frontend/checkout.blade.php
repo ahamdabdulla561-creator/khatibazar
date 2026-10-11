@@ -174,15 +174,15 @@
                                         <span x-text="paymentMethod === 'bkash' ? 'বিকাশ (bKash)' : (paymentMethod === 'nagad' ? 'নগদ (Nagad)' : 'রকেট (Rocket)')"></span> <span class="text-xs text-gray-600 font-normal">অ্যাকাউন্টের তথ্য:</span>
                                     </h4>
                                     <div class="text-base font-black text-gray-900 font-mono tracking-wide mt-0.5">
-                                        <span x-text="paymentMethod === 'bkash' ? '{{ site_setting('bkash_number', '01711-000000') }}' : (paymentMethod === 'nagad' ? '{{ site_setting('nagad_number', '01822-000000') }}' : '{{ site_setting('rocket_number', '01933-000000-8') }}')"></span>
+                                        <span>01355465191</span>
                                         <span class="text-xs font-bold text-white px-2 py-0.5 rounded-full ml-1" :class="{
                                             'bg-pink-600': paymentMethod === 'bkash',
                                             'bg-orange-500': paymentMethod === 'nagad',
                                             'bg-purple-600': paymentMethod === 'rocket'
-                                        }" x-text="paymentMethod === 'bkash' ? '{{ site_setting('bkash_type', 'Personal') }}' : (paymentMethod === 'nagad' ? '{{ site_setting('nagad_type', 'Personal') }}' : '{{ site_setting('rocket_type', 'Personal') }}')"></span>
+                                        }">Personal</span>
                                     </div>
                                     <p class="text-xs text-gray-600 mt-1 leading-relaxed">
-                                        <span x-text="paymentMethod === 'bkash' ? '{{ site_setting('bkash_instruction', 'উপরের বিকাশ পার্সোনাল নম্বরে সেন্ড মানি (Send Money) করুন।') }}' : (paymentMethod === 'nagad' ? '{{ site_setting('nagad_instruction', 'উপরের নগদ পার্সোনাল নম্বরে সেন্ড মানি (Send Money) করুন।') }}' : '{{ site_setting('rocket_instruction', 'উপরের রকেট পার্সোনাল নম্বরে সেন্ড মানি (Send Money) করুন।') }}')"></span>
+                                        <span x-text="paymentMethod === 'bkash' ? 'bKash Personal নম্বর 01355465191 এ Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।' : (paymentMethod === 'nagad' ? 'Nagad Personal নম্বর 01355465191 এ Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।' : 'Rocket Personal নম্বর 01355465191 এ Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।')"></span>
                                     </p>
                                 </div>
                             </div>

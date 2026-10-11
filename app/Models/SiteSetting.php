@@ -28,10 +28,28 @@ class SiteSetting extends Model
             return '8801355465191';
         }
         if ($key === 'email') {
-            return 'khatibazarbdstore@gmail.com';
+            return 'khatibazarbd91@gmail.com';
         }
         if ($key === 'facebook_url') {
             return 'https://www.facebook.com/share/19fM5TXnjj/';
+        }
+        if ($key === 'address') {
+            return 'ঝিনাইদহ, বাংলাদেশ';
+        }
+        if (in_array($key, ['bkash_number', 'nagad_number', 'rocket_number'])) {
+            return '01355465191';
+        }
+        if (in_array($key, ['bkash_type', 'nagad_type', 'rocket_type'])) {
+            return 'Personal';
+        }
+        if ($key === 'bkash_instruction') {
+            return 'bKash Personal নম্বর 01355465191 এ Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।';
+        }
+        if ($key === 'nagad_instruction') {
+            return 'Nagad Personal নম্বর 01355465191 এ Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।';
+        }
+        if ($key === 'rocket_instruction') {
+            return 'Rocket Personal নম্বর 01355465191 এ Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।';
         }
         if (static::$cachedSettings === null) {
             try {
