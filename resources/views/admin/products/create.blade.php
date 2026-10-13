@@ -12,6 +12,17 @@
     <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
 
+        @if($errors->any())
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-xs font-semibold">
+                <div class="font-bold mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> অনুগ্রহ করে নিচের ভুলগুলো সংশোধন করুন:</div>
+                <ul class="list-disc list-inside space-y-0.5">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <!-- Basic Product Information Card -->
         <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-4">
             <h2 class="text-base font-bold text-gray-900 pb-2 border-b">Basic Info</h2>

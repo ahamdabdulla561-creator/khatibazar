@@ -10,6 +10,8 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -53,95 +55,142 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'brand_id' => 'nullable|exists:brands,id',
-            'regular_price' => 'required|numeric|min:0',
-            'sale_price' => 'nullable|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'gallery.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'short_description' => 'nullable|string',
-            'description' => 'nullable|string',
-            'status' => 'required|in:active,inactive',
-            'variants' => 'nullable|array',
-            'variants.*.name' => 'required_with:variants|string',
-            'variants.*.price' => 'required_with:variants|numeric|min:0',
-            'variants.*.stock' => 'required_with:variants|integer|min:0',
-        ]);
-
-        $slug = Str::slug($request->name);
-        $count = Product::where('slug', 'like', "{$slug}%")->count();
-        if ($count > 0) {
-            $slug .= '-' . ($count + 1);
-        }
-
-        $sku = $request->sku ?? ('KB-PRD-' . strtoupper(Str::random(6)));
-
-        $mainImagePath = null;
-        if ($request->hasFile('image')) {
-            $mainImagePath = $request->file('image')->store('products', 'public');
-        }
-
-        $discountPercent = null;
-        if ($request->sale_price && $request->regular_price > 0 && $request->sale_price < $request->regular_price) {
-            $discountPercent = round((($request->regular_price - $request->sale_price) / $request->regular_price) * 100);
-        }
-
-        $product = Product::create([
-            'category_id' => $request->category_id,
-            'brand_id' => $request->brand_id,
+        Log::info("Attempting to store new product", [
             'name' => $request->name,
-            'slug' => $slug,
-            'sku' => $sku,
-            'short_description' => $request->short_description,
-            'description' => $request->description,
-            'image' => $mainImagePath,
-            'regular_price' => $request->regular_price,
-            'sale_price' => $request->sale_price,
-            'discount_percent' => $discountPercent,
-            'stock' => $request->stock,
-            'status' => $request->status,
-            'is_featured' => $request->boolean('is_featured'),
-            'is_super_offer' => $request->boolean('is_super_offer'),
-            'sort_order' => $request->sort_order ?? 0,
+            'category_id' => $request->category_id,
+            'has_image' => $request->hasFile('image'),
+            'gallery_count' => $request->hasFile('gallery') ? count($request->file('gallery')) : 0,
         ]);
 
-        // Save Gallery Images
-        if ($request->hasFile('gallery')) {
-            foreach ($request->file('gallery') as $idx => $file) {
-                $path = $file->store('products/gallery', 'public');
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'image_path' => $path,
-                    'sort_order' => $idx + 1,
-                ]);
-            }
-        }
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'category_id' => 'required|exists:categories,id',
+                'brand_id' => 'nullable|exists:brands,id',
+                'regular_price' => 'required|numeric|min:0',
+                'sale_price' => 'nullable|numeric|min:0',
+                'stock' => 'required|integer|min:0',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+                'gallery.*' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+                'short_description' => 'nullable|string',
+                'description' => 'nullable|string',
+                'status' => 'required|in:active,inactive',
+                'variants' => 'nullable|array',
+                'variants.*.name' => 'nullable|string',
+                'variants.*.price' => 'nullable|numeric|min:0',
+                'variants.*.stock' => 'nullable|integer|min:0',
+            ]);
 
-        // Save Variants
-        if ($request->has('variants') && is_array($request->variants)) {
-            foreach ($request->variants as $var) {
-                if ((!empty($var['name']) || !empty($var['size']) || !empty($var['color'])) && isset($var['price'])) {
-                    $vName = $var['name'] ?? trim(($var['size'] ?? '') . ' ' . ($var['color'] ?? ''));
-                    ProductVariant::create([
-                        'product_id' => $product->id,
-                        'name' => $vName ?: 'Standard',
-                        'size' => $var['size'] ?? null,
-                        'color' => $var['color'] ?? null,
-                        'sku' => $var['sku'] ?? ($product->sku . '-' . Str::slug($vName ?: 'std')),
-                        'price' => $var['price'],
-                        'stock' => $var['stock'] ?? 0,
-                        'status' => 'active',
-                    ]);
+            // Ensure Storage folders exist
+            if (!Storage::disk('public')->exists('products')) {
+                Storage::disk('public')->makeDirectory('products');
+            }
+            if (!Storage::disk('public')->exists('products/gallery')) {
+                Storage::disk('public')->makeDirectory('products/gallery');
+            }
+
+            // Safe Unicode / Bengali slug generation
+            $slug = Str::slug($request->name);
+            if (empty($slug)) {
+                $slug = 'product-' . time() . '-' . Str::random(4);
+            } else {
+                $count = Product::where('slug', 'like', "{$slug}%")->count();
+                if ($count > 0) {
+                    $slug .= '-' . ($count + 1);
                 }
             }
+
+            $sku = $request->sku ?? ('KB-PRD-' . strtoupper(Str::random(6)));
+
+            $mainImagePath = null;
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                $mainImagePath = $request->file('image')->store('products', 'public');
+            }
+
+            $discountPercent = null;
+            if ($request->sale_price && $request->regular_price > 0 && $request->sale_price < $request->regular_price) {
+                $discountPercent = round((($request->regular_price - $request->sale_price) / $request->regular_price) * 100);
+            }
+
+            $product = Product::create([
+                'category_id' => $request->category_id,
+                'brand_id' => $request->brand_id,
+                'name' => $request->name,
+                'slug' => $slug,
+                'sku' => $sku,
+                'short_description' => $request->short_description,
+                'description' => $request->description,
+                'image' => $mainImagePath,
+                'regular_price' => $request->regular_price,
+                'sale_price' => $request->sale_price,
+                'discount_percent' => $discountPercent,
+                'stock' => $request->stock,
+                'status' => $request->status,
+                'is_featured' => $request->boolean('is_featured'),
+                'is_super_offer' => $request->boolean('is_super_offer'),
+                'sort_order' => $request->sort_order ?? 0,
+            ]);
+
+            // Save Gallery Images safely
+            if ($request->hasFile('gallery')) {
+                foreach ($request->file('gallery') as $idx => $file) {
+                    if ($file && $file->isValid()) {
+                        try {
+                            $path = $file->store('products/gallery', 'public');
+                            ProductImage::create([
+                                'product_id' => $product->id,
+                                'image_path' => $path,
+                                'sort_order' => $idx + 1,
+                            ]);
+                            Log::info("Gallery image saved for product #{$product->id}: {$path}");
+                        } catch (\Throwable $imgEx) {
+                            Log::error("Failed to save gallery image for product #{$product->id}: " . $imgEx->getMessage());
+                        }
+                    }
+                }
+            }
+
+            // Save Variants
+            if ($request->has('variants') && is_array($request->variants)) {
+                foreach ($request->variants as $var) {
+                    if ((!empty($var['name']) || !empty($var['size']) || !empty($var['color'])) && isset($var['price']) && $var['price'] !== '') {
+                        $vName = $var['name'] ?? trim(($var['size'] ?? '') . ' ' . ($var['color'] ?? ''));
+                        $vSlug = Str::slug($vName ?: 'std');
+                        if (empty($vSlug)) {
+                            $vSlug = 'v-' . Str::random(4);
+                        }
+                        ProductVariant::create([
+                            'product_id' => $product->id,
+                            'name' => $vName ?: 'Standard',
+                            'size' => $var['size'] ?? null,
+                            'color' => $var['color'] ?? null,
+                            'sku' => $var['sku'] ?? ($product->sku . '-' . $vSlug),
+                            'price' => $var['price'],
+                            'stock' => $var['stock'] ?? 0,
+                            'status' => 'active',
+                        ]);
+                    }
+                }
+            }
+
+            Log::info("Product created successfully #{$product->id} - {$product->name} (Slug: {$product->slug})");
+            AuditLog::log('Product Created', "পণ্য '{$product->name}' তৈরি করা হয়েছে।");
+
+            return redirect()->route('admin.products.index')->with('success', 'পণ্য সফলভাবে যুক্ত হয়েছে!');
+        } catch (\Illuminate\Validation\ValidationException $ve) {
+            Log::warning("Product validation failed", [
+                'errors' => $ve->errors(),
+                'name' => $request->name
+            ]);
+            throw $ve;
+        } catch (\Throwable $e) {
+            Log::error("Product creation error: " . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'name' => $request->name
+            ]);
+            return redirect()->back()->withInput()->with('error', 'প্রোডাক্ট সংরক্ষণ করতে সমস্যা হয়েছে: ' . $e->getMessage());
         }
-
-        AuditLog::log('Product Created', "পণ্য '{$product->name}' তৈরি করা হয়েছে।");
-
-        return redirect()->route('admin.products.index')->with('success', 'পণ্য সফলভাবে যুক্ত হয়েছে!');
     }
 
     public function edit($id)
@@ -157,97 +206,140 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'brand_id' => 'nullable|exists:brands,id',
-            'regular_price' => 'required|numeric|min:0',
-            'sale_price' => 'nullable|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'status' => 'required|in:active,inactive',
-        ]);
-
-        $mainImagePath = $product->image;
-        if ($request->hasFile('image')) {
-            $mainImagePath = $request->file('image')->store('products', 'public');
-        }
-
-        $discountPercent = null;
-        if ($request->sale_price && $request->regular_price > 0 && $request->sale_price < $request->regular_price) {
-            $discountPercent = round((($request->regular_price - $request->sale_price) / $request->regular_price) * 100);
-        }
-
-        $product->update([
-            'category_id' => $request->category_id,
-            'brand_id' => $request->brand_id,
+        Log::info("Attempting to update product #{$id}", [
             'name' => $request->name,
-            'short_description' => $request->short_description,
-            'description' => $request->description,
-            'image' => $mainImagePath,
-            'regular_price' => $request->regular_price,
-            'sale_price' => $request->sale_price,
-            'discount_percent' => $discountPercent,
-            'stock' => $request->stock,
-            'status' => $request->status,
-            'is_featured' => $request->boolean('is_featured'),
-            'is_super_offer' => $request->boolean('is_super_offer'),
-            'sort_order' => $request->sort_order ?? 0,
+            'category_id' => $request->category_id,
+            'has_image' => $request->hasFile('image'),
+            'gallery_count' => $request->hasFile('gallery') ? count($request->file('gallery')) : 0,
         ]);
 
-        // Additional gallery upload
-        if ($request->hasFile('gallery')) {
-            foreach ($request->file('gallery') as $idx => $file) {
-                $path = $file->store('products/gallery', 'public');
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'image_path' => $path,
-                    'sort_order' => $idx + 1,
-                ]);
-            }
-        }
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'category_id' => 'required|exists:categories,id',
+                'brand_id' => 'nullable|exists:brands,id',
+                'regular_price' => 'required|numeric|min:0',
+                'sale_price' => 'nullable|numeric|min:0',
+                'stock' => 'required|integer|min:0',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+                'gallery.*' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+                'status' => 'required|in:active,inactive',
+            ]);
 
-        // Sync Variants
-        if ($request->has('variants') && is_array($request->variants)) {
-            $existingVariantIds = [];
-            foreach ($request->variants as $var) {
-                if ((!empty($var['name']) || !empty($var['size']) || !empty($var['color'])) && isset($var['price'])) {
-                    $vName = $var['name'] ?? trim(($var['size'] ?? '') . ' ' . ($var['color'] ?? ''));
-                    if (isset($var['id']) && !empty($var['id'])) {
-                        $variantModel = ProductVariant::find($var['id']);
-                        if ($variantModel && $variantModel->product_id == $product->id) {
-                            $variantModel->update([
-                                'name' => $vName ?: $variantModel->name,
-                                'size' => $var['size'] ?? null,
-                                'color' => $var['color'] ?? null,
-                                'sku' => $var['sku'] ?? $variantModel->sku,
-                                'price' => $var['price'],
-                                'stock' => $var['stock'] ?? 0,
+            // Ensure Storage folders exist
+            if (!Storage::disk('public')->exists('products')) {
+                Storage::disk('public')->makeDirectory('products');
+            }
+            if (!Storage::disk('public')->exists('products/gallery')) {
+                Storage::disk('public')->makeDirectory('products/gallery');
+            }
+
+            $mainImagePath = $product->image;
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                $mainImagePath = $request->file('image')->store('products', 'public');
+            }
+
+            $discountPercent = null;
+            if ($request->sale_price && $request->regular_price > 0 && $request->sale_price < $request->regular_price) {
+                $discountPercent = round((($request->regular_price - $request->sale_price) / $request->regular_price) * 100);
+            }
+
+            $product->update([
+                'category_id' => $request->category_id,
+                'brand_id' => $request->brand_id,
+                'name' => $request->name,
+                'short_description' => $request->short_description,
+                'description' => $request->description,
+                'image' => $mainImagePath,
+                'regular_price' => $request->regular_price,
+                'sale_price' => $request->sale_price,
+                'discount_percent' => $discountPercent,
+                'stock' => $request->stock,
+                'status' => $request->status,
+                'is_featured' => $request->boolean('is_featured'),
+                'is_super_offer' => $request->boolean('is_super_offer'),
+                'sort_order' => $request->sort_order ?? 0,
+            ]);
+
+            // Additional gallery upload safely
+            if ($request->hasFile('gallery')) {
+                foreach ($request->file('gallery') as $idx => $file) {
+                    if ($file && $file->isValid()) {
+                        try {
+                            $path = $file->store('products/gallery', 'public');
+                            ProductImage::create([
+                                'product_id' => $product->id,
+                                'image_path' => $path,
+                                'sort_order' => $idx + 1,
                             ]);
-                            $existingVariantIds[] = $variantModel->id;
+                            Log::info("Additional gallery image saved for product #{$product->id}: {$path}");
+                        } catch (\Throwable $imgEx) {
+                            Log::error("Failed to save gallery image for product #{$product->id}: " . $imgEx->getMessage());
                         }
-                    } else {
-                        $newVar = ProductVariant::create([
-                            'product_id' => $product->id,
-                            'name' => $vName ?: 'Standard',
-                            'size' => $var['size'] ?? null,
-                            'color' => $var['color'] ?? null,
-                            'sku' => $var['sku'] ?? ($product->sku . '-' . Str::slug($vName ?: 'std')),
-                            'price' => $var['price'],
-                            'stock' => $var['stock'] ?? 0,
-                            'status' => 'active',
-                        ]);
-                        $existingVariantIds[] = $newVar->id;
                     }
                 }
             }
-            // Delete removed variants
-            ProductVariant::where('product_id', $product->id)->whereNotIn('id', $existingVariantIds)->delete();
+
+            // Sync Variants
+            if ($request->has('variants') && is_array($request->variants)) {
+                $existingVariantIds = [];
+                foreach ($request->variants as $var) {
+                    if ((!empty($var['name']) || !empty($var['size']) || !empty($var['color'])) && isset($var['price']) && $var['price'] !== '') {
+                        $vName = $var['name'] ?? trim(($var['size'] ?? '') . ' ' . ($var['color'] ?? ''));
+                        $vSlug = Str::slug($vName ?: 'std');
+                        if (empty($vSlug)) {
+                            $vSlug = 'v-' . Str::random(4);
+                        }
+                        if (isset($var['id']) && !empty($var['id'])) {
+                            $variantModel = ProductVariant::find($var['id']);
+                            if ($variantModel && $variantModel->product_id == $product->id) {
+                                $variantModel->update([
+                                    'name' => $vName ?: $variantModel->name,
+                                    'size' => $var['size'] ?? null,
+                                    'color' => $var['color'] ?? null,
+                                    'sku' => $var['sku'] ?? $variantModel->sku,
+                                    'price' => $var['price'],
+                                    'stock' => $var['stock'] ?? 0,
+                                ]);
+                                $existingVariantIds[] = $variantModel->id;
+                            }
+                        } else {
+                            $newVar = ProductVariant::create([
+                                'product_id' => $product->id,
+                                'name' => $vName ?: 'Standard',
+                                'size' => $var['size'] ?? null,
+                                'color' => $var['color'] ?? null,
+                                'sku' => $var['sku'] ?? ($product->sku . '-' . $vSlug),
+                                'price' => $var['price'],
+                                'stock' => $var['stock'] ?? 0,
+                                'status' => 'active',
+                            ]);
+                            $existingVariantIds[] = $newVar->id;
+                        }
+                    }
+                }
+                // Delete removed variants
+                ProductVariant::where('product_id', $product->id)->whereNotIn('id', $existingVariantIds)->delete();
+            }
+
+            Log::info("Product updated successfully #{$product->id} - {$product->name}");
+            AuditLog::log('Product Updated', "পণ্য '{$product->name}' আপডেট করা হয়েছে।");
+
+            return redirect()->route('admin.products.index')->with('success', 'পণ্য সফলভাবে আপডেট করা হয়েছে!');
+        } catch (\Illuminate\Validation\ValidationException $ve) {
+            Log::warning("Product update validation failed #{$id}", [
+                'errors' => $ve->errors(),
+                'name' => $request->name
+            ]);
+            throw $ve;
+        } catch (\Throwable $e) {
+            Log::error("Product update error #{$id}: " . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'name' => $request->name
+            ]);
+            return redirect()->back()->withInput()->with('error', 'প্রোডাক্ট আপডেট করতে সমস্যা হয়েছে: ' . $e->getMessage());
         }
-
-        AuditLog::log('Product Updated', "পণ্য '{$product->name}' আপডেট করা হয়েছে।");
-
-        return redirect()->route('admin.products.index')->with('success', 'পণ্য সফলভাবে আপডেট করা হয়েছে!');
     }
 
     public function destroy($id)

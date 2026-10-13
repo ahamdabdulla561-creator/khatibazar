@@ -42,7 +42,10 @@
 
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>[x-cloak] { display: none !important; }</style>
+    <style>
+        [x-cloak] { display: none !important; }
+        input, textarea, select { font-family: 'Hind Siliguri', 'Inter', sans-serif !important; }
+    </style>
     @stack('styles')
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased flex h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
