@@ -74,10 +74,52 @@ class ProductController extends Controller
 
     public function show($slug)
     {
+        // 1. Try finding by exact slug
         $product = Product::with(['category', 'brand', 'images', 'activeVariants'])
             ->where('slug', $slug)
-            ->where('status', 'active')
-            ->firstOrFail();
+            ->first();
+
+        // 2. If not found, try flexible matching (e.g. hluder-qunnra-pure-turmeric-powder-500g -> turmeric)
+        if (!$product) {
+            $product = Product::with(['category', 'brand', 'images', 'activeVariants'])
+                ->where(function ($q) use ($slug) {
+                    if (str_contains($slug, 'turmeric') || str_contains($slug, 'hlud') || str_contains($slug, 'holud')) {
+                        $q->where('slug', 'like', '%turmeric%')
+                          ->orWhere('slug', 'like', '%holud%')
+                          ->orWhere('name', 'like', '%হলুদ%');
+                    } elseif (str_contains($slug, 'chilli') || str_contains($slug, 'morich')) {
+                        $q->where('slug', 'like', '%chilli%')
+                          ->orWhere('slug', 'like', '%morich%')
+                          ->orWhere('name', 'like', '%মরিচ%');
+                    } elseif (str_contains($slug, 'coriander') || str_contains($slug, 'dhonia')) {
+                        $q->where('slug', 'like', '%coriander%')
+                          ->orWhere('slug', 'like', '%dhonia%')
+                          ->orWhere('name', 'like', '%ধনিয়া%');
+                    } elseif (str_contains($slug, 'chia')) {
+                        $q->where('slug', 'like', '%chia%')
+                          ->orWhere('name', 'like', '%চিয়া%');
+                    } elseif (str_contains($slug, 'seeds') || str_contains($slug, 'nuts')) {
+                        $q->where('slug', 'like', '%seeds%')
+                          ->orWhere('name', 'like', '%সিডস%');
+                    }
+                })
+                ->first();
+        }
+
+        // 3. If still not found and slug is numeric, check by ID
+        if (!$product && is_numeric($slug)) {
+            $product = Product::with(['category', 'brand', 'images', 'activeVariants'])->find($slug);
+        }
+
+        // 4. If product not found, redirect to catalog instead of 404
+        if (!$product) {
+            return redirect()->route('products.index')->with('error', 'পণ্যটি পাওয়া যায়নি।');
+        }
+
+        // Redirect to canonical slug if matched via alias/fallback
+        if ($product->slug !== $slug && request()->isMethod('get')) {
+            return redirect()->route('products.show', $product->slug);
+        }
 
         $relatedProducts = Product::with(['category', 'brand', 'variants'])
             ->where('category_id', $product->category_id)
