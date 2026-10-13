@@ -10,6 +10,10 @@ class HomeController extends Controller
 {
     public function index()
     {
+        if (!Product::where('slug', 'pure-turmeric-powder-250g')->exists()) {
+            Product::ensureInitialProducts();
+        }
+
         $categories = Category::where('status', 'active')
             ->orderBy('sort_order', 'asc')
             ->get();

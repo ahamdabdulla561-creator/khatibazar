@@ -12,6 +12,10 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        if (!Product::where('slug', 'pure-turmeric-powder-250g')->exists()) {
+            Product::ensureInitialProducts();
+        }
+
         $query = Product::with(['category', 'brand', 'variants'])->where('status', 'active');
 
         // Search keyword
@@ -74,6 +78,10 @@ class ProductController extends Controller
 
     public function show($slug)
     {
+        if (!Product::where('slug', 'pure-turmeric-powder-250g')->exists()) {
+            Product::ensureInitialProducts();
+        }
+
         // 1. Try finding by exact slug
         $product = Product::with(['category', 'brand', 'images', 'activeVariants'])
             ->where('slug', $slug)
