@@ -100,7 +100,13 @@ class ProductController extends Controller
                 }
             }
 
-            $sku = $request->sku ?? ('KB-PRD-' . strtoupper(Str::random(6)));
+            $sku = $request->filled('sku') ? trim($request->sku) : ('KB-PRD-' . strtoupper(Str::random(6)));
+            $originalSku = $sku;
+            $counter = 1;
+            while (Product::where('sku', $sku)->exists()) {
+                $sku = $originalSku . '-' . $counter;
+                $counter++;
+            }
 
             $mainImagePath = null;
             if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -159,12 +165,19 @@ class ProductController extends Controller
                         if (empty($vSlug)) {
                             $vSlug = 'v-' . Str::random(4);
                         }
+                        $vSku = !empty($var['sku']) ? trim($var['sku']) : ($product->sku . '-' . $vSlug);
+                        $origVSku = $vSku;
+                        $vCounter = 1;
+                        while (ProductVariant::where('sku', $vSku)->exists()) {
+                            $vSku = $origVSku . '-' . $vCounter;
+                            $vCounter++;
+                        }
                         ProductVariant::create([
                             'product_id' => $product->id,
                             'name' => $vName ?: 'Standard',
                             'size' => $var['size'] ?? null,
                             'color' => $var['color'] ?? null,
-                            'sku' => $var['sku'] ?? ($product->sku . '-' . $vSlug),
+                            'sku' => $vSku,
                             'price' => $var['price'],
                             'stock' => $var['stock'] ?? 0,
                             'status' => 'active',
