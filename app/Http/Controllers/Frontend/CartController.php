@@ -64,6 +64,11 @@ class CartController extends Controller
 
         $cart = $this->getCart();
 
+        // If Buy Now / Direct Checkout was triggered, clear old cart items so only this item is purchased
+        if ($request->boolean('buy_now')) {
+            $cart->items()->delete();
+        }
+
         $cartItem = CartItem::where('cart_id', $cart->id)
             ->where('product_id', $product->id)
             ->where('product_variant_id', $variant ? $variant->id : null)
@@ -163,5 +168,22 @@ class CartController extends Controller
             'count' => $count,
             'subtotal_formatted' => format_price($subtotal),
         ]);
+    }
+
+    public function clear()
+    {
+        $cart = $this->getCart();
+        $cart->items()->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'কার্ট সম্পূর্ণ খালি করা হয়েছে।',
+                'cart_count' => 0,
+                'cart_subtotal' => format_price(0),
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'কার্ট খালি করা হয়েছে।');
     }
 }

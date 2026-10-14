@@ -1,6 +1,6 @@
 @props(['product'])
 
-<div class="product-card-anim product-card-hover bg-white rounded-xl sm:rounded-2xl border border-brand-100/90 shadow-sm flex flex-col justify-between overflow-hidden group relative" x-data="productCard({{ $product->id }}, {{ json_encode($product->variants) }})">
+<div class="product-card-anim product-card-hover bg-white rounded-xl sm:rounded-2xl border border-brand-100/90 shadow-sm flex flex-col justify-between overflow-hidden group relative" x-data="productCard({{ $product->id }}, {{ json_encode($product->variants) }}, '{{ format_price($product->effective_price) }}')">
     
     <!-- Product Image (Strict 1:1 Square) -->
     <div class="relative bg-gray-50/70 overflow-hidden pt-[100%]">
@@ -80,55 +80,58 @@
 </div>
 
 <script>
-    function productCard(productId, variants) {
-        return {
-            productId: productId,
-            variants: variants || [],
-            selectedVariantId: (variants && variants.length > 0) ? variants[0].id : null,
-            priceFormatted: '{{ format_price($product->effective_price) }}',
+    if (typeof window.productCard === 'undefined') {
+        window.productCard = function(productId, variants, initialPrice) {
+            return {
+                productId: productId,
+                variants: variants || [],
+                selectedVariantId: (variants && variants.length > 0) ? variants[0].id : null,
+                priceFormatted: initialPrice,
 
-            updateVariantPrice() {
-                if (this.selectedVariantId && this.variants.length > 0) {
-                    let found = this.variants.find(v => v.id == this.selectedVariantId);
-                    if (found) {
-                        this.priceFormatted = '৳ ' + Number(found.price).toLocaleString();
-                    }
-                }
-            },
-
-            addToCart(buyNow = false) {
-                let payload = {
-                    product_id: this.productId,
-                    variant_id: this.selectedVariantId,
-                    quantity: 1,
-                    _token: '{{ csrf_token() }}'
-                };
-
-                fetch('{{ route("cart.store") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        window.dispatchEvent(new CustomEvent('cart-updated', { detail: data.cart_count }));
-                        if (buyNow) {
-                            window.location.href = '{{ route("checkout.index") }}';
-                        } else {
-                            alert(data.message);
-                            location.reload();
+                updateVariantPrice() {
+                    if (this.selectedVariantId && this.variants.length > 0) {
+                        let found = this.variants.find(v => v.id == this.selectedVariantId);
+                        if (found) {
+                            this.priceFormatted = '৳ ' + Number(found.price).toLocaleString();
                         }
-                    } else {
-                        alert(data.message || 'Something went wrong');
                     }
-                })
-                .catch(err => alert('An error occurred while adding to cart.'));
-            }
-        }
+                },
+
+                addToCart(buyNow = false) {
+                    let payload = {
+                        product_id: this.productId,
+                        variant_id: this.selectedVariantId,
+                        quantity: 1,
+                        buy_now: buyNow ? 1 : 0,
+                        _token: '{{ csrf_token() }}'
+                    };
+
+                    fetch('{{ route("cart.store") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.dispatchEvent(new CustomEvent('cart-updated', { detail: data.cart_count }));
+                            if (buyNow) {
+                                window.location.href = '{{ route("checkout.index") }}';
+                            } else {
+                                alert(data.message);
+                                location.reload();
+                            }
+                        } else {
+                            alert(data.message || 'Something went wrong');
+                        }
+                    })
+                    .catch(err => alert('An error occurred while adding to cart.'));
+                }
+            };
+        };
     }
 </script>

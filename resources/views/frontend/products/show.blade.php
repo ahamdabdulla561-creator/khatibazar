@@ -212,7 +212,8 @@
                     body: JSON.stringify({
                         product_id: this.product.id,
                         variant_id: this.selectedVariantId,
-                        quantity: this.quantity
+                        quantity: this.quantity,
+                        buy_now: buyNow ? 1 : 0
                     })
                 })
                 .then(r => r.json())

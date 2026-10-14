@@ -651,7 +651,8 @@
                         body: JSON.stringify({
                             product_id: this.product.id,
                             product_variant_id: this.selectedVariant ? this.selectedVariant.id : null,
-                            quantity: this.quantity
+                            quantity: this.quantity,
+                            buy_now: redirectCheckout ? 1 : 0
                         })
                     })
                     .then(res => res.json())

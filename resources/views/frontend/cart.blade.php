@@ -5,7 +5,18 @@
 @section('content')
 <div class="bg-gray-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-6">Your Shopping Cart</h1>
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900">Your Shopping Cart</h1>
+            @if($cart && $cart->items->count() > 0)
+                <form action="{{ route('cart.clear') }}" method="POST" onsubmit="return confirm('Do you want to clear your cart?');">
+                    @csrf
+                    <button type="submit" class="text-xs text-red-600 hover:text-red-700 font-bold bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-xl transition border border-red-200 flex items-center gap-1.5">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <span>Clear Cart</span>
+                    </button>
+                </form>
+            @endif
+        </div>
 
         @if($cart && $cart->items->count() > 0)
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
