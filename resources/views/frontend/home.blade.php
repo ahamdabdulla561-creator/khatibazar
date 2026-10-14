@@ -65,6 +65,9 @@
                     @foreach($comboOffers as $offer)
                         @php
                             $offerUrl = $offer->product ? route('products.show', $offer->product->slug) : ($offer->link ?: route('products.index'));
+                            if (rtrim($offerUrl, '/') === rtrim(url('/'), '/')) {
+                                $offerUrl = $offer->product ? route('products.show', $offer->product->slug) : route('products.index');
+                            }
                         @endphp
                         <!-- Single Combo Slide (1 by 1) -->
                         <div class="w-full shrink-0 p-4 sm:p-6 md:p-8">
