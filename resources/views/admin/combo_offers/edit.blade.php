@@ -66,12 +66,19 @@
             <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Upload Offer Image</label>
                 @if($offer->image)
-                    <div class="mb-2 flex items-center gap-3">
-                        <img src="{{ $offer->image_url }}" class="w-12 h-12 object-contain rounded-lg border bg-white p-1">
-                        <span class="text-xs text-gray-400">Current Image</span>
+                    <div class="mb-2 p-2 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <img src="{{ $offer->image_url }}" class="w-12 h-12 object-contain rounded-lg border bg-white p-1">
+                            <span class="text-xs text-gray-500 font-semibold">Current Image</span>
+                        </div>
+                        <label class="flex items-center gap-1.5 text-xs text-red-600 font-bold cursor-pointer hover:text-red-700">
+                            <input type="checkbox" name="remove_image" value="1" class="rounded text-red-600">
+                            <span>Use Product Image / Remove</span>
+                        </label>
                     </div>
                 @endif
                 <input type="file" name="image" accept="image/*" class="w-full border border-gray-200 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-brand-500">
+                <span class="text-[11px] text-gray-400 block mt-1">Upload new image file to replace current image</span>
                 @error('image') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
             </div>
 

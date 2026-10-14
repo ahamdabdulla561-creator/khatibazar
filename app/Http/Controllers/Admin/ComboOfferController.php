@@ -52,16 +52,17 @@ class ComboOfferController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
 
+        if (!Storage::disk('public')->exists('combo_offers')) {
+            Storage::disk('public')->makeDirectory('combo_offers');
+        }
+
         $imagePath = null;
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $imagePath = $request->file('image')->store('combo_offers', 'public');
         } elseif ($request->filled('image_url')) {
-            $imagePath = $request->image_url;
+            $imagePath = trim($request->image_url);
         } elseif ($request->filled('product_id')) {
-            $product = Product::find($request->product_id);
-            if ($product) {
-                $imagePath = $product->image;
-            }
+            $imagePath = null;
         }
 
         $offer = ComboOffer::create([
@@ -108,14 +109,28 @@ class ComboOfferController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
 
+        if (!Storage::disk('public')->exists('combo_offers')) {
+            Storage::disk('public')->makeDirectory('combo_offers');
+        }
+
         $imagePath = $offer->image;
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
             if ($offer->image && !filter_var($offer->image, FILTER_VALIDATE_URL) && Storage::disk('public')->exists($offer->image)) {
                 Storage::disk('public')->delete($offer->image);
             }
             $imagePath = $request->file('image')->store('combo_offers', 'public');
         } elseif ($request->filled('image_url')) {
-            $imagePath = $request->image_url;
+            $imagePath = trim($request->image_url);
+        } elseif ($request->boolean('remove_image')) {
+            if ($offer->image && !filter_var($offer->image, FILTER_VALIDATE_URL) && Storage::disk('public')->exists($offer->image)) {
+                Storage::disk('public')->delete($offer->image);
+            }
+            $imagePath = null;
+        } elseif ($request->filled('product_id') && $request->product_id != $offer->product_id && !$request->hasFile('image')) {
+            if ($offer->image && !filter_var($offer->image, FILTER_VALIDATE_URL) && Storage::disk('public')->exists($offer->image)) {
+                Storage::disk('public')->delete($offer->image);
+            }
+            $imagePath = null;
         }
 
         $offer->update([

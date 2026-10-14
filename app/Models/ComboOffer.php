@@ -35,7 +35,14 @@ class ComboOffer extends Model
             if (filter_var($this->image, FILTER_VALIDATE_URL)) {
                 return $this->image;
             }
-            return asset('storage/' . ltrim($this->image, '/'));
+            $clean = ltrim($this->image, '/');
+            if (file_exists(public_path('images/' . $clean))) {
+                return asset('images/' . $clean);
+            }
+            if (file_exists(public_path('storage/' . $clean))) {
+                return asset('storage/' . $clean);
+            }
+            return asset('storage/' . $clean);
         }
         if ($this->product && $this->product->image_url) {
             return $this->product->image_url;
