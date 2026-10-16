@@ -214,6 +214,23 @@ class DatabaseSeeder extends Seeder
             'sort_order' => 5,
         ]);
 
+        // 5.6 CFC Plus
+        $cfcProduct = Product::updateOrCreate(['slug' => 'cfc-plus-combo-feed-concentrate'], [
+            'category_id' => $catVet->id,
+            'brand_id' => $b1->id,
+            'name' => 'CFC Plus Combo Feed Concentrate',
+            'sku' => 'KB-CFC-01',
+            'short_description' => 'গবাদিপশুর স্বাস্থ্য সুরক্ষা, দুধ উৎপাদন বৃদ্ধি এবং দ্রুত ওজন বাড়ানোর প্রিমিয়াম ফর্মুলা।',
+            'description' => 'সিএফসি প্লাস পাউডার গবাদিপশুর হজমশক্তি বৃদ্ধি, রোগ প্রতিরোধ ক্ষমতা বাড়ানো এবং দ্রুত শারীরিক বৃদ্ধির জন্য একটি অত্যন্ত কার্যকর পণ্য।',
+            'image' => 'products/cfc_plus.png',
+            'regular_price' => 800.00,
+            'sale_price' => 800.00,
+            'stock' => 100,
+            'status' => 'active',
+            'is_featured' => true,
+            'sort_order' => 6,
+        ]);
+
         $variants = [
             ['name' => '1 KG Pack', 'size' => '1 KG', 'color' => 'Green', 'sku' => 'KB-CFC-1KG', 'price' => 800.00, 'stock' => 100],
             ['name' => '2 KG Pack', 'size' => '2 KG', 'color' => 'Green', 'sku' => 'KB-CFC-2KG', 'price' => 1400.00, 'stock' => 80],

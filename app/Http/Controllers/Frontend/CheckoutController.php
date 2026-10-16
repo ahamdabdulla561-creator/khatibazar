@@ -35,25 +35,14 @@ class CheckoutController extends Controller
 
         $cart->load(['items.product', 'items.variant']);
 
-        $insideDhakaCharge = 150;
-        $outsideDhakaCharge = 150;
+        $insideDhakaCharge = (float) site_setting('inside_dhaka_charge', 150);
+        $outsideDhakaCharge = (float) site_setting('outside_dhaka_charge', 150);
 
-        // Ensure Pathao and Steadfast exist and are the active courier services
         try {
-            CourierService::updateOrCreate(
-                ['code' => 'pathao'],
-                ['name' => 'পাঠাও কুরিয়ার (Pathao)', 'status' => 'active', 'sort_order' => 1]
-            );
-            CourierService::updateOrCreate(
-                ['code' => 'steadfast'],
-                ['name' => 'স্টেডফাস্ট কুরিয়ার (Steadfast)', 'status' => 'active', 'sort_order' => 2]
-            );
-            CourierService::whereNotIn('code', ['pathao', 'steadfast'])->update(['status' => 'inactive']);
+            $couriers = CourierService::where('status', 'active')->orderBy('sort_order', 'asc')->get();
         } catch (\Throwable $e) {
-            // Ignore if table not migrated
+            $couriers = collect();
         }
-
-        $couriers = CourierService::where('status', 'active')->orderBy('sort_order', 'asc')->get();
 
         return view('frontend.checkout', compact('cart', 'insideDhakaCharge', 'outsideDhakaCharge', 'couriers'));
     }
@@ -111,8 +100,10 @@ class CheckoutController extends Controller
             }
         }
 
-        // Flat 150 BDT nationwide delivery charge
-        $deliveryCharge = 150.00;
+        $area = $request->input('delivery_area', 'outside_dhaka');
+        $deliveryCharge = $area === 'inside_dhaka'
+            ? (float) site_setting('inside_dhaka_charge', 150)
+            : (float) site_setting('outside_dhaka_charge', 150);
 
         try {
             $order = DB::transaction(function () use ($request, $cart, $deliveryCharge, $screenshotPath) {

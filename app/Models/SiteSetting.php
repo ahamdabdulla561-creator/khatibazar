@@ -21,36 +21,6 @@ class SiteSetting extends Model
 
     public static function getByKey(string $key, $default = null)
     {
-        if ($key === 'phone') {
-            return '01355465191';
-        }
-        if ($key === 'whatsapp_number') {
-            return '8801355465191';
-        }
-        if ($key === 'email') {
-            return 'khatibazarbd91@gmail.com';
-        }
-        if ($key === 'facebook_url') {
-            return 'https://www.facebook.com/share/19fM5TXnjj/';
-        }
-        if ($key === 'address') {
-            return 'ঝিনাইদহ, বাংলাদেশ';
-        }
-        if (in_array($key, ['bkash_number', 'nagad_number', 'rocket_number'])) {
-            return '01355465191';
-        }
-        if (in_array($key, ['bkash_type', 'nagad_type', 'rocket_type'])) {
-            return 'Personal';
-        }
-        if ($key === 'bkash_instruction') {
-            return 'bKash Personal নম্বর 01355465191 এ Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।';
-        }
-        if ($key === 'nagad_instruction') {
-            return 'Nagad Personal নম্বর 01355465191 এ Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।';
-        }
-        if ($key === 'rocket_instruction') {
-            return 'Rocket Personal নম্বর 01355465191 এ Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।';
-        }
         if (static::$cachedSettings === null) {
             try {
                 static::$cachedSettings = static::pluck('value', 'key')->toArray();
@@ -58,11 +28,37 @@ class SiteSetting extends Model
                 static::$cachedSettings = [];
             }
         }
-        $val = array_key_exists($key, static::$cachedSettings) ? static::$cachedSettings[$key] : $default;
-        if (is_string($val)) {
-            $val = str_ireplace('Khati B . ajar', 'Khati Bazar', str_ireplace('Khati' . ' Bajar', 'Khati Bazar', $val));
+
+        if (array_key_exists($key, static::$cachedSettings) && static::$cachedSettings[$key] !== null && static::$cachedSettings[$key] !== '') {
+            return static::$cachedSettings[$key];
         }
-        return $val;
+
+        if ($default !== null) {
+            return $default;
+        }
+
+        $fallbacks = [
+            'site_name' => 'Khati Bazar',
+            'phone' => '01355465191',
+            'whatsapp_number' => '8801355465191',
+            'email' => 'khatibazarbd91@gmail.com',
+            'facebook_url' => 'https://www.facebook.com/share/19fM5TXnjj/',
+            'address' => 'ঝিনাইদহ, বাংলাদেশ',
+            'inside_dhaka_charge' => '150',
+            'outside_dhaka_charge' => '150',
+            'currency_symbol' => '৳',
+            'bkash_number' => '01355465191',
+            'nagad_number' => '01355465191',
+            'rocket_number' => '01355465191',
+            'bkash_type' => 'Personal',
+            'nagad_type' => 'Personal',
+            'rocket_type' => 'Personal',
+            'bkash_instruction' => 'bKash নম্বরে Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।',
+            'nagad_instruction' => 'Nagad নম্বরে Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।',
+            'rocket_instruction' => 'Rocket নম্বরে Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।',
+        ];
+
+        return $fallbacks[$key] ?? null;
     }
 
     public static function setByKey(string $key, $value, string $group = 'general', string $label = null, string $type = 'text')

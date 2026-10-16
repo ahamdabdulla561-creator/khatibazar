@@ -41,16 +41,7 @@ class Category extends Model
         return $this->hasMany(Product::class)->where('status', 'active');
     }
 
-    protected static function booted()
-    {
-        static::addGlobalScope('excludeNutsSeeds', function ($builder) {
-            if (!request()->is('admin*')) {
-                $builder->where('slug', '!=', 'nuts-seeds')
-                        ->where('name', 'not like', '%Nuts%')
-                        ->where('name', 'not like', '%বাদাম%');
-            }
-        });
-    }
+
 
     protected static $cachedActive = null;
 
@@ -58,9 +49,6 @@ class Category extends Model
     {
         if (static::$cachedActive === null) {
             static::$cachedActive = static::where('status', 'active')
-                ->where('slug', '!=', 'nuts-seeds')
-                ->where('name', 'not like', '%Nuts%')
-                ->where('name', 'not like', '%বাদাম%')
                 ->orderBy('sort_order', 'asc')
                 ->get();
         }
