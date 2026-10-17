@@ -357,13 +357,52 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $name = $product->name;
-        $product->delete();
+        try {
+            $deletedName = '';
+            \Illuminate\Support\Facades\DB::transaction(function () use ($id, &$deletedName) {
+                $product = Product::with(['images', 'variants'])->findOrFail($id);
+                $deletedName = $product->name;
 
-        AuditLog::log('Product Deleted', "পণ্য '{$name}' মুছে ফেলা হয়েছে।");
+                // 1. Detach from combo offers
+                \App\Models\ComboOffer::where('product_id', $product->id)->update(['product_id' => null]);
 
-        return redirect()->route('admin.products.index')->with('success', 'পণ্যটি মুছে ফেলা হয়েছে।');
+                // 2. Detach or nullify order items so order history remains intact without foreign key failure
+                $variantIds = $product->variants->pluck('id')->toArray();
+                if (!empty($variantIds)) {
+                    \App\Models\OrderItem::whereIn('product_variant_id', $variantIds)->update(['product_variant_id' => null]);
+                }
+                \App\Models\OrderItem::where('product_id', $product->id)->update(['product_id' => null]);
+
+                // 3. Clear from shopping carts
+                \App\Models\CartItem::where('product_id', $product->id)->delete();
+
+                // 4. Delete gallery images
+                foreach ($product->images as $img) {
+                    if ($img->image_path && Storage::disk('public')->exists($img->image_path)) {
+                        Storage::disk('public')->delete($img->image_path);
+                    }
+                    $img->delete();
+                }
+
+                // 5. Delete variants
+                $product->variants()->delete();
+
+                // 6. Delete main image if in storage
+                if ($product->image && Storage::disk('public')->exists($product->image)) {
+                    Storage::disk('public')->delete($product->image);
+                }
+
+                // 7. Delete product
+                $product->delete();
+
+                AuditLog::log('Product Deleted', "পণ্য '{$deletedName}' মুছে ফেলা হয়েছে।");
+            });
+
+            return redirect()->route('admin.products.index')->with('success', "পণ্য '{$deletedName}' সফলভাবে মুছে ফেলা হয়েছে।");
+        } catch (\Throwable $e) {
+            Log::error("Failed to delete product #{$id}: " . $e->getMessage());
+            return redirect()->route('admin.products.index')->with('error', 'পণ্যটি মুছে ফেলা যায়নি: ' . $e->getMessage());
+        }
     }
 
     public function toggleSuperOffer($id)
