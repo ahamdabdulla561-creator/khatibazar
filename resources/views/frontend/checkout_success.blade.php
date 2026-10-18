@@ -83,7 +83,7 @@
                         <p class="text-[11px] text-brand-700 mt-0.5">আপনার অর্ডারের যে কোনো পরিবর্তন বা তথ্য জানতে এখান থেকেই মেসেজ পাঠান অথবা হোয়াটসঅ্যাপ করুন।</p>
                     </div>
                     @php
-                        $waSuccessUrl = "https://wa.me/8801700000000?text=" . urlencode("আসসালামু আলাইকুম, আমি মাত্র অর্ডার #" . $order->order_number . " সম্পন্ন করেছি।");
+                        $waSuccessUrl = "https://wa.me/8801355465191?text=" . urlencode("আসসালামু আলাইকুম, আমি মাত্র অর্ডার #" . $order->order_number . " সম্পন্ন করেছি।");
                     @endphp
                     <a href="{{ $waSuccessUrl }}" target="_blank" class="inline-flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shrink-0 shadow-sm">
                         <i class="fa-brands fa-whatsapp text-sm"></i> হোয়াটসঅ্যাপ চ্যাট
@@ -128,10 +128,7 @@
             </div>
         </div>
 
-        <div class="flex justify-center gap-4">
-            <a href="{{ route('order.track') }}?query={{ $order->order_number }}" class="bg-brand-600 text-white font-bold px-6 py-3 rounded-full hover:bg-brand-700 transition text-sm">
-                <i class="fa-solid fa-location-dot mr-1"></i> অর্ডার ট্র্যাক করুন
-            </a>
+        <div class="flex justify-center">
             <a href="{{ route('home') }}" class="bg-gray-200 text-gray-800 font-bold px-6 py-3 rounded-full hover:bg-gray-300 transition text-sm">
                 হোম পেজে ফিরে যান
             </a>
