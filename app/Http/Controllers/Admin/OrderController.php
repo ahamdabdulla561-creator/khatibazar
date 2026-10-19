@@ -141,4 +141,85 @@ class OrderController extends Controller
 
         return redirect()->back()->with('success', 'কাস্টমারকে সফলভাবে মেসেজ পাঠানো হয়েছে!');
     }
+
+    public function sendToSteadfast(Request $request, $id, \App\Services\SteadfastService $steadfast)
+    {
+        $order = Order::with('items')->findOrFail($id);
+
+        if (!$steadfast->isConfigured()) {
+            return redirect()->back()->with('error', 'স্টেডফাস্ট API Key এবং Secret Key কনফিগার করা নেই। অনুগ্রহ করে সেটিংস পেজে গিয়ে যুক্ত করুন।');
+        }
+
+        $customCod = $request->filled('cod_amount') ? (float)$request->cod_amount : null;
+        $customNote = $request->filled('note') ? $request->note : null;
+
+        $result = $steadfast->createOrder($order, $customCod, $customNote);
+
+        if (!$result['success']) {
+            return redirect()->back()->with('error', 'স্টেডফাস্ট বুকিং ব্যর্থ হয়েছে: ' . $result['message']);
+        }
+
+        $consignment = $result['consignment'] ?? [];
+        $trackingCode = $consignment['tracking_code'] ?? null;
+        $consignmentId = $consignment['consignment_id'] ?? null;
+
+        // Find or create Steadfast courier service record
+        $steadfastCourier = CourierService::firstOrCreate(
+            ['code' => 'steadfast'],
+            [
+                'name' => 'স্টেডফাস্ট কুরিয়ার (Steadfast)',
+                'tracking_url_template' => 'https://steadfast.com.bd/t/{tracking_code}',
+                'status' => 'active',
+                'sort_order' => 1,
+            ]
+        );
+
+        $order->update([
+            'courier_service_id' => $steadfastCourier->id,
+            'courier_name' => $steadfastCourier->name,
+            'courier_tracking_id' => $trackingCode ?? $consignmentId,
+            'order_status' => ($order->order_status === 'pending' || $order->order_status === 'confirmed') ? 'processing' : $order->order_status,
+        ]);
+
+        AuditLog::log('Steadfast Parcel Booked', "অর্ডার #{$order->order_number} স্টেডফাস্টে বুক করা হয়েছে (Tracking Code: {$trackingCode}, CID: {$consignmentId})।");
+
+        return redirect()->back()->with('success', "স্টেডফাস্টে পার্সেল সফলভাবে বুক হয়েছে! ট্র্যাকিং কোড: {$trackingCode} (CID: {$consignmentId})");
+    }
+
+    public function checkSteadfastStatus($id, \App\Services\SteadfastService $steadfast)
+    {
+        $order = Order::findOrFail($id);
+
+        if (empty($order->courier_tracking_id)) {
+            return redirect()->back()->with('error', 'এই অর্ডারে কোনো কুরিয়ার ট্র্যাকিং কোড যুক্ত নেই।');
+        }
+
+        $result = $steadfast->getStatusByInvoice($order->order_number);
+        if (!$result['success']) {
+            $result = $steadfast->getStatusByTrackingCode($order->courier_tracking_id);
+        }
+
+        if ($result['success']) {
+            $status = $result['delivery_status'];
+            $statusLabels = [
+                'pending' => 'পেন্ডিং (Pending)',
+                'in_review' => 'রিভিউতে রয়েছে (In Review)',
+                'delivered' => 'ডেলিভারি সম্পন্ন (Delivered)',
+                'cancelled' => 'বাতিল (Cancelled)',
+                'hold' => 'হোল্ড (Hold)',
+                'in_transit' => 'ডেলিভারির পথে (In Transit)',
+                'unknown' => 'অজ্ঞাত (Unknown)',
+            ];
+            $readable = $statusLabels[$status] ?? ucfirst(str_replace('_', ' ', $status));
+
+            // If delivered, also update our order status if not already delivered
+            if ($status === 'delivered' && $order->order_status !== 'delivered') {
+                $order->update(['order_status' => 'delivered', 'payment_status' => 'paid']);
+            }
+
+            return redirect()->back()->with('success', "স্টেডফাস্ট ডেলিভারি স্ট্যাটাস: {$readable}");
+        }
+
+        return redirect()->back()->with('error', 'স্টেডফাস্ট স্ট্যাটাস চেক ব্যর্থ হয়েছে: ' . ($result['message'] ?? 'তথ্য পাওয়া যায়নি'));
+    }
 }

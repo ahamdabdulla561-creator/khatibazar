@@ -118,6 +118,10 @@
                     .then(res => res.json())
                     .then(data => {
                         if (data.success) {
+                            if (typeof window.trackFbAddToCart === 'function') {
+                                let priceClean = parseFloat(String(this.priceFormatted).replace(/[^0-9.]/g, '')) || 0;
+                                window.trackFbAddToCart(this.productId, 'Product #' + this.productId, priceClean, 1);
+                            }
                             window.dispatchEvent(new CustomEvent('cart-updated', { detail: data.cart_count }));
                             if (buyNow) {
                                 window.location.href = '{{ route("checkout.index") }}';

@@ -56,6 +56,11 @@ class SiteSetting extends Model
             'bkash_instruction' => 'bKash নম্বরে Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।',
             'nagad_instruction' => 'Nagad নম্বরে Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।',
             'rocket_instruction' => 'Rocket নম্বরে Send Money করুন। এরপর প্রেরকের নম্বর, TrxID ও পেমেন্টের স্ক্রিনশট আপলোড করুন।',
+            'fb_pixel_id' => '',
+            'fb_pixel_status' => '1',
+            'steadfast_status' => '1',
+            'steadfast_api_key' => '',
+            'steadfast_secret_key' => '',
         ];
 
         return $fallbacks[$key] ?? null;

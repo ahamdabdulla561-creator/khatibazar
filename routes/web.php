@@ -35,6 +35,7 @@ Route::get('/category/{slug}', function ($slug) {
 })->name('category.show');
 Route::get('/api/search-suggestions', [ProductController::class, 'searchSuggestions'])->name('api.search_suggestions');
 Route::get('/api/products/{id}/quick-view', [ProductController::class, 'quickView'])->name('api.product_quick_view');
+Route::get('/facebook-catalog.xml', [\App\Http\Controllers\Frontend\FacebookFeedController::class, 'index'])->name('facebook.catalog');
 
 // Cart Routes
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -123,6 +124,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/orders/{id}', [AdminOrderController::class, 'show'])->name('orders.show');
         Route::post('/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.update_status');
         Route::post('/orders/{id}/message', [AdminOrderController::class, 'sendOrderMessage'])->name('orders.message');
+        Route::post('/orders/{id}/send-to-steadfast', [AdminOrderController::class, 'sendToSteadfast'])->name('orders.send_steadfast');
+        Route::get('/orders/{id}/check-steadfast-status', [AdminOrderController::class, 'checkSteadfastStatus'])->name('orders.check_steadfast');
         Route::get('/reports/sales', [AdminReportController::class, 'sales'])->name('reports.sales');
 
         // Customers Management

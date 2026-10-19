@@ -219,6 +219,69 @@
 
         <!-- Right: Status Update Panel -->
         <div class="space-y-6">
+
+            <!-- Steadfast Courier 1-Click Booking Card -->
+            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+                <div class="flex items-center justify-between pb-2 border-b">
+                    <h2 class="font-bold text-gray-900 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-truck-fast text-emerald-600"></i> স্টেডফাস্ট কুরিয়ার বুকিং
+                    </h2>
+                    @if($order->courier_tracking_id && ($order->courier_name && str_contains(strtolower($order->courier_name), 'steadfast')))
+                        <span class="text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full">বুকড (Booked)</span>
+                    @else
+                        <span class="text-[11px] bg-gray-100 text-gray-600 font-bold px-2.5 py-1 rounded-full">আন-বুকড</span>
+                    @endif
+                </div>
+
+                @if($order->courier_tracking_id && ($order->courier_name && str_contains(strtolower($order->courier_name), 'steadfast')))
+                    <!-- Already Booked State -->
+                    <div class="p-3.5 bg-emerald-50 rounded-2xl border border-emerald-200 text-xs space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-emerald-800 font-bold">ট্র্যাকিং কোড:</span>
+                            <span class="font-mono font-black text-emerald-900 text-sm bg-white px-2 py-0.5 rounded border border-emerald-300">{{ $order->courier_tracking_id }}</span>
+                        </div>
+                        <div class="flex gap-2 pt-1">
+                            <a href="https://steadfast.com.bd/t/{{ $order->courier_tracking_id }}" target="_blank" class="flex-1 bg-white hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold py-2 px-3 rounded-xl text-center text-xs transition">
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> লাইভ ট্র্যাকিং পেজ
+                            </a>
+                            <a href="{{ route('admin.orders.check_steadfast', $order->id) }}" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-xl text-center text-xs transition shadow-sm">
+                                <i class="fa-solid fa-arrows-rotate mr-1"></i> স্ট্যাটাস চেক
+                            </a>
+                        </div>
+                    </div>
+                @else
+                    <!-- Send to Steadfast Form -->
+                    <p class="text-xs text-gray-500">
+                        ১-ক্লিকে কাস্টমারের নাম, ফোন, ঠিকানা ও কালেকশন অ্যামাউন্ট স্টেডফাস্ট সার্ভারে পাঠিয়ে পার্সেল বুক করুন।
+                    </p>
+
+                    <form action="{{ route('admin.orders.send_steadfast', $order->id) }}" method="POST" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই অর্ডারটি স্টেডফাস্টে বুক করতে চান?')" class="space-y-3">
+                        @csrf
+                        
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-700 mb-1">ক্যাশ অন ডেলিভারি (COD) কালেকশন টাকা</label>
+                            @php
+                                $suggestedCod = ($order->payment_status === 'paid' && in_array($order->payment_method, ['bkash', 'nagad', 'rocket'])) ? 0 : round($order->grand_total);
+                            @endphp
+                            <div class="relative">
+                                <span class="absolute left-3 top-2.5 text-gray-500 font-bold text-xs">৳</span>
+                                <input type="number" name="cod_amount" value="{{ $suggestedCod }}" required class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-7 pr-3 py-2 text-xs font-bold font-mono">
+                            </div>
+                            <span class="text-[10px] text-gray-400 mt-0.5 block">পেইড অর্ডারের জন্য ০ দিন, ক্যাশ অন ডেলিভারির জন্য মোট টাকা দিন।</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-700 mb-1">অর্ডার নোট / বিবরণ (ঐচ্ছিক)</label>
+                            <input type="text" name="note" value="{{ $order->notes }}" placeholder="যেমন: সাবধানে ডেলিভারি করুন" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs">
+                        </div>
+
+                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-md transition text-xs flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> স্টেডফাস্টে পার্সেল বুক করুন (Send to Steadfast)
+                        </button>
+                    </form>
+                @endif
+            </div>
+
             <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
                 <h2 class="font-bold text-gray-900 text-base pb-2 border-b">অর্ডার স্ট্যাটাস আপডেট</h2>
 

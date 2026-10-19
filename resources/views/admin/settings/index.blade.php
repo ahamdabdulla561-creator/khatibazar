@@ -208,6 +208,85 @@
             </div>
         </div>
 
+        <!-- Facebook Pixel & Meta Ads Tracking Card -->
+        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b">
+                <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fa-brands fa-facebook text-blue-600"></i> Facebook Pixel & Meta Ads Tracking
+                </h2>
+                <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-bold">Meta Pixel & Boost</span>
+            </div>
+
+            <p class="text-xs text-gray-500">
+                ফেসবুকে বিজ্ঞাপন/ক্যারোজল বুস্টের জন্য মেটা পিক্সেল কোড সেটআপ। এখানে আপনার Pixel ID যুক্ত করলে পেজভিউ, প্রোডাক্ট ভিউ, কার্ট, চেকআউট ও পারচেজ স্বয়ংক্রিয়ভাবে ট্র্যাক হবে।
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Facebook Pixel ID</label>
+                    <input type="text" name="fb_pixel_id" value="{{ site_setting('fb_pixel_id') }}" placeholder="যেমন: 123456789012345" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-mono">
+                    <span class="text-[11px] text-gray-400 mt-1 block">Meta Events Manager থেকে প্রাপ্ত পিক্সেল আইডি এখানে দিন।</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Pixel Tracking Status</label>
+                    <select name="fb_pixel_status" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-semibold">
+                        <option value="1" {{ site_setting('fb_pixel_status', '1') == '1' ? 'selected' : '' }}>Active (সক্রিয়)</option>
+                        <option value="0" {{ site_setting('fb_pixel_status') == '0' ? 'selected' : '' }}>Inactive (নিষ্ক্রিয়)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="p-3 bg-blue-50/70 rounded-xl border border-blue-100 text-xs text-blue-900 flex items-start gap-2">
+                <i class="fa-solid fa-circle-info text-blue-600 mt-0.5"></i>
+                <div class="space-y-1">
+                    <span class="font-bold block">অটোমেটিক ই-কমার্স ইভেন্টস:</span>
+                    <span>PageView, ViewContent, AddToCart, InitiateCheckout ও Purchase ইভেন্ট স্বয়ংক্রিয়ভাবে ফায়ার হবে। এছাড়াও ফেসবুকে ডাইনামিক ক্যাটালগ সিঙ্কের জন্য ফিড লিঙ্ক: <a href="{{ url('/facebook-catalog.xml') }}" target="_blank" class="font-mono text-blue-700 underline font-bold">{{ url('/facebook-catalog.xml') }}</a></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Steadfast Courier API Configuration Card -->
+        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b">
+                <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fa-solid fa-truck-fast text-emerald-600"></i> Steadfast Courier API Integration
+                </h2>
+                <span class="text-xs bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full font-bold">স্টেডফাস্ট এপিআই</span>
+            </div>
+
+            <p class="text-xs text-gray-500">
+                স্টেডফাস্ট কুরিয়ারের সাথে ১-ক্লিকে পার্সেল বুকিংয়ের জন্য আপনার মার্চেন্ট অ্যাকাউন্টের API Key ও Secret Key যুক্ত করুন।
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Steadfast API Key</label>
+                    <input type="text" name="steadfast_api_key" value="{{ site_setting('steadfast_api_key') }}" placeholder="স্টেডফাস্ট API Key পেস্ট করুন" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Steadfast Secret Key</label>
+                    <input type="text" name="steadfast_secret_key" value="{{ site_setting('steadfast_secret_key') }}" placeholder="স্টেডফাস্ট Secret Key পেস্ট করুন" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Steadfast API Status</label>
+                    <select name="steadfast_status" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-semibold">
+                        <option value="1" {{ site_setting('steadfast_status', '1') == '1' ? 'selected' : '' }}>Active (সক্রিয়)</option>
+                        <option value="0" {{ site_setting('steadfast_status') == '0' ? 'selected' : '' }}>Inactive (নিষ্ক্রিয়)</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center">
+                    <div class="text-xs text-gray-500 space-y-1">
+                        <span class="font-bold text-gray-700 block"><i class="fa-solid fa-key text-brand-600 mr-1"></i> API তথ্য কোথায় পাবেন?</span>
+                        <span><a href="https://portal.steadfast.com.bd" target="_blank" class="text-brand-600 underline font-semibold">portal.steadfast.com.bd</a> তে লগইন করে Settings ➔ API Information মেন্যু থেকে সংগ্রহ করুন।</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-4 rounded-2xl shadow-xl transition text-sm">
             Save Settings
         </button>

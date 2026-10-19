@@ -1,6 +1,17 @@
 @extends('layouts.app')
 
-@section('title', $product->name . ' - Khati Bazar')
+@section('title', $product->name . ' - ' . site_setting('site_name', 'খাঁটি বাজার'))
+
+@section('og_title', $product->name . ' - ' . format_price($product->effective_price))
+@section('og_description', \Illuminate\Support\Str::limit(strip_tags($product->short_description ?: $product->description), 160))
+@section('og_image', $product->image_url)
+@section('og_type', 'product')
+@section('extra_og')
+    <meta property="product:price:amount" content="{{ (float)$product->effective_price }}">
+    <meta property="product:price:currency" content="BDT">
+    <meta property="product:availability" content="{{ $product->inStock() ? 'in stock' : 'out of stock' }}">
+    <meta property="product:brand" content="{{ $product->brand->name ?? site_setting('site_name', 'খাঁটি বাজার') }}">
+@endsection
 
 @section('content')
 <div class="bg-gray-50 py-8" x-data="productDetail({{ json_encode($product) }}, {{ json_encode($product->activeVariants) }})">
@@ -219,6 +230,9 @@
                 .then(r => r.json())
                 .then(data => {
                     if (data.success) {
+                        if (typeof window.trackFbAddToCart === 'function') {
+                            window.trackFbAddToCart(this.product.id, this.product.name, this.currentPrice, this.quantity);
+                        }
                         if (buyNow) {
                             window.location.href = '{{ route("checkout.index") }}';
                         } else {
@@ -232,5 +246,19 @@
             }
         }
     }
+
+    // Trigger Meta Pixel ViewContent event
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof window.fbq === 'function') {
+            window.fbq('track', 'ViewContent', {
+                content_name: '{{ addslashes($product->name) }}',
+                content_category: '{{ addslashes($product->category->name ?? '') }}',
+                content_ids: ['{{ $product->id }}'],
+                content_type: 'product',
+                value: {{ (float)$product->effective_price }},
+                currency: 'BDT'
+            });
+        }
+    });
 </script>
 @endsection

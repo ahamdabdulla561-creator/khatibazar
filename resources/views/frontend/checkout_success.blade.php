@@ -136,4 +136,21 @@
 
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof window.fbq === 'function') {
+            window.fbq('track', 'Purchase', {
+                content_ids: [{!! $order->items->pluck('product_id')->filter()->map(fn($id) => "'$id'")->join(',') !!}],
+                content_type: 'product',
+                value: {{ (float)$order->grand_total }},
+                currency: 'BDT',
+                num_items: {{ (int)$order->items->sum('quantity') }},
+                order_id: '{{ $order->order_number }}'
+            });
+        }
+    });
+</script>
+@endpush
 @endsection

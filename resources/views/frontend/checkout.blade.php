@@ -333,5 +333,18 @@
             }
         }
     }
+
+    // Trigger Meta Pixel InitiateCheckout event
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof window.fbq === 'function') {
+            window.fbq('track', 'InitiateCheckout', {
+                content_ids: [{!! $cart->items->pluck('product_id')->filter()->map(fn($id) => "'$id'")->join(',') !!}],
+                content_type: 'product',
+                value: {{ (float)$cart->items->sum(fn($i) => $i->price * $i->quantity) }},
+                currency: 'BDT',
+                num_items: {{ (int)$cart->items->sum('quantity') }}
+            });
+        }
+    });
 </script>
 @endsection

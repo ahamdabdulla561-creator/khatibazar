@@ -9,6 +9,36 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
+    <!-- Open Graph / Facebook Meta Tags for Carousel & Boost -->
+    <meta property="og:site_name" content="{{ site_setting('site_name', 'খাঁটি বাজার (Khati Bazar)') }}">
+    <meta property="og:title" content="@yield('og_title', site_setting('site_name', 'খাঁটি বাজার - ১০০% খাঁটি ও অর্গানিক পণ্য'))">
+    <meta property="og:description" content="@yield('og_description', 'খাঁটি বাজার থেকে প্রিমিয়াম বাদাম, পুষ্টিকর বীজ, খাঁটি মসলা এবং নির্ভরযোগ্য কৃষি ও খামার পণ্য অর্ডার করুন সারাদেশে হোম ডেলিভারিতে।')">
+    <meta property="og:image" content="@yield('og_image', asset('images/logo.png'))">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    @yield('extra_og')
+
+    @if(site_setting('fb_pixel_id') && site_setting('fb_pixel_status', '1') == '1')
+    <!-- Meta Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '{{ trim(site_setting('fb_pixel_id')) }}');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none" 
+             src="https://www.facebook.com/tr?id={{ trim(site_setting('fb_pixel_id')) }}&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Meta Pixel Code -->
+    @endif
+
     <!-- Google Fonts: Inter & Hind Siliguri for Bengali -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -708,6 +738,22 @@
             initCardAnimations();
             window.addEventListener('content-updated', initCardAnimations);
         });
+
+        window.trackFbAddToCart = function(productId, productName, price, quantity = 1) {
+            try {
+                if (typeof window.fbq === 'function') {
+                    window.fbq('track', 'AddToCart', {
+                        content_name: productName,
+                        content_ids: [String(productId)],
+                        content_type: 'product',
+                        value: parseFloat(price) * parseInt(quantity || 1),
+                        currency: 'BDT'
+                    });
+                }
+            } catch (e) {
+                // Silently ignore if blocked
+            }
+        };
     </script>
     @stack('scripts')
 </body>
