@@ -61,6 +61,13 @@ class SiteSetting extends Model
             'steadfast_status' => '1',
             'steadfast_api_key' => '',
             'steadfast_secret_key' => '',
+            'pathao_status' => '1',
+            'pathao_client_id' => '',
+            'pathao_client_secret' => '',
+            'pathao_username' => '',
+            'pathao_password' => '',
+            'pathao_store_id' => '',
+            'pathao_environment' => 'production',
         ];
 
         return $fallbacks[$key] ?? null;

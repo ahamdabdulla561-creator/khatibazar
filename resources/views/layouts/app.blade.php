@@ -18,8 +18,12 @@
     <meta property="og:type" content="@yield('og_type', 'website')">
     @yield('extra_og')
 
-    @if(site_setting('fb_pixel_id') && site_setting('fb_pixel_status', '1') == '1')
-    <!-- Meta Pixel Code -->
+    @php
+        $rawPixelIds = site_setting('fb_pixel_id', '');
+        $pixelIds = array_values(array_filter(array_map('trim', preg_split('/[\r\n,;]+/', (string)$rawPixelIds))));
+    @endphp
+    @if(!empty($pixelIds) && site_setting('fb_pixel_status', '1') == '1')
+    <!-- Meta Pixel Code (Supports Multiple Ad Managers / Pixels) -->
     <script>
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -29,12 +33,16 @@
         t.src=v;s=b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '{{ trim(site_setting('fb_pixel_id')) }}');
+        @foreach($pixelIds as $pId)
+        fbq('init', '{{ $pId }}');
+        @endforeach
         fbq('track', 'PageView');
     </script>
     <noscript>
+        @foreach($pixelIds as $pId)
         <img height="1" width="1" style="display:none" 
-             src="https://www.facebook.com/tr?id={{ trim(site_setting('fb_pixel_id')) }}&ev=PageView&noscript=1"/>
+             src="https://www.facebook.com/tr?id={{ $pId }}&ev=PageView&noscript=1"/>
+        @endforeach
     </noscript>
     <!-- End Meta Pixel Code -->
     @endif

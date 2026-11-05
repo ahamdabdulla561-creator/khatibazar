@@ -36,11 +36,14 @@ class OrderController extends Controller
         return view('admin.orders.index', compact('orders'));
     }
 
-    public function show($id)
+    public function show($id, \App\Services\PathaoService $pathao)
     {
         $order = Order::with(['items.product', 'items.variant', 'user', 'courierService', 'messages'])->findOrFail($id);
         $couriers = CourierService::orderBy('sort_order', 'asc')->get();
-        return view('admin.orders.show', compact('order', 'couriers'));
+        $pathaoConfigured = $pathao->isConfigured();
+        $pathaoStores = $pathaoConfigured ? $pathao->getStores() : [];
+        $pathaoCities = $pathaoConfigured ? $pathao->getCities() : [];
+        return view('admin.orders.show', compact('order', 'couriers', 'pathaoConfigured', 'pathaoStores', 'pathaoCities'));
     }
 
     public function updateStatus(Request $request, $id)
@@ -221,5 +224,63 @@ class OrderController extends Controller
         }
 
         return redirect()->back()->with('error', 'স্টেডফাস্ট স্ট্যাটাস চেক ব্যর্থ হয়েছে: ' . ($result['message'] ?? 'তথ্য পাওয়া যায়নি'));
+    }
+
+    public function sendToPathao(Request $request, $id, \App\Services\PathaoService $pathao)
+    {
+        $order = Order::with('items')->findOrFail($id);
+
+        if (!$pathao->isConfigured()) {
+            return redirect()->back()->with('error', 'পাঠাও এপিআই তথ্য (Client ID / Secret / Credentials) কনফিগার করা নেই। অনুগ্রহ করে সেটিংস পেজে যুক্ত করুন।');
+        }
+
+        $params = [
+            'store_id' => $request->store_id,
+            'recipient_city' => $request->recipient_city,
+            'recipient_zone' => $request->recipient_zone,
+            'recipient_area' => $request->recipient_area,
+            'cod_amount' => $request->filled('cod_amount') ? (float)$request->cod_amount : null,
+            'item_weight' => $request->filled('item_weight') ? (float)$request->item_weight : 0.5,
+            'note' => $request->note,
+        ];
+
+        $result = $pathao->createOrder($order, $params);
+
+        if (!$result['success']) {
+            return redirect()->back()->with('error', 'পাঠাও পার্সেল বুকিং ব্যর্থ হয়েছে: ' . $result['message']);
+        }
+
+        $consignmentId = $result['consignment_id'];
+
+        $pathaoCourier = CourierService::firstOrCreate(
+            ['code' => 'pathao'],
+            [
+                'name' => 'পাঠাও কুরিয়ার (Pathao)',
+                'tracking_url_template' => 'https://pathao.com/tracking/?consignment_id={tracking_code}',
+                'status' => 'active',
+                'sort_order' => 1,
+            ]
+        );
+
+        $order->update([
+            'courier_service_id' => $pathaoCourier->id,
+            'courier_name' => $pathaoCourier->name,
+            'courier_tracking_id' => $consignmentId,
+            'order_status' => ($order->order_status === 'pending' || $order->order_status === 'confirmed') ? 'processing' : $order->order_status,
+        ]);
+
+        AuditLog::log('Pathao Parcel Booked', "অর্ডার #{$order->order_number} পাঠাও-তে বুক করা হয়েছে (Consignment ID: {$consignmentId})।");
+
+        return redirect()->back()->with('success', "পাঠাও-তে পার্সেল সফলভাবে বুক হয়েছে! কনসাইনমেন্ট আইডি: {$consignmentId}");
+    }
+
+    public function getPathaoZones($cityId, \App\Services\PathaoService $pathao)
+    {
+        return response()->json($pathao->getZones((int)$cityId));
+    }
+
+    public function getPathaoAreas($zoneId, \App\Services\PathaoService $pathao)
+    {
+        return response()->json($pathao->getAreas((int)$zoneId));
     }
 }

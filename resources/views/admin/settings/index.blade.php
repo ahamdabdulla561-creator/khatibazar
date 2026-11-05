@@ -223,9 +223,9 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="md:col-span-2">
-                    <label class="block text-xs font-bold text-gray-700 mb-1">Facebook Pixel ID</label>
-                    <input type="text" name="fb_pixel_id" value="{{ site_setting('fb_pixel_id') }}" placeholder="যেমন: 123456789012345" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-mono">
-                    <span class="text-[11px] text-gray-400 mt-1 block">Meta Events Manager থেকে প্রাপ্ত পিক্সেল আইডি এখানে দিন।</span>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Facebook Pixel ID(s) / Ad Manager Pixels</label>
+                    <textarea name="fb_pixel_id" rows="2" placeholder="যেমন: 987170464440390, 123456789012345 (একাধিক আইডি কমা বা নতুন লাইনে লিখুন)" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-mono">{{ site_setting('fb_pixel_id') }}</textarea>
+                    <span class="text-[11px] text-gray-400 mt-1 block">একাধিক অ্যাড ম্যানেজারের Pixel ID থাকলে কমা (,) অথবা নতুন লাইনে লিখে দিন। সবকটি পিক্সেল একসাথে ট্র্যাক হবে।</span>
                 </div>
 
                 <div>
@@ -283,6 +283,56 @@
                         <span class="font-bold text-gray-700 block"><i class="fa-solid fa-key text-brand-600 mr-1"></i> API তথ্য কোথায় পাবেন?</span>
                         <span><a href="https://portal.steadfast.com.bd" target="_blank" class="text-brand-600 underline font-semibold">portal.steadfast.com.bd</a> তে লগইন করে Settings ➔ API Information মেন্যু থেকে সংগ্রহ করুন।</span>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pathao Courier API Configuration Card -->
+        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b">
+                <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fa-solid fa-motorcycle text-red-600"></i> Pathao Courier API Integration
+                </h2>
+                <span class="text-xs bg-red-50 text-red-700 px-3 py-1 rounded-full font-bold">পাঠাও এপিআই</span>
+            </div>
+
+            <p class="text-xs text-gray-500">
+                পাঠাও কুরিয়ারের সাথে ১-ক্লিকে পার্সেল বুকিংয়ের জন্য আপনার মার্চেন্ট অ্যাকাউন্টের Developer API তথ্য দিন।
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Pathao Client ID</label>
+                    <input type="text" name="pathao_client_id" value="{{ site_setting('pathao_client_id') }}" placeholder="যেমন: 1234" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Pathao Client Secret</label>
+                    <input type="text" name="pathao_client_secret" value="{{ site_setting('pathao_client_secret') }}" placeholder="পাঠাও Client Secret পেস্ট করুন" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Pathao Registered Email / Username</label>
+                    <input type="text" name="pathao_username" value="{{ site_setting('pathao_username') }}" placeholder="মার্চেন্ট রেজিস্টার্ড ইমেইল" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Pathao Account Password</label>
+                    <input type="password" name="pathao_password" value="{{ site_setting('pathao_password') }}" placeholder="মার্চেন্ট পাসওয়ার্ড" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Default Pickup Store ID</label>
+                    <input type="text" name="pathao_store_id" value="{{ site_setting('pathao_store_id') }}" placeholder="যেমন: 5678" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-mono">
+                    <span class="text-[11px] text-gray-400 mt-1 block">পাঠাও মার্চেন্ট প্যানেলের পিকআপ স্টোর আইডি।</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Pathao API Status</label>
+                    <select name="pathao_status" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-semibold">
+                        <option value="1" {{ site_setting('pathao_status', '1') == '1' ? 'selected' : '' }}>Active (সক্রিয়)</option>
+                        <option value="0" {{ site_setting('pathao_status') == '0' ? 'selected' : '' }}>Inactive (নিষ্ক্রিয়)</option>
+                    </select>
                 </div>
             </div>
         </div>

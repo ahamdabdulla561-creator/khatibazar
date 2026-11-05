@@ -126,6 +126,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/orders/{id}/message', [AdminOrderController::class, 'sendOrderMessage'])->name('orders.message');
         Route::post('/orders/{id}/send-to-steadfast', [AdminOrderController::class, 'sendToSteadfast'])->name('orders.send_steadfast');
         Route::get('/orders/{id}/check-steadfast-status', [AdminOrderController::class, 'checkSteadfastStatus'])->name('orders.check_steadfast');
+        Route::post('/orders/{id}/send-to-pathao', [AdminOrderController::class, 'sendToPathao'])->name('orders.send_pathao');
+        Route::get('/pathao/zones/{city_id}', [AdminOrderController::class, 'getPathaoZones'])->name('pathao.zones');
+        Route::get('/pathao/areas/{zone_id}', [AdminOrderController::class, 'getPathaoAreas'])->name('pathao.areas');
         Route::get('/reports/sales', [AdminReportController::class, 'sales'])->name('reports.sales');
 
         // Customers Management

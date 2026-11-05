@@ -220,24 +220,44 @@
         <!-- Right: Status Update Panel -->
         <div class="space-y-6">
 
-            <!-- Steadfast Courier 1-Click Booking Card -->
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+            <!-- Courier API 1-Click Booking Card (Steadfast & Pathao Multi-Courier) -->
+            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-4" x-data="{
+                courierTab: '{{ ($order->courier_name && str_contains(strtolower($order->courier_name), 'pathao')) ? 'pathao' : 'steadfast' }}',
+                selectedCity: '{{ $pathaoCities[0]['city_id'] ?? '' }}',
+                zones: [],
+                loadingZones: false,
+                fetchZones(cityId) {
+                    if (!cityId) return;
+                    this.loadingZones = true;
+                    fetch('{{ url('/admin/pathao/zones') }}/' + cityId)
+                        .then(r => r.json())
+                        .then(d => {
+                            this.zones = d || [];
+                            this.loadingZones = false;
+                        })
+                        .catch(() => { this.loadingZones = false; });
+                }
+            }" x-init="if (selectedCity) fetchZones(selectedCity)">
                 <div class="flex items-center justify-between pb-2 border-b">
                     <h2 class="font-bold text-gray-900 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-truck-fast text-emerald-600"></i> স্টেডফাস্ট কুরিয়ার বুকিং
+                        <i class="fa-solid fa-truck-fast text-brand-600"></i> কুরিয়ার পার্সেল বুকিং
                     </h2>
-                    @if($order->courier_tracking_id && ($order->courier_name && str_contains(strtolower($order->courier_name), 'steadfast')))
-                        <span class="text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full">বুকড (Booked)</span>
+                    @if($order->courier_tracking_id)
+                        <span class="text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full">
+                            {{ $order->courier_name ?? 'বুকড' }} (Booked)
+                        </span>
                     @else
                         <span class="text-[11px] bg-gray-100 text-gray-600 font-bold px-2.5 py-1 rounded-full">আন-বুকড</span>
                     @endif
                 </div>
 
                 @if($order->courier_tracking_id && ($order->courier_name && str_contains(strtolower($order->courier_name), 'steadfast')))
-                    <!-- Already Booked State -->
+                    <!-- Steadfast Already Booked State -->
                     <div class="p-3.5 bg-emerald-50 rounded-2xl border border-emerald-200 text-xs space-y-2">
                         <div class="flex justify-between items-center">
-                            <span class="text-emerald-800 font-bold">ট্র্যাকিং কোড:</span>
+                            <span class="text-emerald-800 font-bold flex items-center gap-1.5">
+                                <i class="fa-solid fa-truck-fast text-emerald-600"></i> স্টেডফাস্ট ট্র্যাকিং কোড:
+                            </span>
                             <span class="font-mono font-black text-emerald-900 text-sm bg-white px-2 py-0.5 rounded border border-emerald-300">{{ $order->courier_tracking_id }}</span>
                         </div>
                         <div class="flex gap-2 pt-1">
@@ -249,36 +269,131 @@
                             </a>
                         </div>
                     </div>
+                @elseif($order->courier_tracking_id && ($order->courier_name && str_contains(strtolower($order->courier_name), 'pathao')))
+                    <!-- Pathao Already Booked State -->
+                    <div class="p-3.5 bg-red-50 rounded-2xl border border-red-200 text-xs space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-red-800 font-bold flex items-center gap-1.5">
+                                <i class="fa-solid fa-motorcycle text-red-600"></i> পাঠাও কনসাইনমেন্ট আইডি:
+                            </span>
+                            <span class="font-mono font-black text-red-900 text-sm bg-white px-2 py-0.5 rounded border border-red-300">{{ $order->courier_tracking_id }}</span>
+                        </div>
+                        <div class="pt-1">
+                            <a href="https://pathao.com/tracking/?consignment_id={{ $order->courier_tracking_id }}" target="_blank" class="w-full block bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-xl text-center text-xs transition shadow-sm">
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> পাঠাও লাইভ ট্র্যাকিং পেজ
+                            </a>
+                        </div>
+                    </div>
                 @else
-                    <!-- Send to Steadfast Form -->
-                    <p class="text-xs text-gray-500">
-                        ১-ক্লিকে কাস্টমারের নাম, ফোন, ঠিকানা ও কালেকশন অ্যামাউন্ট স্টেডফাস্ট সার্ভারে পাঠিয়ে পার্সেল বুক করুন।
-                    </p>
-
-                    <form action="{{ route('admin.orders.send_steadfast', $order->id) }}" method="POST" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই অর্ডারটি স্টেডফাস্টে বুক করতে চান?')" class="space-y-3">
-                        @csrf
-                        
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-700 mb-1">ক্যাশ অন ডেলিভারি (COD) কালেকশন টাকা</label>
-                            @php
-                                $suggestedCod = ($order->payment_status === 'paid' && in_array($order->payment_method, ['bkash', 'nagad', 'rocket'])) ? 0 : round($order->grand_total);
-                            @endphp
-                            <div class="relative">
-                                <span class="absolute left-3 top-2.5 text-gray-500 font-bold text-xs">৳</span>
-                                <input type="number" name="cod_amount" value="{{ $suggestedCod }}" required class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-7 pr-3 py-2 text-xs font-bold font-mono">
-                            </div>
-                            <span class="text-[10px] text-gray-400 mt-0.5 block">পেইড অর্ডারের জন্য ০ দিন, ক্যাশ অন ডেলিভারির জন্য মোট টাকা দিন।</span>
-                        </div>
-
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-700 mb-1">অর্ডার নোট / বিবরণ (ঐচ্ছিক)</label>
-                            <input type="text" name="note" value="{{ $order->notes }}" placeholder="যেমন: সাবধানে ডেলিভারি করুন" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs">
-                        </div>
-
-                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-md transition text-xs flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-paper-plane"></i> স্টেডফাস্টে পার্সেল বুক করুন (Send to Steadfast)
+                    <!-- Multi-Courier Selector Tabs -->
+                    <div class="flex rounded-xl bg-gray-100 p-1 text-xs font-bold">
+                        <button type="button" @click="courierTab = 'steadfast'" :class="courierTab === 'steadfast' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-1.5 rounded-lg transition text-center flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-truck-fast"></i> স্টেডফাস্ট (Steadfast)
                         </button>
-                    </form>
+                        <button type="button" @click="courierTab = 'pathao'" :class="courierTab === 'pathao' ? 'bg-white text-red-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-1.5 rounded-lg transition text-center flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-motorcycle"></i> পাঠাও (Pathao)
+                        </button>
+                    </div>
+
+                    @php
+                        $suggestedCod = ($order->payment_status === 'paid' && in_array($order->payment_method, ['bkash', 'nagad', 'rocket'])) ? 0 : round($order->grand_total);
+                    @endphp
+
+                    <!-- 1. Steadfast Booking Form -->
+                    <div x-show="courierTab === 'steadfast'" class="space-y-3">
+                        <p class="text-xs text-gray-500">
+                            ১-ক্লিকে কাস্টমারের নাম, ফোন, ঠিকানা ও কালেকশন অ্যামাউন্ট স্টেডফাস্ট সার্ভারে পাঠিয়ে পার্সেল বুক করুন।
+                        </p>
+
+                        <form action="{{ route('admin.orders.send_steadfast', $order->id) }}" method="POST" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই অর্ডারটি স্টেডফাস্টে বুক করতে চান?')" class="space-y-3">
+                            @csrf
+                            
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-700 mb-1">ক্যাশ অন ডেলিভারি (COD) কালেকশন টাকা</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-2.5 text-gray-500 font-bold text-xs">৳</span>
+                                    <input type="number" name="cod_amount" value="{{ $suggestedCod }}" required class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-7 pr-3 py-2 text-xs font-bold font-mono">
+                                </div>
+                                <span class="text-[10px] text-gray-400 mt-0.5 block">পেইড অর্ডারের জন্য ০ দিন, ক্যাশ অন ডেলিভারির জন্য মোট টাকা দিন।</span>
+                            </div>
+
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-700 mb-1">অর্ডার নোট / বিবরণ (ঐচ্ছিক)</label>
+                                <input type="text" name="note" value="{{ $order->notes }}" placeholder="যেমন: সাবধানে ডেলিভারি করুন" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs">
+                            </div>
+
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-md transition text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> স্টেডফাস্টে পার্সেল বুক করুন (Send to Steadfast)
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- 2. Pathao Booking Form -->
+                    <div x-show="courierTab === 'pathao'" class="space-y-3" x-cloak>
+                        <p class="text-xs text-gray-500">
+                            ১-ক্লিকে কাস্টমারের তথ্য ও ঠিকানা পাঠাও সার্ভারে পাঠিয়ে পার্সেল বুক করুন।
+                        </p>
+
+                        <form action="{{ route('admin.orders.send_pathao', $order->id) }}" method="POST" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই অর্ডারটি পাঠাও-তে বুক করতে চান?')" class="space-y-3">
+                            @csrf
+
+                            @if(!empty($pathaoStores) && count($pathaoStores) > 0)
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-700 mb-1">পিকআপ স্টোর (Pickup Store)</label>
+                                <select name="store_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold">
+                                    @foreach($pathaoStores as $store)
+                                        <option value="{{ $store['store_id'] }}">{{ $store['store_name'] }} ({{ $store['store_address'] }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @endif
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-700 mb-1">সিটি (City)</label>
+                                    <select name="recipient_city" x-model="selectedCity" @change="fetchZones(selectedCity)" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-2 py-2 text-xs font-semibold">
+                                        @if(!empty($pathaoCities) && count($pathaoCities) > 0)
+                                            @foreach($pathaoCities as $city)
+                                                <option value="{{ $city['city_id'] }}">{{ $city['city_name'] }}</option>
+                                            @endforeach
+                                        @else
+                                            <option value="1">Dhaka</option>
+                                        @endif
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-700 mb-1">জোন (Zone)</label>
+                                    <select name="recipient_zone" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-2 py-2 text-xs font-semibold">
+                                        <template x-for="z in zones" :key="z.zone_id">
+                                            <option :value="z.zone_id" x-text="z.zone_name"></option>
+                                        </template>
+                                        <option x-show="zones.length === 0" value="1">Default Zone</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-700 mb-1">COD টাকা</label>
+                                    <input type="number" name="cod_amount" value="{{ $suggestedCod }}" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-700 mb-1">ওজন (KG)</label>
+                                    <input type="number" step="0.1" name="item_weight" value="0.5" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-mono">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-700 mb-1">অর্ডার নোট / বিবরণ</label>
+                                <input type="text" name="note" value="{{ $order->notes }}" placeholder="যেমন: দ্রুত ডেলিভারি" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs">
+                            </div>
+
+                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-md transition text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-motorcycle"></i> পাঠাও-তে পার্সেল বুক করুন (Send to Pathao)
+                            </button>
+                        </form>
+                    </div>
                 @endif
             </div>
 
